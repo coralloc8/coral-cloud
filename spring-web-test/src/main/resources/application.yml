@@ -1,0 +1,20 @@
+info:
+  author: huss
+  date: 2020年5月20日
+  remark: spring oauth2 资源服务
+  my-server-name: spring-web-test
+
+server:
+  port: 8083
+
+#spring
+spring:
+  application:
+    name: ${info.my-server-name}
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
+
+    

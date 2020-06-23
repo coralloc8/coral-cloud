@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example.spring</groupId>
+    <artifactId>spring-example</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>spring-common</module>
+        <module>spring-common-jpa</module>
+        <module>spring-database-test</module>
+        <module>spring-web-core</module>
+        <module>spring-web-auth</module>
+        <module>spring-web-test</module>
+    </modules>
+
+    <name>spring-example</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <project.appVersion>1.0.0-SNAPSHOT</project.appVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <druid.version>1.1.22</druid.version>
+        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <spring.security.version>2.3.3.RELEASE</spring.security.version>
+        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
+
+    </properties>
+
+
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Override Spring Data release train provided by Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Neumann-RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.3.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+            <!-- -->
+
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
