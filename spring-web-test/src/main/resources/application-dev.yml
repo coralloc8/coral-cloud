@@ -8,10 +8,6 @@ server:
       force: true
   tomcat:
     uri-encoding: UTF-8
-    basedir: null
-    logging:
-      path: null
-      file: null
     threads:
       max: 800
 

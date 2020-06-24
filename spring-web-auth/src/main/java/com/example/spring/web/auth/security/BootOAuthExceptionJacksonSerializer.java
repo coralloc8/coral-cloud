@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
+import com.example.spring.web.core.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -12,11 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自定义授权服务认证时返回的异常信息序列化
- * 
+ *
  * @author huss
  */
-@Slf4j
-public class BootOAuthExceptionJacksonSerializer extends StdSerializer<BootOAuth2Exception> {
+@Slf4j public class BootOAuthExceptionJacksonSerializer extends StdSerializer<BootOAuth2Exception> {
 
     protected BootOAuthExceptionJacksonSerializer() {
         super(BootOAuth2Exception.class);

@@ -10,12 +10,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @SpringBootApplication
 @Slf4j
-public class AuthApplication {
+public class OAuth2Application {
 
     public static void main(String[] args) {
-        log.info("#####AuthApplication start...");
+        log.info("#####Spring AuthApplication start...");
 
-        SpringApplication.run(AuthApplication.class, args);
+        SpringApplication.run(OAuth2Application.class, args);
     }
 
 }

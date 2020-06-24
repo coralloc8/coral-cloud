@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class Oauth2Service extends JpaBaseServiceImpl<OauthClientDetails, Long, OauthClientDetailsRepository>
+public class Oauth2ServiceImpl extends JpaBaseServiceImpl<OauthClientDetails, Long, OauthClientDetailsRepository>
     implements IOauth2Service {
 
     @Autowired

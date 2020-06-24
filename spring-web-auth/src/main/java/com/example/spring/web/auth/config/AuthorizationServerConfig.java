@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.example.spring.web.auth.security.HeaderOnlyOAuth2ExceptionRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,19 +13,22 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpointHandlerMapping;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
@@ -37,6 +41,7 @@ import com.example.spring.web.auth.security.handler.CustomAuthExceptionHandler;
 import com.example.spring.web.auth.service.IOauth2Service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  * Security 认证服务
@@ -62,7 +67,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      *
      * 5、refresh_token — 刷新access_token
      * @formatter:on
-     * 
+     *
      * /oauth/authorize：授权端点
      *      * /oauth/token：令牌端点
      *      * /oauth/confirm_access：用户确认授权提交端点
@@ -107,12 +112,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * 配置认证服务器
      *
-     * 
      * @return
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.authenticationEntryPoint(customAuthExceptionHandler).accessDeniedHandler(customAuthExceptionHandler);
 
         security
             // 允许所有资源服务器访问公钥端点（/oauth/token_key）
@@ -120,10 +123,25 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .tokenKeyAccess("permitAll()")
             // isAuthenticated
             .checkTokenAccess("isAuthenticated()")
-            //
-            // .authenticationEntryPoint(customAuthExceptionHandler).accessDeniedHandler(customAuthExceptionHandler);
             // 允许客户端发送表单来进行权限认证来获取令牌
-            .allowFormAuthenticationForClients();
+            .allowFormAuthenticationForClients()
+            //
+            .authenticationEntryPoint(customAuthExceptionHandler)
+            //
+            .accessDeniedHandler(customAuthExceptionHandler);
+
+//        String realm = "oauth2/client";
+//        ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter =
+//            new ClientCredentialsTokenEndpointFilter();
+//        clientCredentialsTokenEndpointFilter.setAuthenticationManager(authenticationManager);
+//        OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+//        authenticationEntryPoint.setTypeName("Form");
+//        authenticationEntryPoint.setRealmName(realm);
+//        authenticationEntryPoint.setExceptionRenderer(new HeaderOnlyOAuth2ExceptionRenderer());
+//
+//        clientCredentialsTokenEndpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint);
+//
+//        security.addTokenEndpointAuthenticationFilter(clientCredentialsTokenEndpointFilter);
 
     }
 
@@ -164,6 +182,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 处理 ExceptionTranslationFilter 抛出的异常
         endpoints.exceptionTranslator(customWebResponseExceptionTranslator);
 
+        // OAuth2AuthenticationEntryPoint o;
         // ClientCredentialsTokenEndpointFilter f = null;
         // BasicAuthenticationFilter b = null;
         // ExceptionTranslationFilter e = null;
@@ -194,16 +213,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      * 
      * @formatter:on
      * @param oauth2Service
-     * @param passwordEncoder
      * @return
      */
     @Primary
     @Bean
-    public ClientDetailsService myClientDetailsService(IOauth2Service oauth2Service, PasswordEncoder passwordEncoder) {
+    public ClientDetailsService myClientDetailsService(IOauth2Service oauth2Service) {
         return clientId -> {
             List<OauthClientDetails> clients1 = oauth2Service.findOauth2ClientByClientId(clientId);
             if (clients1 == null || clients1.isEmpty()) {
-                throw new ClientRegistrationException("invalid client_id");
+                throw new InvalidClientException("invalid client_id");
             }
             OauthClientDetails client = clients1.get(0);
             String clientSecretAfterEncoder = client.getClientSecret();

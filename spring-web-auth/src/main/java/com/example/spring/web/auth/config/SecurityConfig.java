@@ -11,7 +11,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -22,8 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.spring.database.test.entity.SysUser;
 import com.example.spring.web.auth.security.handler.CustomAuthExceptionHandler;
-import com.example.spring.web.auth.security.handler.MyAuthenticationFailHandler;
-import com.example.spring.web.auth.security.handler.MyAuthenticationSuccessHandler;
 import com.example.spring.web.auth.service.IOauth2Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,14 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
-    @Autowired
-    private MyAuthenticationFailHandler myAuthenticationFailHandler;
-
-    @Autowired
-    private SecurityProperties securityProperties;
-
-    @Autowired
     private CustomAuthExceptionHandler customAuthExceptionHandler;
 
     @Override
@@ -76,10 +65,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/login.html", "/static/**");
-    }
+    // @Override
+    // public void configure(WebSecurity web) throws Exception {
+    // web.ignoring().antMatchers("/login.html", "/static/**");
+    // }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -90,9 +79,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //
             .and().authorizeRequests().anyRequest().authenticated();
 
-        // 不起作用
-        http.exceptionHandling().authenticationEntryPoint(customAuthExceptionHandler)
+        // ExceptionTranslationFilter返回的错误信息格式重新定义
+        http.exceptionHandling()
+            //
+            .authenticationEntryPoint(customAuthExceptionHandler)
+            //
             .accessDeniedHandler(customAuthExceptionHandler);
+
+
 
     }
 
@@ -166,11 +160,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 注册一个UserDetailsService用于用户身份认证
      *
      * @param oauth2Service
-     * @param passwordEncoder
      * @return
      */
     @Bean
-    public UserDetailsService userDetailsService(IOauth2Service oauth2Service, PasswordEncoder passwordEncoder) {
+    public UserDetailsService userDetailsService(IOauth2Service oauth2Service) {
         return username -> {
             List<SysUser> users = oauth2Service.findOauth2UserByUsername(username);
             if (users == null || users.isEmpty()) {

@@ -58,6 +58,11 @@ public enum OauthMessageEnum implements IErrorCodeMessage<OauthMessageEnum>, I18
     HTTP_MEDIA_TYPE_NOT_ACCEPT(40010, "http media type not accept"),
 
     /**
+     * client_id或者client_secret有误
+     */
+    BAD_CREDENTIALS(40011,"bad credentials"),
+
+    /**
      * user not exist
      */
     USER_NOT_EXIST(50001, "user not exist"),

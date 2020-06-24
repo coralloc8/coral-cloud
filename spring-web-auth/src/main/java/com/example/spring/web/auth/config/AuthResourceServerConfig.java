@@ -42,11 +42,6 @@ public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
-        // 不起作用
-        http.exceptionHandling().accessDeniedHandler(customAuthExceptionHandler)
-            .authenticationEntryPoint(customAuthExceptionHandler);
-
         //
         http.requestMatchers().antMatchers("/api/**", "/user/**", "/oauth/**")
             //
