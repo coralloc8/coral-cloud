@@ -30,16 +30,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactoryMysql",
     transactionManagerRef = "transactionManagerMysql",
-    basePackages = {MysqlConfig.DEFAULT_DAO_PACKAGE, MysqlConfig.COMMON_ENTITY_PACKAGE})
+    basePackages = {MysqlConfig.COMMON_DAO_PACKAGE, MysqlConfig.DEFAULT_DAO_PACKAGE})
 public class MysqlConfig {
-
-    protected static final String COMMON_ENTITY_PACKAGE = "com.example.spring.common.jpa.entity";
 
     protected static final String COMMON_DAO_PACKAGE = "com.example.spring.common.jpa.repository";
 
-    protected static final String DEFAULT_ENTITY_PACKAGE = "com.example.spring.database.test.entity";
-
     protected static final String DEFAULT_DAO_PACKAGE = "com.example.spring.database.test.repository";
+
+    protected static final String COMMON_ENTITY_PACKAGE = "com.example.spring.common.jpa.entity";
+
+    protected static final String DEFAULT_DTO_PACKAGE = "com.example.spring.database.test.dto";
+
+    protected static final String DEFAULT_ENTITY_PACKAGE = "com.example.spring.database.test.entity";
 
     @Qualifier("mysqlDataSource")
     @Autowired
@@ -61,10 +63,9 @@ public class MysqlConfig {
     @Bean(name = "entityManagerFactoryMysql")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryMysql(EntityManagerFactoryBuilder builder) {
         // 设置实体类所在位置
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryMysql =
-            builder.dataSource(mysqlDataSource).properties(getVendorProperties())
-                .packages(DEFAULT_ENTITY_PACKAGE, COMMON_DAO_PACKAGE).persistenceUnit("mysqlPersistenceUnit").build();
-        return entityManagerFactoryMysql;
+        return builder.dataSource(mysqlDataSource).properties(getVendorProperties())
+            .packages(COMMON_ENTITY_PACKAGE, DEFAULT_ENTITY_PACKAGE, DEFAULT_DTO_PACKAGE)
+            .persistenceUnit("mysqlPersistenceUnit").build();
     }
 
     private Map<String, Object> getVendorProperties() {

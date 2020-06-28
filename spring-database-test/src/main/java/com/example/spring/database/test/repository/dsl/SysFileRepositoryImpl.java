@@ -58,7 +58,7 @@ public class SysFileRepositoryImpl extends QuerydslRepositorySupport implements 
                 FileInfoDTO.class,
                 QSysFile.sysFile.saveType,
                 QSysFile.sysFile.relativePath,
-                QSysFile.sysFile.id,
+                QSysFile.sysFile.id.as(FileInfoDTO.FILE_ID_ALIAS),
                 QSysFile.sysFile.remark,
                 QSysFile.sysFile.md5,
                 QSysFileRelation.sysFileRelation.fileModule,

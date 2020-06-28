@@ -7,22 +7,21 @@ spring:
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
       type: com.alibaba.druid.pool.DruidDataSource
-      druid:
-        filters: stat
-        maxActive: 20
-        initialSize: 10
-        maxWait: 9000
-        minIdle: 10
-        timeBetweenEvictionRunsMillis: 60000
-        minEvictableIdleTimeMillis: 160000
-        maxEvictableIdleTimeMillis: 230000
-        validationQuery: select 1
-        testWhileIdle: true
-        testOnBorrow: false
-        testOnReturn: false
-        poolPreparedStatements: true
-        maxOpenPreparedStatements: 20
-        keepAlive: true
+      filters: stat
+      maxActive: 20
+      initialSize: 10
+      maxWait: 9000
+      minIdle: 10
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 160000
+      maxEvictableIdleTimeMillis: 230000
+      validationQuery: select 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+      keepAlive: true
 
   jpa:
     #database: mysql

@@ -13,7 +13,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 public class MyDataSource extends DruidDataSource {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 

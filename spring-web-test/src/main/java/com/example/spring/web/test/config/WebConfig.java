@@ -2,8 +2,13 @@ package com.example.spring.web.test.config;
 
 import java.util.List;
 
+import com.example.spring.web.core.support.converter.StringToEnumConverterFactory;
+import com.example.spring.web.core.support.converter.StringToLocalDate;
+import com.example.spring.web.core.support.converter.StringToLocalDateTime;
+import com.example.spring.web.core.support.converter.StringToLocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -25,6 +30,15 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Autowired
     private UploadProperty uploadProperty;
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverterFactory(new StringToEnumConverterFactory());
+        registry.addConverter(new StringToLocalDate());
+        registry.addConverter(new StringToLocalDateTime());
+        registry.addConverter(new StringToLocalTime());
+
+    }
 
     /**
      * 跨域
