@@ -74,17 +74,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
             .addResourceLocations("file:" + uploadProperty.getSavePath());
     }
 
-    /**
-     * 防XSS注入
-     *
-     * @return FilterRegistrationBean
-     */
-    // @Bean
-    // public FilterRegistrationBean<XssFilter> xssFilterRegistration() {
-    // FilterRegistrationBean<XssFilter> registration = new FilterRegistrationBean<>(new XssFilter());
-    // registration.addUrlPatterns("/*");
-    // registration.setName("xssFilter");
-    // return registration;
-    // }
+
 
 }

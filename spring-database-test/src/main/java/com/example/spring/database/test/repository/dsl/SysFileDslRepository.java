@@ -15,18 +15,19 @@ public interface SysFileDslRepository {
 
     /**
      * 根据module和info查询文件
+     * 
      * @param fileModule
-     * @param infoId
+     * @param infoNo
      * @return
      */
-    FileInfoDTO findFilesByModuleAndInfoId(FileModuleEnum fileModule, Long infoId);
+    FileInfoDTO findFilesByModuleAndInfoNo(FileModuleEnum fileModule, String infoNo);
 
     /**
-     * 
+     * 根据module和info查询文件
      * @param modules
-     * @param infoIds
+     * @param infoNos
      * @return
      */
-    List<FileInfoDTO> findFilesByModuleInAndInfoIdIn(Set<FileModuleEnum> modules, Set<Long> infoIds);
+    List<FileInfoDTO> findFilesByModuleInAndInfoNoIn(Set<FileModuleEnum> modules, Set<String> infoNos);
 
 }

@@ -1,4 +1,4 @@
-package com.example.spring.web.test.vo.response;
+package com.example.spring.web.test.vo.response.file;
 
 import javax.persistence.Convert;
 
@@ -16,10 +16,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FileResVO {
 
-    private Long id;
+    private String fileNo;
 
     private String url;
 
     @Convert(converter = FileModuleEnum.Convert.class)
     private FileModuleEnum fileModule;
+
+    private String md5;
 }

@@ -18,14 +18,15 @@ import com.example.spring.database.test.enums.file.FileModuleEnum;
 import com.example.spring.database.test.enums.file.FileSaveTypeEnum;
 import com.example.spring.database.test.repository.SysFileRelationRepository;
 import com.example.spring.database.test.repository.SysFileRepository;
+import com.example.spring.web.core.support.NumberCreatorFactory;
 import com.example.spring.web.test.config.UploadProperty;
 import com.example.spring.web.test.dto.FileRelationSaveDTO;
 import com.example.spring.web.test.dto.FileSaveDTO;
 import com.example.spring.web.test.service.IFileService;
-import com.example.spring.web.test.vo.response.FileAndInfoIdResVO;
-import com.example.spring.web.test.vo.response.FileByFileIdVO;
-import com.example.spring.web.test.vo.response.FileListResVO;
-import com.example.spring.web.test.vo.response.FileResVO;
+import com.example.spring.web.test.vo.response.file.FileAndInfoIdResVO;
+import com.example.spring.web.test.vo.response.file.FileByFileIdVO;
+import com.example.spring.web.test.vo.response.file.FileListResVO;
+import com.example.spring.web.test.vo.response.file.FileResVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +46,9 @@ public class FileServiceImpl implements IFileService {
     @Autowired
     private UploadProperty uploadProperty;
 
+    @Autowired
+    private NumberCreatorFactory numberCreatorFactory;
+
     @Override
     public FileResVO saveFile(FileSaveDTO fileSaveDTO) {
         String savePath = uploadProperty.getSavePath();
@@ -53,20 +57,21 @@ public class FileServiceImpl implements IFileService {
         String relativePath = filePath.getRelativePath();
 
         SysFile sysFile = new SysFile();
+        sysFile.setNo(numberCreatorFactory.createUniqueNo().toString());
         sysFile.setRelativePath(relativePath);
         sysFile.setRemark(fileSaveDTO.getRemark());
         sysFile.setSaveType(FileSaveTypeEnum.LOCAL_DISK);
+        sysFile.setMd5(filePath.getMd5());
         fileRepository.save(sysFile);
 
-        return new FileResVO(sysFile.getId(), uploadProperty.getNetworkFullPath(relativePath), null);
+        return new FileResVO(sysFile.getNo(), uploadProperty.getNetworkFullPath(relativePath), null, sysFile.getMd5());
     }
 
     @Override
-    public void deleteFile(Set<Long> fileIds) {
-        for (Long fileId : fileIds) {
-            Optional<SysFile> sysFileOptional = fileRepository.findById(fileId);
-            if (sysFileOptional.isPresent()) {
-                SysFile sysFile = sysFileOptional.get();
+    public void deleteFile(Set<String> fileNos) {
+        for (String no : fileNos) {
+            SysFile sysFile = fileRepository.findByNo(no);
+            if (sysFile != null) {
                 sysFile.setDeleted(GlobalDeletedEnum.YES);
                 fileRepository.save(sysFile);
             }
@@ -77,22 +82,22 @@ public class FileServiceImpl implements IFileService {
     public void saveFileRelations(List<FileRelationSaveDTO> relationSaveDTOList) {
         relationSaveDTOList.stream().map(e -> {
             SysFileRelation fileRe = new SysFileRelation();
-            fileRe.setFileId(e.getFileId());
+            fileRe.setFileNo(e.getFileNo());
             fileRe.setFileModule(e.getFileModule());
-            fileRe.setInfoId(e.getInfoId());
+            fileRe.setInfoNo(e.getInfoNo());
             return fileRe;
         }).forEach(e -> fileRelationRepository.save(e));
     }
 
     @Override
-    public void deleteFileRelations(FileModuleEnum fileModuleEnum, Long infoId) {
-        fileRelationRepository.deleteByFileModuleAndInfoId(fileModuleEnum, infoId);
+    public void deleteFileRelations(FileModuleEnum fileModuleEnum, String infoNo) {
+        fileRelationRepository.deleteByFileModuleAndInfoNo(fileModuleEnum, infoNo);
 
     }
 
     @Override
-    public Optional<FileResVO> findByFileModuleAndInfoId(FileModuleEnum fileModuleEnum, Long infoId) {
-        List<FileResVO> fileResVOS = this.findByFileModuleInAndInfoId(Arrays.asList(fileModuleEnum), infoId);
+    public Optional<FileResVO> findByFileModuleAndInfoNo(FileModuleEnum fileModuleEnum, String infoNo) {
+        List<FileResVO> fileResVOS = this.findByFileModuleInAndInfoNo(Arrays.asList(fileModuleEnum), infoNo);
         if (fileResVOS == null || fileResVOS.isEmpty()) {
             return Optional.empty();
         }
@@ -100,48 +105,54 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public List<FileResVO> findByFileModuleInAndInfoId(List<FileModuleEnum> fileModuleEnums, Long infoId) {
+    public List<FileResVO> findByFileModuleInAndInfoNo(List<FileModuleEnum> fileModuleEnums, String infoNo) {
         // 此处采用dsl查询的方式实现
-        List<FileInfoDTO> fileInfoDTOS = fileRepository.findFilesByModuleInAndInfoIdIn(
-            CollectionUtil.newHashSet(fileModuleEnums), CollectionUtil.newHashSet(infoId));
+        List<FileInfoDTO> fileInfoDTOS = fileRepository.findFilesByModuleInAndInfoNoIn(
+            CollectionUtil.newHashSet(fileModuleEnums), CollectionUtil.newHashSet(infoNo));
         if (fileInfoDTOS == null || fileInfoDTOS.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return fileInfoDTOS.stream().map(e -> new FileResVO(e.getFileId(),
-            uploadProperty.getNetworkFullPath(e.getRelativePath()), e.getFileModule())).collect(Collectors.toList());
+        return fileInfoDTOS.stream().map(e -> new FileResVO(e.getFileNo(),
+            uploadProperty.getNetworkFullPath(e.getRelativePath()), e.getFileModule(), e.getMd5()))
+            .collect(Collectors.toList());
     }
 
     @Override
-    public List<FileListResVO> findByFileModuleInAndInfoIdIn(List<FileModuleEnum> fileModuleEnums, List<Long> infoIds) {
+    public List<FileListResVO> findByFileModuleInAndInfoNoIn(List<FileModuleEnum> fileModuleEnums,
+        List<String> infoNos) {
         List<SysFileRelation> sysFileRelations =
-            fileRelationRepository.findByFileModuleInAndInfoIdIn(fileModuleEnums, infoIds);
+            fileRelationRepository.findByFileModuleInAndInfoNoIn(fileModuleEnums, infoNos);
         if (sysFileRelations == null || sysFileRelations.isEmpty()) {
             return Collections.emptyList();
         }
-        List<Long> fileIds =
-            sysFileRelations.stream().map(SysFileRelation::getFileId).distinct().collect(Collectors.toList());
-        List<SysFile> files = fileRepository.findAllById(fileIds);
+        List<String> fileNos =
+            sysFileRelations.stream().map(SysFileRelation::getFileNo).distinct().collect(Collectors.toList());
+        List<SysFile> files = fileRepository.findByNoIn(fileNos);
 
         if (files == null || files.isEmpty()) {
             return Collections.emptyList();
         }
 
-        Map<Long, List<SysFile>> fileMap = files.stream().collect(Collectors.groupingBy(SysFile::getId));
+        Map<String, List<SysFile>> fileMap = files.stream().collect(Collectors.groupingBy(SysFile::getNo));
 
-        List<FileListResVO> list = sysFileRelations.stream().collect(Collectors.groupingBy(SysFileRelation::getInfoId))
+        List<FileListResVO> list = sysFileRelations.stream().collect(Collectors.groupingBy(SysFileRelation::getInfoNo))
             .entrySet().stream().map(e -> {
                 FileListResVO resVo = new FileListResVO();
 
-                resVo.setInfoId(e.getKey());
+                resVo.setInfoNo(e.getKey());
 
                 List<FileResVO> resVos = e.getValue().stream().map(v -> {
-                    String relativePath =
-                        fileMap.containsKey(v.getFileId()) ? fileMap.get(v.getFileId()).get(0).getRelativePath() : "";
+                    String relativePath = "", md5 = "";
+                    if (fileMap.containsKey(v.getFileNo())) {
+                        SysFile sysFile = fileMap.get(v.getFileNo()).get(0);
+                        relativePath = sysFile.getRelativePath();
+                        md5 = sysFile.getMd5();
+                    }
 
                     FileModuleEnum fileModuleEnum = v.getFileModule();
-                    return new FileResVO(v.getFileId(), uploadProperty.getNetworkFullPath(relativePath),
-                        fileModuleEnum);
+                    return new FileResVO(v.getFileNo(), uploadProperty.getNetworkFullPath(relativePath), fileModuleEnum,
+                        md5);
                 }).collect(Collectors.toList());
 
                 resVo.setFiles(resVos);
@@ -154,33 +165,33 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public List<FileByFileIdVO> findByModuleAndInfoIds(FileModuleEnum fileModuleEnum, List<Long> infoIds) {
+    public List<FileByFileIdVO> findByModuleAndInfoNos(FileModuleEnum fileModuleEnum, List<String> infoNos) {
         List<SysFileRelation> sysFileRelations =
-            fileRelationRepository.findByFileModuleInAndInfoIdIn(Arrays.asList(fileModuleEnum), infoIds);
+            fileRelationRepository.findByFileModuleInAndInfoNoIn(Arrays.asList(fileModuleEnum), infoNos);
         if (CollectionUtil.isBlank(sysFileRelations)) {
             return Collections.emptyList();
         }
-        List<Long> fileIds =
-            sysFileRelations.stream().map(SysFileRelation::getFileId).distinct().collect(Collectors.toList());
-        List<SysFile> files = fileRepository.findAllById(fileIds);
+        List<String> fileNos =
+            sysFileRelations.stream().map(SysFileRelation::getFileNo).distinct().collect(Collectors.toList());
+        List<SysFile> files = fileRepository.findByNoIn(fileNos);
 
         if (files == null || files.isEmpty()) {
             return Collections.emptyList();
         }
 
-        Map<Long, List<SysFile>> fileMap = files.stream().collect(Collectors.groupingBy(SysFile::getId));
+        Map<String, List<SysFile>> fileMap = files.stream().collect(Collectors.groupingBy(SysFile::getNo));
 
-        List<FileByFileIdVO> list = sysFileRelations.stream().collect(Collectors.groupingBy(SysFileRelation::getFileId))
+        List<FileByFileIdVO> list = sysFileRelations.stream().collect(Collectors.groupingBy(SysFileRelation::getFileNo))
             .entrySet().stream().filter(e -> fileMap.containsKey(e.getKey())).map(e -> {
                 SysFile sysFile = fileMap.get(e.getKey()).get(0);
 
-                FileResVO fileResVo = new FileResVO(sysFile.getId(),
-                    uploadProperty.getNetworkFullPath(sysFile.getRelativePath()), fileModuleEnum);
+                FileResVO fileResVo = new FileResVO(sysFile.getNo(),
+                    uploadProperty.getNetworkFullPath(sysFile.getRelativePath()), fileModuleEnum, sysFile.getMd5());
 
-                List<Long> infoIdList =
-                    e.getValue().stream().map(SysFileRelation::getInfoId).collect(Collectors.toList());
+                List<String> infoNoList =
+                    e.getValue().stream().map(SysFileRelation::getInfoNo).collect(Collectors.toList());
 
-                return new FileByFileIdVO(fileResVo, infoIdList);
+                return new FileByFileIdVO(fileResVo, infoNoList);
             }).collect(Collectors.toList());
 
         return list;
@@ -188,30 +199,34 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public List<FileAndInfoIdResVO> findByModulesAndInfoIds(List<FileModuleEnum> fileModuleEnums, List<Long> infoIds) {
+    public List<FileAndInfoIdResVO> findByModulesAndInfoNos(List<FileModuleEnum> fileModuleEnums,
+        List<String> infoNos) {
         List<SysFileRelation> sysFileRelations =
-            fileRelationRepository.findByFileModuleInAndInfoIdIn(fileModuleEnums, infoIds);
+            fileRelationRepository.findByFileModuleInAndInfoNoIn(fileModuleEnums, infoNos);
         if (sysFileRelations == null || sysFileRelations.isEmpty()) {
             return Collections.emptyList();
         }
-        List<Long> fileIds =
-            sysFileRelations.stream().map(SysFileRelation::getFileId).distinct().collect(Collectors.toList());
+        List<String> fileNos =
+            sysFileRelations.stream().map(SysFileRelation::getFileNo).distinct().collect(Collectors.toList());
 
-        List<SysFile> files = fileRepository.findAllById(fileIds);
+        List<SysFile> files = fileRepository.findByNoIn(fileNos);
 
         if (files == null || files.isEmpty()) {
             return Collections.emptyList();
         }
 
-        Map<Long, List<SysFile>> fileMap = files.stream().collect(Collectors.groupingBy(SysFile::getId));
+        Map<String, List<SysFile>> fileMap = files.stream().collect(Collectors.groupingBy(SysFile::getNo));
 
         List<FileAndInfoIdResVO> list = sysFileRelations.stream().map(e -> {
-            String relativePath =
-                fileMap.containsKey(e.getFileId()) ? fileMap.get(e.getFileId()).get(0).getRelativePath() : "";
-
+            String relativePath = "", md5 = "";
+            if (fileMap.containsKey(e.getFileNo())) {
+                SysFile sysFile = fileMap.get(e.getFileNo()).get(0);
+                relativePath = sysFile.getRelativePath();
+                md5 = sysFile.getMd5();
+            }
             FileModuleEnum fileModuleEnum = e.getFileModule();
-            return new FileAndInfoIdResVO(e.getFileId(), uploadProperty.getNetworkFullPath(relativePath),
-                fileModuleEnum, e.getInfoId());
+            return new FileAndInfoIdResVO(e.getFileNo(), uploadProperty.getNetworkFullPath(relativePath),
+                fileModuleEnum, e.getInfoNo(), md5);
         }).collect(Collectors.toList());
         return list;
     }

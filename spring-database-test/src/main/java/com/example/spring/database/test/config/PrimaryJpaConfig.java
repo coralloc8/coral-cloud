@@ -3,12 +3,10 @@ package com.example.spring.database.test.config;
 
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -22,16 +20,19 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author huss
  */
 @Configuration
-@ConditionalOnBean(DataSourceConfig.class)
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactoryMysql",
     transactionManagerRef = "transactionManagerMysql",
-    basePackages = {MysqlConfig.COMMON_DAO_PACKAGE, MysqlConfig.DEFAULT_DAO_PACKAGE})
-public class MysqlConfig {
+    basePackages = {PrimaryJpaConfig.COMMON_DAO_PACKAGE, PrimaryJpaConfig.DEFAULT_DAO_PACKAGE})
+
+@Slf4j
+public class PrimaryJpaConfig {
 
     protected static final String COMMON_DAO_PACKAGE = "com.example.spring.common.jpa.repository";
 
@@ -39,13 +40,13 @@ public class MysqlConfig {
 
     protected static final String COMMON_ENTITY_PACKAGE = "com.example.spring.common.jpa.entity";
 
-    protected static final String DEFAULT_DTO_PACKAGE = "com.example.spring.database.test.dto";
-
     protected static final String DEFAULT_ENTITY_PACKAGE = "com.example.spring.database.test.entity";
 
-    @Qualifier("mysqlDataSource")
+    protected static final String DEFAULT_DTO_PACKAGE = "com.example.spring.database.test.dto";
+
+    @Qualifier("primaryDataSource")
     @Autowired
-    private DataSource mysqlDataSource;
+    private DataSource primaryDataSource;
 
     @Autowired
     private JpaProperties jpaProperties;
@@ -54,16 +55,10 @@ public class MysqlConfig {
     private HibernateProperties hibernateProperties;
 
     @Primary
-    @Bean(name = "entityManagerMysql")
-    public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
-        return entityManagerFactoryMysql(builder).getObject().createEntityManager();
-    }
-
-    @Primary
     @Bean(name = "entityManagerFactoryMysql")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryMysql(EntityManagerFactoryBuilder builder) {
         // 设置实体类所在位置
-        return builder.dataSource(mysqlDataSource).properties(getVendorProperties())
+        return builder.dataSource(primaryDataSource).properties(getVendorProperties())
             .packages(COMMON_ENTITY_PACKAGE, DEFAULT_ENTITY_PACKAGE, DEFAULT_DTO_PACKAGE)
             .persistenceUnit("mysqlPersistenceUnit").build();
     }

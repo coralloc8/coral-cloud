@@ -5,16 +5,16 @@ import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
+import lombok.ToString;
+
 /**
- * @author huss
+ * @description: TODO
+ * @author: huss
+ * @time: 2020/7/10 18:28
  */
 @Configuration
-@ConfigurationProperties(prefix = "spring.datasource.mysql")
-public class MyDataSource extends DruidDataSource {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+@ConfigurationProperties(prefix = "spring.datasource.primary")
+@ToString(callSuper = true)
+public class PrimaryDataSource extends DruidDataSource {
 
 }

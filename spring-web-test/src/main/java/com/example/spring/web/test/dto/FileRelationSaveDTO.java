@@ -1,6 +1,6 @@
 package com.example.spring.web.test.dto;
 
-import com.example.spring.web.test.vo.response.FileResVO;
+import com.example.spring.web.test.vo.response.file.FileResVO;
 
 import lombok.Data;
 import lombok.ToString;
@@ -12,8 +12,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class FileRelationSaveDTO extends FileResVO {
 
-    private Long fileId;
+    private String fileNo;
 
-    private Long infoId;
+    private String infoNo;
 
 }

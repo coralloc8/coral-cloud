@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConv
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 
+import com.example.spring.web.test.config.UploadProperty;
+
 /**
  * 资源服务
  * 
@@ -30,6 +32,8 @@ public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private CustomAuthExceptionHandler customAuthExceptionHandler;
+    @Autowired
+    private UploadProperty uploadProperty;
 
     @Value("${security.oauth2.authorization.check-token-access}")
     private String checkTokenAccess;
@@ -43,6 +47,8 @@ public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         // 匹配所有url
         http.requestMatchers().antMatchers("/**")
+            //
+            .and().authorizeRequests().antMatchers("/**/druid/**", uploadProperty.getVirtualPath() + "**").permitAll()
             // 所有url都需要授权访问
             .and().authorizeRequests().anyRequest().authenticated();
     }

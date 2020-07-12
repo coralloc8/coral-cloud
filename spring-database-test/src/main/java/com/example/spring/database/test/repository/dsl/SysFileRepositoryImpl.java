@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.spring.database.test.dto.FileInfoDTO;
 import com.example.spring.database.test.entity.QSysFile;
 import com.example.spring.database.test.entity.QSysFileRelation;
+import com.example.spring.database.test.entity.SysFile;
 import com.example.spring.database.test.enums.file.FileModuleEnum;
 import com.querydsl.core.types.Projections;
 
@@ -26,46 +27,46 @@ public class SysFileRepositoryImpl extends QuerydslRepositorySupport implements 
      * must not be {@literal null}.
      */
     public SysFileRepositoryImpl() {
-        super(FileInfoDTO.class);
+        super(SysFile.class);
     }
 
     @Override
-    public FileInfoDTO findFilesByModuleAndInfoId(FileModuleEnum fileModule, Long infoId) {
+    public FileInfoDTO findFilesByModuleAndInfoNo(FileModuleEnum fileModule, String infoNo) {
         FileInfoDTO fileInfoDTO = from(QSysFile.sysFile).leftJoin(QSysFileRelation.sysFileRelation)
-            .on(QSysFile.sysFile.id.eq(QSysFileRelation.sysFileRelation.fileId)).select(Projections.bean(
+            .on(QSysFile.sysFile.no.eq(QSysFileRelation.sysFileRelation.fileNo)).select(Projections.bean(
             //@formatter:off
                 FileInfoDTO.class,
                 QSysFile.sysFile.saveType,
                 QSysFile.sysFile.relativePath,
-                QSysFile.sysFile.id,
+                QSysFile.sysFile.no,
                 QSysFile.sysFile.remark,
                 QSysFile.sysFile.md5,
                 QSysFileRelation.sysFileRelation.fileModule,
-                QSysFileRelation.sysFileRelation.infoId
+                QSysFileRelation.sysFileRelation.infoNo
             //@formatter:on
             )).where(QSysFileRelation.sysFileRelation.fileModule.eq(fileModule)
-                .and(QSysFileRelation.sysFileRelation.infoId.eq(infoId)))
+                .and(QSysFileRelation.sysFileRelation.infoNo.eq(infoNo)))
             .fetchOne();
 
         return fileInfoDTO;
     }
 
     @Override
-    public List<FileInfoDTO> findFilesByModuleInAndInfoIdIn(Set<FileModuleEnum> modules, Set<Long> infoIds) {
+    public List<FileInfoDTO> findFilesByModuleInAndInfoNoIn(Set<FileModuleEnum> modules, Set<String> infoNos) {
         List<FileInfoDTO> fileInfoDTOs = from(QSysFile.sysFile).leftJoin(QSysFileRelation.sysFileRelation)
-            .on(QSysFile.sysFile.id.eq(QSysFileRelation.sysFileRelation.fileId)).select(Projections.bean(
+            .on(QSysFile.sysFile.no.eq(QSysFileRelation.sysFileRelation.fileNo)).select(Projections.bean(
             //@formatter:off
                 FileInfoDTO.class,
                 QSysFile.sysFile.saveType,
                 QSysFile.sysFile.relativePath,
-                QSysFile.sysFile.id.as(FileInfoDTO.FILE_ID_ALIAS),
+                QSysFile.sysFile.no.as(FileInfoDTO.FILE_NO_ALIAS),
                 QSysFile.sysFile.remark,
                 QSysFile.sysFile.md5,
                 QSysFileRelation.sysFileRelation.fileModule,
-                QSysFileRelation.sysFileRelation.infoId
+                QSysFileRelation.sysFileRelation.infoNo
             //@formatter:on
             )).where(QSysFileRelation.sysFileRelation.fileModule.in(modules)
-                .and(QSysFileRelation.sysFileRelation.infoId.in(infoIds)))
+                .and(QSysFileRelation.sysFileRelation.infoNo.in(infoNos)))
             .fetch();
 
         return fileInfoDTOs;

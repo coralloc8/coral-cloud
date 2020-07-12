@@ -15,37 +15,37 @@ import com.example.spring.database.test.enums.file.FileModuleEnum;
 public interface SysFileRelationRepository extends JpaBaseRepository<SysFileRelation, Long> {
 
     /**
-     * 根据module和infoId删除
+     * 根据module和infoNo删除
      * 
      * @param fileModule
-     * @param infoId
+     * @param infoNo
      */
-    void deleteByFileModuleAndInfoId(FileModuleEnum fileModule, Long infoId);
+    void deleteByFileModuleAndInfoNo(FileModuleEnum fileModule, String infoNo);
 
     /**
-     * 根据module和infoId查找
+     * 根据module和infoNo查找
      * 
      * @param fileModule
-     * @param infoId
+     * @param infoNo
      * @return
      */
-    SysFileRelation findByFileModuleAndInfoId(FileModuleEnum fileModule, Long infoId);
+    SysFileRelation findByFileModuleAndInfoNo(FileModuleEnum fileModule, String infoNo);
 
     /**
-     * 多个module和一个infoId查找
+     * 多个module和一个infoNo查找
      * 
      * @param fileModuleEnumList
-     * @param infoId
+     * @param infoNo
      * @return
      */
-    List<SysFileRelation> findByFileModuleInAndInfoId(List<FileModuleEnum> fileModuleEnumList, Long infoId);
+    List<SysFileRelation> findByFileModuleInAndInfoNo(List<FileModuleEnum> fileModuleEnumList, String infoNo);
 
     /**
-     * 多个module和infoId查找
+     * 多个module和infoNo查找
      * 
      * @param fileModuleEnumList
-     * @param infoIds
+     * @param infoNos
      * @return
      */
-    List<SysFileRelation> findByFileModuleInAndInfoIdIn(List<FileModuleEnum> fileModuleEnumList, List<Long> infoIds);
+    List<SysFileRelation> findByFileModuleInAndInfoNoIn(List<FileModuleEnum> fileModuleEnumList, List<String> infoNos);
 }

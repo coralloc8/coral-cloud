@@ -1,4 +1,4 @@
-package com.example.spring.web.test.vo.response;
+package com.example.spring.web.test.vo.response.file;
 
 import com.example.spring.database.test.enums.file.FileModuleEnum;
 
@@ -13,10 +13,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class FileAndInfoIdResVO extends FileResVO {
 
-    private Long infoId;
+    private String infoNo;
 
-    public FileAndInfoIdResVO(Long id, String url, FileModuleEnum fileModule, Long infoId) {
-        super(id, url, fileModule);
-        this.infoId = infoId;
+    public FileAndInfoIdResVO(String fileNo, String url, FileModuleEnum fileModule, String infoNo, String md5) {
+        super(fileNo, url, fileModule, md5);
+        this.infoNo = infoNo;
     }
 }

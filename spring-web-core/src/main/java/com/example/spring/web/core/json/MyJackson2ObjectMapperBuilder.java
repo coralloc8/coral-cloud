@@ -34,14 +34,14 @@ public class MyJackson2ObjectMapperBuilder extends Jackson2ObjectMapperBuilder {
         super.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // 单引号处理
         super.featuresToEnable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
-        // 反序列化时，属性不存在的兼容处理
-        super.featuresToEnable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
 
         // 禁用科学计数法
         super.featuresToEnable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
         super.featuresToEnable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         // 日期格式化
-        super.modules(new ParameterNamesModule(), new BladeJavaTimeModule(), new EnumModule());
+        super.modules(new ParameterNamesModule(), new BladeJavaTimeModule(), new EnumModule(),
+            new String2EscapeHtml4Module());
         // 属性可视化范围
         // super.visibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.PUBLIC_ONLY);
     }

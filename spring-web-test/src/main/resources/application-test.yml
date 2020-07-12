@@ -45,8 +45,16 @@ spring:
     encoding: utf-8
   servlet:
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      #是否开启文件上传支持
+      enabled: true
+      #文件写入磁盘阈值
+      file-size-threshold: 0
+      #单个文件时上传的最大大小
+      max-file-size: 100MB
+      #多个文件时上传的最大大小
+      max-request-size: 1000MB
+      #文件是否延迟解析
+      resolve-lazily: false
   redis:
     host: 47.92.172.93
     port: 6379
@@ -78,3 +86,8 @@ upload:
   save-path: /opt/install/netgear-files/
   domain: http://47.92.172.93/cms
   virtual-path: /files/
+
+
+snow-flake-creator:
+  data-center-id: 1
+  machine-id: 1

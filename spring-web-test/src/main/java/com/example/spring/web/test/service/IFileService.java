@@ -7,29 +7,80 @@ import java.util.Set;
 import com.example.spring.database.test.enums.file.FileModuleEnum;
 import com.example.spring.web.test.dto.FileRelationSaveDTO;
 import com.example.spring.web.test.dto.FileSaveDTO;
-import com.example.spring.web.test.vo.response.FileAndInfoIdResVO;
-import com.example.spring.web.test.vo.response.FileByFileIdVO;
-import com.example.spring.web.test.vo.response.FileListResVO;
-import com.example.spring.web.test.vo.response.FileResVO;
+import com.example.spring.web.test.vo.response.file.FileAndInfoIdResVO;
+import com.example.spring.web.test.vo.response.file.FileByFileIdVO;
+import com.example.spring.web.test.vo.response.file.FileListResVO;
+import com.example.spring.web.test.vo.response.file.FileResVO;
 
+/**
+ * @author huss
+ */
 public interface IFileService {
 
+    /**
+     * 保存文件
+     * @param fileSaveDTO
+     * @return
+     */
     FileResVO saveFile(FileSaveDTO fileSaveDTO);
 
-    void deleteFile(Set<Long> fileIds);
+    /**
+     * 删除文件
+     * @param fileNos
+     */
+    void deleteFile(Set<String> fileNos);
 
+    /**
+     * 保存文件映射关系
+     * @param relationSaveDTOList
+     */
     void saveFileRelations(List<FileRelationSaveDTO> relationSaveDTOList);
 
-    void deleteFileRelations(FileModuleEnum fileModuleEnum, Long infoId);
+    /**
+     * 删除文件映射关系
+     * @param fileModuleEnum
+     * @param infoNo
+     */
+    void deleteFileRelations(FileModuleEnum fileModuleEnum, String infoNo);
 
-    Optional<FileResVO> findByFileModuleAndInfoId(FileModuleEnum fileModuleEnum, Long infoId);
+    /**
+     * 根据filemodule和infoNo查找文件
+     * @param fileModuleEnum
+     * @param infoNo
+     * @return
+     */
+    Optional<FileResVO> findByFileModuleAndInfoNo(FileModuleEnum fileModuleEnum, String infoNo);
 
-    List<FileResVO> findByFileModuleInAndInfoId(List<FileModuleEnum> fileModuleEnums, Long infoId);
+    /**
+     * 根据filemodule和infoNo查找文件
+     * @param fileModuleEnums
+     * @param infoNo
+     * @return
+     */
+    List<FileResVO> findByFileModuleInAndInfoNo(List<FileModuleEnum> fileModuleEnums, String infoNo);
 
-    List<FileListResVO> findByFileModuleInAndInfoIdIn(List<FileModuleEnum> fileModuleEnums, List<Long> infoIds);
+    /**
+     * 根据filemodule和infoNo查找文件
+     * @param fileModuleEnums
+     * @param infoNos
+     * @return
+     */
+    List<FileListResVO> findByFileModuleInAndInfoNoIn(List<FileModuleEnum> fileModuleEnums, List<String> infoNos);
 
-    List<FileByFileIdVO> findByModuleAndInfoIds(FileModuleEnum fileModuleEnum, List<Long> infoIds);
+    /**
+     * 根据filemodule和infoNo查找文件
+     * @param fileModuleEnum
+     * @param infoNos
+     * @return
+     */
+    List<FileByFileIdVO> findByModuleAndInfoNos(FileModuleEnum fileModuleEnum, List<String> infoNos);
 
-    List<FileAndInfoIdResVO> findByModulesAndInfoIds(List<FileModuleEnum> fileModuleEnums, List<Long> infoIds);
+    /**
+     * 根据filemodule和infoNo查找文件
+     * @param fileModuleEnums
+     * @param infoNos
+     * @return
+     */
+    List<FileAndInfoIdResVO> findByModulesAndInfoNos(List<FileModuleEnum> fileModuleEnums, List<String> infoNos);
 
 }

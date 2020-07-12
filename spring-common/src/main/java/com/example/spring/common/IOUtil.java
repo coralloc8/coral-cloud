@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -12,6 +14,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class IOUtil {
+
+    public static String getMd5(InputStream in) throws IOException {
+        return DigestUtils.md5Hex(in);
+
+    }
 
     public static byte[] readByteArray(InputStream in, boolean escapeHtml4) throws IOException {
         if (escapeHtml4) {
@@ -40,14 +47,12 @@ public class IOUtil {
     public static String readStream(InputStream inputStream) throws IOException {
         Objects.requireNonNull(inputStream);
         StringBuilder stringBuilder = new StringBuilder();
-
-
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
 
             return br.lines().collect(Collectors.joining("\n"));
         } catch (IOException ioe) {
             // return getKeyFromAuthorizationServer();
-            log.error("error:",ioe);
+            log.error("error:", ioe);
             return "";
         }
 

@@ -19,11 +19,11 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class SysFileRelation extends IdentityIdKey {
 
-    private Long fileId;
+    private String fileNo;
 
     @Convert(converter = FileModuleEnum.Convert.class)
     private FileModuleEnum fileModule;
 
-    private Long infoId;
+    private String infoNo;
 
 }

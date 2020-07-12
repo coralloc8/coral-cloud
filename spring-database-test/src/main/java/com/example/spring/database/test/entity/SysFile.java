@@ -20,6 +20,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class SysFile extends IdentityIdKey {
 
+    private String no;
+
     @Convert(converter = FileSaveTypeEnum.Convert.class)
     private FileSaveTypeEnum saveType;
 

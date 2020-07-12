@@ -17,13 +17,13 @@ import lombok.*;
 @ToString
 public class FileInfoDTO {
 
-    public static final String FILE_ID_ALIAS = "fileId";
+    public static final String FILE_NO_ALIAS = "fileNo";
 
     private FileSaveTypeEnum saveType;
 
     private String relativePath;
 
-    private Long fileId;
+    private String fileNo;
 
     private String remark;
 
@@ -31,6 +31,6 @@ public class FileInfoDTO {
 
     private FileModuleEnum fileModule;
 
-    private Long infoId;
+    private String infoNo;
 
 }

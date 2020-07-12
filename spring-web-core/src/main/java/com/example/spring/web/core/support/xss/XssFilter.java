@@ -13,16 +13,26 @@
 package com.example.spring.web.core.support.xss;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.MediaType;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * XSS过滤
  * 
  * @author huss
  */
+@Slf4j
 public class XssFilter implements Filter {
+
+    private static final List<String> CONTENT_TYPES =
+        Arrays.asList(MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE);
 
     @Override
     public void init(FilterConfig config) throws ServletException {}
@@ -30,8 +40,25 @@ public class XssFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
-        XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest)request);
-        chain.doFilter(xssRequest, response);
+        log.info(">>>>>xss filter start. contentType: {}, request：{}", request.getContentType(), request);
+
+        // json请求需要转换value里面的特殊字符，不在此处处理
+        // form-data文件上传暂时也有问题
+        if (this.filter(request)) {
+            XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest)request);
+            chain.doFilter(xssRequest, response);
+        } else {
+            chain.doFilter(request, response);
+        }
+
+    }
+
+    private boolean filter(ServletRequest request) {
+        return request.getContentType() != null
+            //
+            && !CONTENT_TYPES.contains(request.getContentType())
+            //
+            && !request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE);
     }
 
     @Override

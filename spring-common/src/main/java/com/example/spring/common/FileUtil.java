@@ -39,11 +39,18 @@ public class FileUtil {
                 file + "_" + DateTimeUtil.format(LocalDateTime.now(), DatePattern.YYYYMMDDHHMMSS_EN) + "." + suffix;
 
             Path fullPath = Paths.get(parentPath.toString(), fullFile);
-
-            Files.copy(new BufferedInputStream(inputStream), fullPath);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            // 先标记
+            bufferedInputStream.mark(bufferedInputStream.available() + 1);
+            Files.copy(bufferedInputStream, fullPath);
 
             relativePath = Paths.get(relativePath.toString(), fullFile);
-            return new FilePath(relativePath.toString(), fullPath.toString(), rootPath.toString());
+
+            // reset 从头读取
+            bufferedInputStream.reset();
+            String md5 = IOUtil.getMd5(bufferedInputStream);
+
+            return new FilePath(relativePath.toString(), fullPath.toString(), rootPath.toString(), md5);
         } catch (IOException e) {
             throw new SystemRuntimeException("save file error", e);
         }
@@ -60,6 +67,8 @@ public class FileUtil {
         private String fullPath;
 
         private String rootPath;
+
+        private String md5;
 
     }
 }
