@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.spring.service.auth.enums.AuthErrorMessageEnum;
+import com.example.spring.web.core.enums.OauthErrorMessageEnum;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -17,7 +19,6 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.spring.web.core.enums.OauthMessageEnum;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
 import com.example.spring.web.core.util.JsonUtil;
@@ -61,7 +62,7 @@ public class CustomBasicErrorController extends BasicErrorController {
 
         log.error(">>>>>body error:{}", body);
 
-        result = new Results().failure(OauthMessageEnum.UNAUTHORIZED);
+        result = new Results().failure(OauthErrorMessageEnum.UNAUTHORIZED);
         String resultJson = JsonUtil.toJson(result);
         Map<String, Object> resultJsonMap = JsonUtil.toMap(resultJson);
 
@@ -72,7 +73,7 @@ public class CustomBasicErrorController extends BasicErrorController {
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ResponseEntity<String> mediaTypeNotAcceptable(HttpServletRequest request) {
         HttpStatus status = getStatus(request);
-        Result result = new Results().failure(OauthMessageEnum.HTTP_MEDIA_TYPE_NOT_ACCEPT);
+        Result result = new Results().failure(OauthErrorMessageEnum.HTTP_MEDIA_TYPE_NOT_ACCEPT);
         String resultJson = JsonUtil.toJson(result);
         return new ResponseEntity<>(resultJson, status);
     }

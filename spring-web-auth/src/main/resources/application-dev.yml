@@ -57,3 +57,7 @@ spring:
         key-prefix:
   main:
     allow-bean-definition-overriding: true
+
+snow-flake-creator:
+  data-center-id: 1
+  machine-id: 1

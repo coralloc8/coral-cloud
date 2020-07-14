@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.spring.web.core.enums.OauthErrorMessageEnum;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpResponse;
@@ -20,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 
-import com.example.spring.web.core.enums.OauthMessageEnum;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
 
@@ -57,7 +57,7 @@ public class HeaderOnlyOAuth2ExceptionRenderer implements OAuth2ExceptionRendere
         Object body = responseEntity.getBody();
         log.error(">>>>>HeaderOnlyOAuth2ExceptionRenderer handleHttpEntityResponse body:{}", body);
         // 自定义错误消息
-        Result result = new Results().failure(OauthMessageEnum.BAD_CREDENTIALS);
+        Result result = new Results().failure(OauthErrorMessageEnum.BAD_CREDENTIALS);
 
         if (body != null) {
             writeWithMessageConverters(result, inputMessage, outputMessage);

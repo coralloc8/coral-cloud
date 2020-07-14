@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.spring.common.enums.I18nMessageKey;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.spring.common.exception.IErrorMessage;
 import com.example.spring.common.exception.SystemRuntimeException;
 import com.example.spring.web.core.enums.BaseErrorMessageEnum;
-import com.example.spring.web.core.enums.I18nMessageKey;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
 import com.example.spring.web.core.support.I18nMessageHelper;

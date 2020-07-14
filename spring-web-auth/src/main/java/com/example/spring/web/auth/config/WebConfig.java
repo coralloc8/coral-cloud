@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.example.spring.service.file.config.UploadProperty;
 import com.example.spring.web.core.interceptor.LocaleChangeInterceptor;
 import com.example.spring.web.core.json.Jackson2HttpMessageConverter;
 
@@ -22,6 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private LocaleChangeInterceptor localeChangeInterceptor;
+    @Autowired
+    private UploadProperty uploadProperty;
 
     /**
      * 跨域
@@ -59,6 +62,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler(uploadProperty.getVirtualPath() + "**")
+            .addResourceLocations("file:" + uploadProperty.getSavePath());
     }
 
     /**

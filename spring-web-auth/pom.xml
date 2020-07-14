@@ -18,9 +18,16 @@
             <artifactId>spring-web-core</artifactId>
             <version>${project.appVersion}</version>
         </dependency>
+
         <dependency>
             <groupId>com.example.spring</groupId>
             <artifactId>spring-database-test</artifactId>
+            <version>${project.appVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.example.spring</groupId>
+            <artifactId>spring-service-auth</artifactId>
             <version>${project.appVersion}</version>
         </dependency>
 

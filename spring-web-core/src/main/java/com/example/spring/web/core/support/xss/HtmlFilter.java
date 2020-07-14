@@ -1,13 +1,13 @@
 package com.example.spring.web.core.support.xss;
 
+import com.example.spring.common.StringPool;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.example.spring.web.core.support.StringPool;
 
 /**
  * HTML filtering utility for protecting against XSS (Cross Site Scripting).

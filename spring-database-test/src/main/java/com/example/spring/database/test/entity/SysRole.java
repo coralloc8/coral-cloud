@@ -23,7 +23,7 @@ public class SysRole extends IdentityIdKey {
     /**
      * 编号
      */
-    private Integer no;
+    private String no;
 
     /**
      * 名称

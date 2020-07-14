@@ -2,6 +2,7 @@ package com.example.spring.web.test.config;
 
 import java.util.List;
 
+import com.example.spring.service.file.config.UploadProperty;
 import com.example.spring.web.core.support.converter.StringToEnumConverterFactory;
 import com.example.spring.web.core.support.converter.StringToLocalDate;
 import com.example.spring.web.core.support.converter.StringToLocalDateTime;

@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.example.spring.web.core.support.StringPool;
+import com.example.spring.common.StringPool;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;

@@ -15,6 +15,9 @@
         <module>spring-web-core</module>
         <module>spring-web-auth</module>
         <module>spring-web-test</module>
+        <module>spring-service-file</module>
+        <module>spring-service-core</module>
+        <module>spring-service-auth</module>
     </modules>
 
     <name>spring-example</name>
@@ -40,7 +43,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
 
     </dependencies>

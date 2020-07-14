@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.spring.web.core.enums.OauthErrorMessageEnum;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
@@ -13,7 +14,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.spring.web.core.enums.OauthMessageEnum;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
 import com.example.spring.web.core.util.JsonUtil;
@@ -45,12 +45,12 @@ public class CustomAuthExceptionHandler
         if (cause instanceof InvalidTokenException) {
             this.createHttpHeader(response, HttpServletResponse.SC_UNAUTHORIZED);
             // Token无效
-            Result result = new Results().failure(OauthMessageEnum.ACCESS_TOKEN_INVALID);
+            Result result = new Results().failure(OauthErrorMessageEnum.ACCESS_TOKEN_INVALID);
             response.getWriter().write(JsonUtil.toJson(result));
         } else {
             this.createHttpHeader(response, HttpServletResponse.SC_FORBIDDEN);
             // 资源未授权
-            Result result = new Results().failure(OauthMessageEnum.UNAUTHORIZED);
+            Result result = new Results().failure(OauthErrorMessageEnum.UNAUTHORIZED);
             response.getWriter().write(JsonUtil.toJson(result));
         }
 
@@ -70,7 +70,7 @@ public class CustomAuthExceptionHandler
         log.error(">>>>>AccessDeniedException error:", accessDeniedException);
         // 访问资源的用户权限不足
         this.createHttpHeader(response, HttpServletResponse.SC_FORBIDDEN);
-        Result result = new Results().failure(OauthMessageEnum.INSUFFICIENT_PERMISSIONS);
+        Result result = new Results().failure(OauthErrorMessageEnum.INSUFFICIENT_PERMISSIONS);
         response.getWriter().write(JsonUtil.toJson(result));
     }
 
@@ -80,7 +80,7 @@ public class CustomAuthExceptionHandler
         log.error(">>>>>onAuthenticationFailure error:", exception);
         this.createHttpHeader(response, HttpServletResponse.SC_FORBIDDEN);
         // 资源未授权
-        Result result = new Results().failure(OauthMessageEnum.UNAUTHORIZED);
+        Result result = new Results().failure(OauthErrorMessageEnum.UNAUTHORIZED);
         response.getWriter().write(JsonUtil.toJson(result));
     }
 

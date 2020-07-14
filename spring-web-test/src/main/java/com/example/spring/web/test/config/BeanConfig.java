@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.example.spring.common.SnowFlakeCreator;
 import com.example.spring.common.cache.ICacheService;
+import com.example.spring.service.core.config.SnowFlakeCreatorProperty;
+import com.example.spring.service.core.support.NumberCreatorFactory;
 import com.example.spring.web.core.aop.LogAop;
 import com.example.spring.web.core.cache.RedisCacheServiceImpl;
-import com.example.spring.web.core.support.NumberCreatorFactory;
 import com.example.spring.web.core.support.xss.XssFilter;
 
 /**

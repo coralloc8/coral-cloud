@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.spring.common.cache.ICacheService;
+import com.example.spring.common.jpa.enums.GlobalDeletedEnum;
 import com.example.spring.common.jpa.service.impl.JpaBaseServiceImpl;
 import com.example.spring.database.test.entity.OauthClientDetails;
 import com.example.spring.database.test.entity.SysUser;
@@ -28,7 +29,7 @@ public class Oauth2ServiceImpl extends JpaBaseServiceImpl<OauthClientDetails, Lo
 
     @Override
     public List<SysUser> findOauth2UserByUsername(String username) {
-        return sysUserRepository.findByAccount(username);
+        return sysUserRepository.findByAccountAndDeleted(username, GlobalDeletedEnum.NO);
     }
 
     @Override

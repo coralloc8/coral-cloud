@@ -8,9 +8,9 @@ import com.example.spring.common.enums.CacheEnum;
 
 public enum CacheKeyEnum implements CacheEnum<CacheKeyEnum> {
     /**
-     * 2小时 login:username:{}
+     * 1小时 login:username:{}
      */
-    LOGIN_USERNAME(2 * 60 * 60, "login:username:{}"),
+    LOGIN_USERNAME(1 * 60 * 60, "login:username:{}"),
 
     ;
 

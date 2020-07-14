@@ -1,11 +1,12 @@
 package com.example.spring.web.auth.web;
 
-import java.security.Principal;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.spring.service.auth.service.IAuthService;
+import com.example.spring.service.core.support.LoginUser;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
 
@@ -15,11 +16,15 @@ import com.example.spring.web.core.response.Results;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @GetMapping
-    public Result getCurrentUser(Principal principal) {
 
-        String username = principal.getName();
-        return new Results().success(principal);
+    @Autowired
+    private IAuthService authService;
+
+    @GetMapping
+    public Result getCurrentUser() {
+        LoginUser loginUser = authService.getLoginUser();
+        return new Results().success(loginUser);
+
     }
 
 }

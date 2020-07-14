@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.spring.database.test.enums.file.FileModuleEnum;
+import com.example.spring.service.file.dto.FileSaveDTO;
+import com.example.spring.service.file.service.IFileService;
+import com.example.spring.service.file.vo.FileListResVO;
+import com.example.spring.service.file.vo.FileResVO;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
-import com.example.spring.web.test.dto.FileSaveDTO;
-import com.example.spring.web.test.service.IFileService;
 import com.example.spring.web.test.vo.BaseUploadVO;
-import com.example.spring.web.test.vo.response.file.FileListResVO;
-import com.example.spring.web.test.vo.response.file.FileResVO;
 
 /**
  * @author huss
@@ -53,10 +53,5 @@ public class FileController {
             fileService.findByFileModuleInAndInfoNoIn(Arrays.asList(fileModule), Arrays.asList(infoNo));
         return new Results().success(listResVOS);
     }
-
-    // @PostMapping("/xss")
-    // public Result xss(@RequestBody BaseUploadVO baseUploadVO) {
-    // return new Results().success(baseUploadVO);
-    // }
 
 }

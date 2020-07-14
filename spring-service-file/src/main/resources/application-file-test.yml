@@ -1,0 +1,5 @@
+
+upload:
+  save-path: /opt/install/netgear-files/
+  domain: http://47.92.172.93/cms
+  virtual-path: /files/

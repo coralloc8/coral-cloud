@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.spring.common.jpa.enums.GlobalEnabledEnum;
 import com.example.spring.database.test.entity.SysUser;
 import com.example.spring.web.auth.security.handler.CustomAuthExceptionHandler;
 import com.example.spring.web.auth.service.IOauth2Service;
@@ -75,9 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         //
-        http.authorizeRequests().antMatchers("/oauth/**").permitAll()
-            //
-            .and().authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().authenticated();
 
         // ExceptionTranslationFilter返回的错误信息格式重新定义
         http.exceptionHandling()
@@ -85,8 +85,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint(customAuthExceptionHandler)
             //
             .accessDeniedHandler(customAuthExceptionHandler);
-
-
 
     }
 
@@ -170,6 +168,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 throw new UsernameNotFoundException("invalid username");
             }
             SysUser user = users.get(0);
+
+            if (GlobalEnabledEnum.DISABLE.equals(user.getEnabled())) {
+                throw new AccountExpiredException("user account is disabled");
+            }
             // String passwordAfterEncoder = passwordEncoder.encode(user.getPassword());
             String passwordAfterEncoder = user.getPassword();
 

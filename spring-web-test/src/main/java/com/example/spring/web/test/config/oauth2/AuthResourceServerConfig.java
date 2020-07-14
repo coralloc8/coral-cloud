@@ -1,5 +1,6 @@
 package com.example.spring.web.test.config.oauth2;
 
+import com.example.spring.service.file.config.UploadProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,8 +16,6 @@ import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-
-import com.example.spring.web.test.config.UploadProperty;
 
 /**
  * 资源服务

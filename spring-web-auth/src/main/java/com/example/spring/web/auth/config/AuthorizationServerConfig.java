@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.example.spring.web.auth.security.HeaderOnlyOAuth2ExceptionRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -24,11 +22,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
-import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpointHandlerMapping;
-import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
@@ -36,12 +31,12 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import com.example.spring.common.jpa.enums.GlobalEnabledEnum;
 import com.example.spring.database.test.entity.OauthClientDetails;
 import com.example.spring.web.auth.security.handler.CustomAuthExceptionHandler;
 import com.example.spring.web.auth.service.IOauth2Service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  * Security 认证服务
@@ -130,18 +125,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             //
             .accessDeniedHandler(customAuthExceptionHandler);
 
-//        String realm = "oauth2/client";
-//        ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter =
-//            new ClientCredentialsTokenEndpointFilter();
-//        clientCredentialsTokenEndpointFilter.setAuthenticationManager(authenticationManager);
-//        OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
-//        authenticationEntryPoint.setTypeName("Form");
-//        authenticationEntryPoint.setRealmName(realm);
-//        authenticationEntryPoint.setExceptionRenderer(new HeaderOnlyOAuth2ExceptionRenderer());
-//
-//        clientCredentialsTokenEndpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint);
-//
-//        security.addTokenEndpointAuthenticationFilter(clientCredentialsTokenEndpointFilter);
+        // String realm = "oauth2/client";
+        // ClientCredentialsTokenEndpointFilter clientCredentialsTokenEndpointFilter =
+        // new ClientCredentialsTokenEndpointFilter();
+        // clientCredentialsTokenEndpointFilter.setAuthenticationManager(authenticationManager);
+        // OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        // authenticationEntryPoint.setTypeName("Form");
+        // authenticationEntryPoint.setRealmName(realm);
+        // authenticationEntryPoint.setExceptionRenderer(new HeaderOnlyOAuth2ExceptionRenderer());
+        //
+        // clientCredentialsTokenEndpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint);
+        //
+        // security.addTokenEndpointAuthenticationFilter(clientCredentialsTokenEndpointFilter);
 
     }
 
@@ -224,6 +219,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 throw new InvalidClientException("invalid client_id");
             }
             OauthClientDetails client = clients1.get(0);
+
+            if (GlobalEnabledEnum.DISABLE.equals(client.getEnabled())) {
+                throw new InvalidClientException("invalid client");
+            }
             String clientSecretAfterEncoder = client.getClientSecret();
             // String clientSecretAfterEncoder = passwordEncoder.encode(client.getClientSecret());
             BaseClientDetails clientDetails = new BaseClientDetails();

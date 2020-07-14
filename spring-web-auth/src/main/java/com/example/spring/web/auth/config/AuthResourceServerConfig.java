@@ -2,6 +2,7 @@ package com.example.spring.web.auth.config;
 
 import java.util.Arrays;
 
+import com.example.spring.service.file.config.UploadProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,9 @@ public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private CustomAuthExceptionHandler customAuthExceptionHandler;
 
+    @Autowired
+    private UploadProperty uploadProperty;
+
     /**
      * 这里设置需要token验证的url 这些url可以在WebSecurityConfigurerAdapter中排查掉， 对于相同的url，如果二者都配置了验证
      * 则优先进入ResourceServerConfigurerAdapter,进行token验证。而不会进行 WebSecurityConfigurerAdapter 的 basic auth或表单认证。
@@ -43,11 +47,11 @@ public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         //
-        http.requestMatchers().antMatchers("/api/**", "/user/**", "/oauth/**")
+        http.requestMatchers().antMatchers("/**")
             //
             .and().authorizeRequests().antMatchers("/api/**", "/user/**").authenticated()
             //
-            .and().authorizeRequests().antMatchers("/oauth/**").permitAll();
+            .and().authorizeRequests().antMatchers("/**/druid/**", uploadProperty.getVirtualPath() + "**").permitAll();
 
     }
 

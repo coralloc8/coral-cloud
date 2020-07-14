@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.provider.error.WebResponseExceptionTr
 import org.springframework.stereotype.Component;
 
 import com.example.spring.web.core.enums.BaseErrorMessageEnum;
-import com.example.spring.web.core.enums.OauthMessageEnum;
+import com.example.spring.web.core.enums.OauthErrorMessageEnum;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,17 +28,17 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
         BootOAuth2Exception bootOAuth2Exception;
         if (oAuth2Exception instanceof BadClientCredentialsException
             || oAuth2Exception instanceof InvalidClientException) {
-            bootOAuth2Exception = new BootOAuth2Exception(OauthMessageEnum.INVALID_CLIENT);
+            bootOAuth2Exception = new BootOAuth2Exception(OauthErrorMessageEnum.INVALID_CLIENT);
         } else if (oAuth2Exception instanceof InvalidGrantException) {
-            bootOAuth2Exception = new BootOAuth2Exception(OauthMessageEnum.INVALID_GRANT);
+            bootOAuth2Exception = new BootOAuth2Exception(OauthErrorMessageEnum.INVALID_GRANT);
         } else if (oAuth2Exception instanceof InvalidTokenException) {
-            bootOAuth2Exception = new BootOAuth2Exception(OauthMessageEnum.INVALID_TOKEN);
+            bootOAuth2Exception = new BootOAuth2Exception(OauthErrorMessageEnum.INVALID_TOKEN);
         } else if (oAuth2Exception instanceof InvalidRequestException) {
-            bootOAuth2Exception = new BootOAuth2Exception(OauthMessageEnum.INVALID_REQUEST);
+            bootOAuth2Exception = new BootOAuth2Exception(OauthErrorMessageEnum.INVALID_REQUEST);
         } else if (oAuth2Exception instanceof UnauthorizedClientException) {
-            bootOAuth2Exception = new BootOAuth2Exception(OauthMessageEnum.UNAUTHORIZED_CLIENT);
+            bootOAuth2Exception = new BootOAuth2Exception(OauthErrorMessageEnum.UNAUTHORIZED_CLIENT);
         } else if (oAuth2Exception instanceof UnsupportedGrantTypeException) {
-            bootOAuth2Exception = new BootOAuth2Exception(OauthMessageEnum.UNSUPPORTED_GRANT_TYPE);
+            bootOAuth2Exception = new BootOAuth2Exception(OauthErrorMessageEnum.UNSUPPORTED_GRANT_TYPE);
         } else {
             bootOAuth2Exception = new BootOAuth2Exception(BaseErrorMessageEnum.SYSTEM_ERROR);
         }

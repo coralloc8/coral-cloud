@@ -1,7 +1,8 @@
 package com.example.spring.web.core.enums;
 
+import com.example.spring.common.I18nMessageUtil;
+import com.example.spring.common.enums.I18nMessageKey;
 import com.example.spring.common.exception.IErrorCodeMessage;
-import com.example.spring.web.core.util.I18nMessageUtil;
 
 /**
  * 基础错误信息，默认全英文提示

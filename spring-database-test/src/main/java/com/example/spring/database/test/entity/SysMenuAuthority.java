@@ -22,7 +22,7 @@ public class SysMenuAuthority extends IdAndStatusKey {
     /**
      * 编号
      */
-    private Integer no;
+    private String no;
 
     /**
      * 菜单编号
