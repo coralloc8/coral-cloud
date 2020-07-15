@@ -4,6 +4,7 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.example.spring.common.jpa.entity.IdAndStatusKey;
 import com.example.spring.common.jpa.entity.IdentityIdKey;
 import com.example.spring.common.jpa.enums.GlobalDeletedEnum;
 import com.example.spring.common.jpa.enums.GlobalYesOrNoEnum;
@@ -20,7 +21,7 @@ import lombok.ToString;
 @Table
 @Data
 @ToString(callSuper = true)
-public class SysMenu extends IdentityIdKey {
+public class SysMenu extends IdAndStatusKey {
 
     /**
      * 菜单编号
@@ -77,17 +78,7 @@ public class SysMenu extends IdentityIdKey {
      */
     private Integer right;
 
-    /**
-     * 是否隐藏
-     */
-    @Convert(converter = GlobalYesOrNoEnum.Convert.class)
-    private GlobalYesOrNoEnum hidden = GlobalYesOrNoEnum.NO;
 
-    /**
-     * 已删除
-     */
-    @Convert(converter = GlobalDeletedEnum.Convert.class)
-    private GlobalDeletedEnum deleted = GlobalDeletedEnum.NO;
 
 
 }

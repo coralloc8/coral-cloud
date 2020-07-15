@@ -76,6 +76,7 @@ public class AuthServiceImpl implements IAuthService {
             loginUserCache.setUserName(user.getUsername());
             loginUserCache.setAuthorities(finalAuthorities);
             String avatar = this.findAvatar(user.getId());
+            loginUserCache.setSuperAdmin(user.getIsAdmin() == null ? false : user.getIsAdmin());
             loginUserCache.setAvatar(avatar);
             return loginUserCache;
         };

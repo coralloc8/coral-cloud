@@ -1,4 +1,4 @@
-package com.example.spring.common.jpa.util;
+package com.example.spring.common.jpa.util.dsl;
 
 import java.util.List;
 

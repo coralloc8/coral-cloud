@@ -24,11 +24,11 @@ public class UploadProperty {
     private String virtualPath;
 
     public String getFullBasePath() {
-        return StringUtils.getFilePth(this.getDomain() + this.getVirtualPath());
+        return this.getDomain() + StringUtils.getFilePth(this.getVirtualPath());
     }
 
     public String getNetworkFullPath(String relativePath) {
-        return StringUtils.getFilePth(this.getFullBasePath() + relativePath);
+        return this.getFullBasePath() + StringUtils.getFilePth(relativePath);
     }
 
 }

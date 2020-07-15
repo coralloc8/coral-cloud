@@ -31,13 +31,9 @@ public class LoginUser {
     private List<String> authorities;
 
     /**
-     * 超级管理员
-     * 
-     * @return
+     * 是否超级管理员
      */
-    public boolean isSuperAdmin() {
-        return this.getAuthorities().contains("ROLE_ADMIN");
-    }
+    private boolean isSuperAdmin = false;
 
     public static class EmptyLoginUser extends LoginUser {
 
