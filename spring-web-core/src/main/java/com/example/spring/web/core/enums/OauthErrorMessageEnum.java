@@ -1,6 +1,5 @@
 package com.example.spring.web.core.enums;
 
-import com.example.spring.common.I18nMessageUtil;
 import com.example.spring.common.enums.I18nMessageKey;
 import com.example.spring.common.exception.IErrorCodeMessage;
 
@@ -80,12 +79,8 @@ public enum OauthErrorMessageEnum implements IErrorCodeMessage<OauthErrorMessage
     }
 
     @Override
-    public String getMessageKey() {
-        return I18nMessageUtil.getMessageKey(this);
-    }
-
-    @Override
     public Integer getErrorCode() {
         return this.code;
     }
+
 }

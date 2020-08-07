@@ -12,32 +12,32 @@ public enum DefaultRightEnum implements IEnum<DefaultRightEnum, Integer> {
     /**
      * find：查询
      */
-    FIND(1, "查询"),
+    FIND(1, "find", "查询"),
 
     /**
      * add：新增
      */
-    ADD(2, "新增"),
+    ADD(2, "add", "新增"),
 
     /**
      * edit：编辑
      */
-    EDIT(3, "编辑"),
+    EDIT(3, "edit", "编辑"),
 
     /**
      * delete：删除
      */
-    DELETE(4, "删除"),
+    DELETE(4, "delete", "删除"),
 
     /**
      * export：导出
      */
-    EXPORT(5, "导出"),
+    EXPORT(5, "export", "导出"),
 
     /**
      * import：导入
      */
-    IMPORT(6, "导入"),
+    IMPORT(6, "import", "导入"),
 
     ;
 
@@ -45,9 +45,12 @@ public enum DefaultRightEnum implements IEnum<DefaultRightEnum, Integer> {
 
     private String name;
 
-    DefaultRightEnum(Integer code, String name) {
+    private String description;
+
+    DefaultRightEnum(Integer code, String name, String description) {
         this.code = code;
         this.name = name;
+        this.description = description;
     }
 
     @Override
@@ -58,6 +61,11 @@ public enum DefaultRightEnum implements IEnum<DefaultRightEnum, Integer> {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
     }
 
     public static class Convert extends AbstractEnumConvert<DefaultRightEnum, Integer> {

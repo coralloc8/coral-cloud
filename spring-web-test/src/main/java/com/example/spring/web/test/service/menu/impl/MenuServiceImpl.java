@@ -13,10 +13,12 @@ import com.example.spring.common.jpa.util.dsl.PredicateCreator;
 import com.example.spring.database.test.entity.QSysMenu;
 import com.example.spring.database.test.entity.SysMenu;
 import com.example.spring.database.test.repository.SysMenuRepository;
-import com.example.spring.web.test.dto.menu.SimpleMenuDTO;
+import com.example.spring.web.test.dto.menu.MenuDTO;
 import com.example.spring.web.test.service.menu.IMenuService;
 import com.example.spring.web.test.vo.menu.request.MenuFilter;
 import com.querydsl.core.types.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @description: 菜单服务
@@ -24,20 +26,35 @@ import com.querydsl.core.types.Predicate;
  * @time: 2020/7/14 15:54
  */
 @Service
+@Slf4j
 public class MenuServiceImpl extends JpaBaseServiceImpl<SysMenu, Long, SysMenuRepository> implements IMenuService {
 
+    /**
+     * 查询导航栏菜单
+     *
+     * @param menuFilter
+     * @return
+     */
     @Override
-    public List<SimpleMenuDTO> findAllMenus(MenuFilter menuFilter) {
-        Predicate predicate = this.buildPredicate(menuFilter);
-
-        List<SysMenu> menuList = (List<SysMenu>)this.getRepository().findAll(predicate);
-
+    public List<MenuDTO> findNavigationBarMenus(MenuFilter menuFilter) {
+        List<SysMenu> menuList = this.findAllOriginalMenus(menuFilter);
         // 数据转换
         return menuList.stream()
             //
-            .map(e -> SimpleMenuDTO.convert(e))
+            .map(new MenuDTO()::convert)
             //
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 查询所有原始数据菜单
+     * 
+     * @param menuFilter
+     * @return
+     */
+    private List<SysMenu> findAllOriginalMenus(MenuFilter menuFilter) {
+        Predicate predicate = this.buildPredicate(menuFilter);
+        return (List<SysMenu>)this.getRepository().findAll(predicate);
     }
 
     /**
@@ -63,4 +80,5 @@ public class MenuServiceImpl extends JpaBaseServiceImpl<SysMenu, Long, SysMenuRe
             //
             .build();
     }
+
 }

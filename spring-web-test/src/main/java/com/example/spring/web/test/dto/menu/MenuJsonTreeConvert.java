@@ -25,7 +25,7 @@ public class MenuJsonTreeConvert extends AbstractJsonTreeConvert<SimpleMenuDTO, 
 
     @Override
     protected String getOwnChildrenKeyVal(SimpleMenuDTO simpleMenuDTO) {
-        return simpleMenuDTO.getMenuNo();
+        return simpleMenuDTO.getNo();
     }
 
     @Override
@@ -41,16 +41,17 @@ public class MenuJsonTreeConvert extends AbstractJsonTreeConvert<SimpleMenuDTO, 
 
     @Override
     protected SimpleJsonTree buildTree(SimpleMenuDTO simpleMenuDTO) {
+
         return new SimpleJsonTree();
     }
 
     @Override
     public String setTreeLabel(SimpleMenuDTO simpleMenuDTO) {
-        return simpleMenuDTO.getMenuName();
+        return simpleMenuDTO.getName();
     }
 
     @Override
     public Object setTreeValue(SimpleMenuDTO simpleMenuDTO) {
-        return simpleMenuDTO.getMenuNo();
+        return simpleMenuDTO.getNo();
     }
 }

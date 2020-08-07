@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.spring.common.convert.SimpleJsonTree;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.web.BaseController;
-import com.example.spring.web.test.dto.menu.MenuJsonTreeConvert;
-import com.example.spring.web.test.dto.menu.SimpleMenuDTO;
+import com.example.spring.web.test.dto.menu.MenuDTO;
+import com.example.spring.web.test.dto.menu.MenuNavigationBarJsonTreeConvert;
 import com.example.spring.web.test.service.menu.IMenuService;
 import com.example.spring.web.test.vo.menu.request.MenuFilter;
+import com.example.spring.web.test.vo.menu.response.MenuJsonTreeVO;
 
 /**
  * @description: 菜单
@@ -28,11 +28,16 @@ public class MenuController extends BaseController {
     @Autowired
     private IMenuService menuService;
 
-    @GetMapping("/tree")
-    public Result tree() {
-        List<SimpleMenuDTO> menus = menuService.findAllMenus(new MenuFilter());
-        List<SimpleJsonTree> trees = MenuJsonTreeConvert.newInstance().convert(menus);
-        return this.result(true, trees);
+    /**
+     * 获取资源权限列表
+     * 
+     * @return
+     */
+    @GetMapping
+    public Result list(MenuFilter menuFilter) {
+        List<MenuDTO> menus = menuService.findNavigationBarMenus(menuFilter);
+        List<MenuJsonTreeVO> menuTrees = MenuNavigationBarJsonTreeConvert.newInstance().convert(menus);
+        return this.result(true, menuTrees);
     }
 
 }

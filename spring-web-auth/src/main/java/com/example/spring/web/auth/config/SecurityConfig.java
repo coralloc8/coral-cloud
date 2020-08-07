@@ -155,6 +155,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * 认证服务器不查询用户的权限资源，只负责认证
      * 注册一个UserDetailsService用于用户身份认证
      *
      * @param oauth2Service
@@ -175,7 +176,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // String passwordAfterEncoder = passwordEncoder.encode(user.getPassword());
             String passwordAfterEncoder = user.getPassword();
 
-            return User.withUsername(username).password(passwordAfterEncoder).roles(user.getRole().split(",")).build();
+            return User.withUsername(username).password(passwordAfterEncoder).build();
         };
     }
 

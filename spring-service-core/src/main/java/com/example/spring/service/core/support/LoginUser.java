@@ -28,8 +28,6 @@ public class LoginUser {
      */
     private String avatar;
 
-    private List<String> authorities;
-
     /**
      * 是否超级管理员
      */

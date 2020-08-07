@@ -1,27 +1,28 @@
 package com.example.spring.web.test.dto.menu;
 
+import com.example.spring.common.convert.IConvert;
 import com.example.spring.database.test.entity.SysMenu;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * @description: 精简的menu属性
  * @author: huss
  * @time: 2020/7/14 15:42
  */
-@Data
-@Builder
-public class SimpleMenuDTO {
+@Getter
+@ToString
+public class SimpleMenuDTO implements IConvert<SysMenu, SimpleMenuDTO> {
 
-    private String menuNo;
+    protected String no;
 
     private String parentNo;
 
     private String uniqueKey;
 
-    private String menuName;
+    private String name;
 
     private Integer sort;
 
@@ -32,20 +33,14 @@ public class SimpleMenuDTO {
      *            菜单数据
      * @return SimpleMenuDTO
      */
-    public static SimpleMenuDTO convert(@NonNull SysMenu e) {
-        return SimpleMenuDTO.builder()
-            //
-            .menuNo(e.getNo())
-            //
-            .menuName(e.getTitle())
-            //
-            .uniqueKey(e.getUniqueKey())
-            //
-            .parentNo(e.getParentNo())
-            //
-            .sort(e.getSort())
-            //
-            .build();
+    @Override
+    public SimpleMenuDTO convert(@NonNull SysMenu e) {
+        this.no = e.getNo();
+        this.parentNo = e.getParentNo();
+        this.uniqueKey = e.getUniqueKey();
+        this.name = e.getTitle();
+        this.sort = e.getSort();
+        return this;
     }
 
 }

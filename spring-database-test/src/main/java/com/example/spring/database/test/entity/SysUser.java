@@ -12,11 +12,19 @@ import com.example.spring.common.jpa.enums.GlobalSexEnum;
 import lombok.Data;
 import lombok.ToString;
 
+/**
+ * @author huss
+ */
 @Entity
 @Table
 @Data
 @ToString(callSuper = true)
 public class SysUser extends IdAndStatusKey {
+
+    /**
+     * 用户编号
+     */
+    private Long no;
 
     private String account;
 
@@ -46,8 +54,5 @@ public class SysUser extends IdAndStatusKey {
     private Long updateUser;
 
     private String email;
-
-    // 临时字段，暂时用来保存角色信息
-    private String role;
 
 }

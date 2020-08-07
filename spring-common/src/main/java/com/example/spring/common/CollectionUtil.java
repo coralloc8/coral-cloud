@@ -15,6 +15,10 @@ public class CollectionUtil {
         return collection == null || collection.isEmpty();
     }
 
+    public static boolean isNotBlank(Collection collection) {
+        return !isBlank(collection);
+    }
+
     public static <T> Set<T> newHashSet(T... args) {
         return new HashSet<>(Arrays.asList(args));
     }

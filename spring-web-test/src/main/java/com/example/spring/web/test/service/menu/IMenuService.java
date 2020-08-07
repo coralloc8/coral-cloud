@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.spring.common.jpa.service.IJpaBaseService;
 import com.example.spring.database.test.entity.SysMenu;
-import com.example.spring.web.test.dto.menu.SimpleMenuDTO;
+import com.example.spring.web.test.dto.menu.MenuDTO;
 import com.example.spring.web.test.vo.menu.request.MenuFilter;
 
 /**
@@ -15,11 +15,11 @@ import com.example.spring.web.test.vo.menu.request.MenuFilter;
 public interface IMenuService extends IJpaBaseService<SysMenu, Long> {
 
     /**
-     * 查询所有没有删除的菜单
+     * 查询导航栏菜单
      * 
      * @param menuFilter
      * @return
      */
-    List<SimpleMenuDTO> findAllMenus(MenuFilter menuFilter);
+    List<MenuDTO> findNavigationBarMenus(MenuFilter menuFilter);
 
 }

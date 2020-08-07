@@ -13,6 +13,8 @@ public interface IEnum<T extends Enum<T>, R extends Serializable> {
 
     String NAME_KEY = "name";
 
+    String DESCRIPTION_KEY = "description";
+
     /**
      * 获取code
      * 
@@ -28,6 +30,15 @@ public interface IEnum<T extends Enum<T>, R extends Serializable> {
     String getName();
 
     /**
+     * 描述
+     * 
+     * @return
+     */
+    default String getDescription() {
+        return "";
+    }
+
+    /**
      * 获取所有参数
      * 
      * @return
@@ -36,6 +47,7 @@ public interface IEnum<T extends Enum<T>, R extends Serializable> {
         Map<String, Object> map = new HashMap<>(4);
         map.put(CODE_KEY, this.getCode());
         map.put(NAME_KEY, this.getName());
+        map.put(DESCRIPTION_KEY, this.getDescription());
         return map;
     }
 
