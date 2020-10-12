@@ -5,12 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import com.example.spring.common.bus.event.AbstractEvent;
-import com.example.spring.common.bus.event.DefaultEventIdentifier;
 import com.example.spring.common.bus.event.IEventIdentifier;
 import com.example.spring.common.bus.handler.ISubscriber;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
-
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +37,7 @@ class GEventBus implements IEventBus {
      * @param identifier
      * @return IEventBus
      */
-    private EventBus getBus(@NonNull DefaultEventIdentifier identifier) {
+    private EventBus getBus(@NonNull IEventIdentifier identifier) {
         EventBus bus = BUS_MAP.get(identifier.getIdentifierKey());
         if (bus == null) {
             throw new NullPointerException("GEventBus not init...");
@@ -71,7 +69,7 @@ class GEventBus implements IEventBus {
 
     @Override
     public IEventBus register(@SuppressWarnings("rawtypes") @NonNull ISubscriber subscribe,
-        @NonNull DefaultEventIdentifier identifier) {
+        @NonNull IEventIdentifier identifier) {
         EventBus bus = init(identifier);
         bus.register(subscribe);
         return this;
@@ -90,14 +88,14 @@ class GEventBus implements IEventBus {
     }
 
     @Override
-    public String eventIdentifier(@NonNull DefaultEventIdentifier identifier) {
+    public String eventIdentifier(@NonNull IEventIdentifier identifier) {
         EventBus bus = getBus(identifier);
         return bus.identifier();
     }
 
     @Override
     public IEventBus unregister(@SuppressWarnings("rawtypes") @NonNull ISubscriber subscribe,
-        @NonNull DefaultEventIdentifier identifier) {
+        @NonNull IEventIdentifier identifier) {
         EventBus bus = getBus(identifier);
         bus.unregister(subscribe);
         return this;

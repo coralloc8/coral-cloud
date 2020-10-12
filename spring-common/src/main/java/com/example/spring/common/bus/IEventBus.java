@@ -2,6 +2,7 @@ package com.example.spring.common.bus;
 
 import com.example.spring.common.bus.event.AbstractEvent;
 import com.example.spring.common.bus.event.DefaultEventIdentifier;
+import com.example.spring.common.bus.event.IEventIdentifier;
 import com.example.spring.common.bus.handler.ISubscriber;
 
 /**
@@ -22,7 +23,7 @@ public interface IEventBus {
      * @return IEventBus
      */
     @SuppressWarnings("rawtypes")
-    public IEventBus register(ISubscriber subscribe, DefaultEventIdentifier identifier);
+    public IEventBus register(ISubscriber subscribe, IEventIdentifier identifier);
 
     /**
      * 取消注册
@@ -32,7 +33,7 @@ public interface IEventBus {
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public IEventBus unregister(ISubscriber subscribe, DefaultEventIdentifier identifier);
+    public IEventBus unregister(ISubscriber subscribe, IEventIdentifier identifier);
 
     /**
      * 发送事件
@@ -48,5 +49,5 @@ public interface IEventBus {
      * @param identifier
      * @return
      */
-    public String eventIdentifier(DefaultEventIdentifier identifier);
+    public String eventIdentifier(IEventIdentifier identifier);
 }
