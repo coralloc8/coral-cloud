@@ -1,24 +1,17 @@
 package com.example.spring.common.bus.event;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
  * @author huss
  */
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractEvent {
 
-    /**
-     * 事件类型
-     */
-    @Getter
-    private DefaultEventIdentifier eventIdentifier;
     /**
      * 事件id
      */
@@ -30,11 +23,23 @@ public abstract class AbstractEvent {
     @Getter
     private LocalDateTime sendTime;
 
-    public AbstractEvent(DefaultEventIdentifier eventIdentifier, String eventId, LocalDateTime sendTime) {
+    /**
+     * 获取事件标识
+     *
+     * @return
+     */
+    public IEventIdentifier getEventIdentifier() {
+        return DefaultEventIdentifier.DEFAULT;
+    }
+
+    protected AbstractEvent() {
+        this(UUID.randomUUID().toString());
+    }
+
+    public AbstractEvent(String eventId) {
         super();
-        this.eventIdentifier = eventIdentifier;
         this.eventId = eventId;
-        this.sendTime = sendTime;
+        this.sendTime = LocalDateTime.now();
     }
 
 }

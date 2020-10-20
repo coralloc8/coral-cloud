@@ -1,5 +1,6 @@
 package com.example.spring.common.bus.handler;
 
+import com.example.spring.common.bus.EventBusFactory;
 import com.example.spring.common.bus.event.AbstractEvent;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,5 +24,7 @@ public abstract class AbstractPublisher<T extends AbstractEvent> implements IPub
      *
      * @param event
      */
-    protected abstract void sendHandle(T event);
+    protected void sendHandle(T event) {
+        EventBusFactory.getEventBus().post(event);
+    }
 }
