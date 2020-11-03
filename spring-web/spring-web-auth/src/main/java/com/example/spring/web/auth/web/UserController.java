@@ -1,6 +1,6 @@
 package com.example.spring.web.auth.web;
 
-import com.example.spring.common.log.annotation.LogAnnotation;
+import com.example.spring.enable.log.annotation.LogAnnotation;
 import com.example.spring.database.test.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +21,7 @@ public class UserController {
 
     @Autowired
     private IAuthService authService;
+
 
     @LogAnnotation("auth-user")
     @GetMapping

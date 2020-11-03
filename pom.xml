@@ -13,6 +13,7 @@
         <module>spring-service</module>
         <module>spring-base</module>
         <module>spring-web</module>
+
     </modules>
 
     <name>spring-example</name>
