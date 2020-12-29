@@ -1,8 +1,9 @@
 package com.example.spring.enable.log.selector;
 
-import com.example.spring.enable.log.EnableLogAutoConfiguration;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
+
+import com.example.spring.enable.log.EnableLogAutoConfiguration;
 
 /**
  * @description: 自定义启动
@@ -11,7 +12,7 @@ import org.springframework.core.type.AnnotationMetadata;
  */
 public class LogImportSelector implements ImportSelector {
 
-    private final static String DEFAULT_BASE_PACKAGE = EnableLogAutoConfiguration.class.getPackage().getName();
+    // private final static String DEFAULT_BASE_PACKAGE = EnableLogAutoConfiguration.class.getPackage().getName();
 
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {

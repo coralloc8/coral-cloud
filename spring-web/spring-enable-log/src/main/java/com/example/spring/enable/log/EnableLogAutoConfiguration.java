@@ -2,20 +2,18 @@ package com.example.spring.enable.log;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-import com.example.spring.enable.log.service.impl.SysLogServiceImpl;
-import com.example.spring.enable.log.aop.LogRecordAop;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import com.example.spring.enable.log.service.SysLogService;
 
 /**
  * @description: 自动装配
  * @author: huss
  * @time: 2020/10/21 16:17
  */
+@ComponentScan
 public class EnableLogAutoConfiguration {
 
     @ConditionalOnMissingBean(TaskExecutor.class)
@@ -36,13 +34,4 @@ public class EnableLogAutoConfiguration {
         return taskExecutor;
     }
 
-    @Bean
-    public LogRecordAop logRecordAop() {
-        return new LogRecordAop();
-    }
-
-    @Bean
-    public SysLogService sysLogService() {
-        return new SysLogServiceImpl();
-    }
 }

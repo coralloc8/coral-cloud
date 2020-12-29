@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8084
   session-timeout: 30
   servlet:
     context-path: /simple/web1

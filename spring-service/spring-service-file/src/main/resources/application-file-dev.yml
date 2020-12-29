@@ -1,4 +1,4 @@
 upload:
-  save-path: D:/netgear-files/
+  save-path: D:/netegear-files/
   domain: http://localhost:${server.port}${server.servlet.context-path}
   virtual-path: /files/
