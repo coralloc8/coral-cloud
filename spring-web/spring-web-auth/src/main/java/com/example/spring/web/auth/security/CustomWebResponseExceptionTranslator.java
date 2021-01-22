@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.common.exceptions.*;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.stereotype.Component;
 
-import com.example.spring.web.core.enums.BaseErrorMessageEnum;
+import com.example.spring.common.exception.BaseErrorMessageEnum;
 import com.example.spring.web.core.enums.OauthErrorMessageEnum;
 
 import lombok.extern.slf4j.Slf4j;

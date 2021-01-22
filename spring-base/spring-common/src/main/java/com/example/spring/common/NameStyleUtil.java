@@ -43,6 +43,10 @@ public class NameStyleUtil {
             matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
         }
         matcher.appendTail(sb);
+
+        if (sb.toString().startsWith(StringPool.UNDERSCORE)) {
+            return sb.substring(1);
+        }
         return sb.toString();
     }
 

@@ -26,6 +26,9 @@
         <easyexcel.version>2.2.6</easyexcel.version>
         <guava.version>29.0-jre</guava.version>
         <commons-codec.version>1.14</commons-codec.version>
+        <!--<hibernate-validator.version>7.0.0.Final</hibernate-validator.version>-->
+        <!--<version.jakarta.validation-api>3.0.0</version.jakarta.validation-api>-->
+        <javax.el-api.version>4.0.1</javax.el-api.version>
     </properties>
 
 
@@ -62,9 +65,42 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
         </dependency>
 
+
+        <!-- 参数校验 -->
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- 规范API -->
+        <!-- https://mvnrepository.com/artifact/jakarta.el/jakarta.el-api -->
+        <!-- <dependency>
+             <groupId>jakarta.el</groupId>
+             <artifactId>jakarta.el-api</artifactId>
+             <version>4.0.0</version>
+         </dependency>-->
 
 
     </dependencies>

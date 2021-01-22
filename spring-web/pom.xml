@@ -17,6 +17,7 @@
         <module>spring-web-test</module>
         <module>spring-enable-log</module>
         <module>spring-enable-task</module>
+        <module>spring-enable-workflow</module>
         <module>spring-simple-web1</module>
     </modules>
 

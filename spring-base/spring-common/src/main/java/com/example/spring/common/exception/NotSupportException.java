@@ -1,9 +1,9 @@
 
-package com.example.spring.web.core.exception;
+package com.example.spring.common.exception;
 
 import com.example.spring.common.exception.IErrorMessage;
 import com.example.spring.common.exception.SystemRuntimeException;
-import com.example.spring.web.core.enums.BaseErrorMessageEnum;
+import com.example.spring.common.exception.BaseErrorMessageEnum;
 
 /**
  * 描述 : 不支持此操作

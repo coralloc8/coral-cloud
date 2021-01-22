@@ -1,8 +1,6 @@
-package com.example.spring.web.core.enums;
+package com.example.spring.common.exception;
 
-import com.example.spring.common.I18nMessageUtil;
 import com.example.spring.common.enums.I18nMessageKey;
-import com.example.spring.common.exception.IErrorCodeMessage;
 
 /**
  * 基础错误信息，默认全英文提示
@@ -87,11 +85,6 @@ public enum BaseErrorMessageEnum implements IErrorCodeMessage<BaseErrorMessageEn
     @Override
     public String getErrorMsg() {
         return this.message;
-    }
-
-    @Override
-    public String getMessageKey() {
-        return I18nMessageUtil.getMessageKey(this);
     }
 
 }

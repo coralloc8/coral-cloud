@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.spring.common.exception.IErrorMessage;
 import com.example.spring.common.exception.SystemRuntimeException;
-import com.example.spring.web.core.enums.BaseErrorMessageEnum;
+import com.example.spring.common.exception.BaseErrorMessageEnum;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.response.Results;
 import com.example.spring.web.core.support.I18nMessageHelper;

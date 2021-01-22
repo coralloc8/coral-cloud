@@ -202,25 +202,7 @@ public class SseController {
         private List<String> unUsedNumbers;
     }
 
-    @Data
-    public static class Result {
 
-        private int code;
 
-        private Object data;
-
-        private Result(int code, Object data) {
-            this.code = code;
-            this.data = data;
-        }
-
-        public static Result success(Object data) {
-            return new Result(0, data);
-        }
-
-        public static Result faiture(Object data) {
-            return new Result(1, data);
-        }
-    }
 
 }

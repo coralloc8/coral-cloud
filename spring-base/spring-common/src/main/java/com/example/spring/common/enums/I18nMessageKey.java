@@ -1,6 +1,6 @@
 package com.example.spring.common.enums;
 
-import com.example.spring.common.NameStyleUtil;
+import com.example.spring.common.I18nMessageUtil;
 
 /**
  * @author huss
@@ -13,12 +13,7 @@ public interface I18nMessageKey {
      * @return
      */
     default String getMessageKey() {
-        String className = this.getClass().getName();
-        className = NameStyleUtil.humpToLine(className).replaceFirst("_", "");
-        if(this instanceof  Enum){
-            return className.toLowerCase() + "." + this.toString().toLowerCase();
-        }
-        return className.toLowerCase();
+        return I18nMessageUtil.getMessageKey(this);
     }
 
 }

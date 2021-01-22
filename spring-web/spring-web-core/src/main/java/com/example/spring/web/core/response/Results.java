@@ -2,7 +2,7 @@ package com.example.spring.web.core.response;
 
 import com.example.spring.common.exception.IErrorCodeMessage;
 import com.example.spring.common.exception.IErrorMessage;
-import com.example.spring.web.core.enums.BaseErrorMessageEnum;
+import com.example.spring.common.exception.BaseErrorMessageEnum;
 
 /**
  * @author huss

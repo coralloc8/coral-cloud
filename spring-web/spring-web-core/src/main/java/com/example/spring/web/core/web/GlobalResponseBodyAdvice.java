@@ -11,7 +11,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.example.spring.web.core.enums.BaseErrorMessageEnum;
+import com.example.spring.common.exception.BaseErrorMessageEnum;
 import com.example.spring.web.core.response.Result;
 import com.example.spring.web.core.support.I18nMessageHelper;
 

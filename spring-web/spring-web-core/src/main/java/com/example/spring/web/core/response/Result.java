@@ -3,7 +3,7 @@ package com.example.spring.web.core.response;
 import java.io.Serializable;
 import java.util.Collections;
 
-import com.example.spring.web.core.enums.BaseErrorMessageEnum;
+import com.example.spring.common.exception.BaseErrorMessageEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
