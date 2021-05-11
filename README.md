@@ -1,27 +1,27 @@
-# springboot-example
+# coral-cloud
 
 ---
 
 # **各个项目组成:**
 
-# spring-common   
+# coral-common   
   基本组件
 
-# spring-common-jpa   
+# coral-common-jpa   
   jpa
 
-# spring-database-test      
+# coral-database-test      
    数据库
 
 
 
-# spring-web-core     
+# coral-web-core     
   web基础
 
-# spring-web-auth     
+# coral-web-auth     
    认证
 
-# spring-web-test    
+# coral-web-test    
    资源
  
 

@@ -4,19 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example.spring</groupId>
-    <artifactId>spring-example</artifactId>
+    <groupId>com.coral.cloud</groupId>
+    <artifactId>coral-cloud</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>spring-database</module>
-        <module>spring-service</module>
-        <module>spring-base</module>
-        <module>spring-web</module>
+        <module>coral-base</module>
+        <module>coral-database</module>
+        <module>coral-service</module>
+        <module>coral-web</module>
 
     </modules>
 
-    <name>spring-example</name>
+    <name>coral-cloud</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -29,8 +29,10 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <spring.security.version>2.3.3.RELEASE</spring.security.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
+        <jackson.version>2.11.4</jackson.version>
+        <log4j.version>2.13.3</log4j.version>
+        <okhttp3.version>4.9.1</okhttp3.version>
         <flowable.version>6.6.0</flowable.version>
-
     </properties>
 
 
@@ -62,8 +64,84 @@
             </dependency>
 
 
-            <!-- -->
+            <!-- base start -->
+            <dependency>
+                <groupId>com.coral.base</groupId>
+                <artifactId>coral-common</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.base</groupId>
+                <artifactId>coral-common-jpa</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <!-- base end -->
 
+
+            <!-- database start -->
+            <dependency>
+                <groupId>com.coral.database</groupId>
+                <artifactId>coral-database-test</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <!-- database end -->
+
+            <!-- service start -->
+            <dependency>
+                <groupId>com.coral.service</groupId>
+                <artifactId>coral-service-auth</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.service</groupId>
+                <artifactId>coral-service-core</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.service</groupId>
+                <artifactId>coral-service-file</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <!-- service end -->
+
+            <!-- web start -->
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-enable-log</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-enable-task</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-enable-workflow</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-simple-web1</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-web-auth</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-web-core</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coral.web</groupId>
+                <artifactId>coral-web-test</artifactId>
+                <version>${project.appVersion}</version>
+            </dependency>
+
+            <!-- web end -->
 
         </dependencies>
     </dependencyManagement>

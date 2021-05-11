@@ -1,0 +1,4 @@
+
+com.coral.simple.web1.service.NumCreatorService=\
+  com.coral.simple.web1.service.impl.NumCreatorOneServiceImpl,\
+  com.coral.simple.web1.service.impl.NumCreatorTwoServiceImpl
