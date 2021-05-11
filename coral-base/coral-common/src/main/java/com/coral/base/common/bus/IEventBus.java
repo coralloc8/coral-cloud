@@ -1,0 +1,52 @@
+package com.coral.base.common.bus;
+
+import com.coral.base.common.bus.event.AbstractEvent;
+import com.coral.base.common.bus.event.IEventIdentifier;
+import com.coral.base.common.bus.handler.ISubscriber;
+
+/**
+ * @author huss
+ */
+public interface IEventBus {
+
+    /**
+     * 
+     * @description 注册
+     * @author huss
+     * @email 452327322@qq.com
+     * @date 2019年7月10日下午8:11:16
+     * @param subscribe
+     *            订阅
+     * @param identifier
+     *            标识
+     * @return IEventBus
+     */
+    @SuppressWarnings("rawtypes")
+    IEventBus register(ISubscriber subscribe, IEventIdentifier identifier);
+
+    /**
+     * 取消注册
+     * 
+     * @param subscribe
+     * @param identifier
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    IEventBus unregister(ISubscriber subscribe, IEventIdentifier identifier);
+
+    /**
+     * 发送事件
+     * 
+     * @param event
+     * @return
+     */
+    boolean post(AbstractEvent event);
+
+    /**
+     * 获取事件标识
+     * 
+     * @param identifier
+     * @return
+     */
+    String eventIdentifier(IEventIdentifier identifier);
+}
