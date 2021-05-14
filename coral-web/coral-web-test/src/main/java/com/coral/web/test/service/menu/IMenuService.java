@@ -3,7 +3,7 @@ package com.coral.web.test.service.menu;
 import java.util.List;
 
 import com.coral.base.common.jpa.service.IJpaBaseService;
-import com.coral.database.test.entity.SysMenu;
+import com.coral.database.test.jpa.entity.SysMenu;
 import com.coral.web.test.dto.menu.MenuDTO;
 import com.coral.web.test.vo.menu.request.MenuFilter;
 

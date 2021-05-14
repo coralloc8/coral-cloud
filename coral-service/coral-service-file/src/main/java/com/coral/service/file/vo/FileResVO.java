@@ -2,7 +2,7 @@ package com.coral.service.file.vo;
 
 import javax.persistence.Convert;
 
-import com.coral.database.test.enums.file.FileModuleEnum;
+import com.coral.database.test.jpa.enums.file.FileModuleEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

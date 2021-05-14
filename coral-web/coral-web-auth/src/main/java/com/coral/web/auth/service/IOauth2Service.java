@@ -3,8 +3,8 @@ package com.coral.web.auth.service;
 import java.util.List;
 
 import com.coral.base.common.jpa.service.IJpaBaseService;
-import com.coral.database.test.entity.OauthClientDetails;
-import com.coral.database.test.entity.SysUser;
+import com.coral.database.test.jpa.entity.OauthClientDetails;
+import com.coral.database.test.jpa.entity.SysUser;
 
 public interface IOauth2Service extends IJpaBaseService<OauthClientDetails, Long> {
 

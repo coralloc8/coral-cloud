@@ -1,7 +1,7 @@
 package com.coral.web.test.dto.menu;
 
 import com.coral.base.common.convert.IConvert;
-import com.coral.database.test.entity.SysMenuAuthority;
+import com.coral.database.test.jpa.entity.SysMenuAuthority;
 
 import lombok.Getter;
 import lombok.Setter;

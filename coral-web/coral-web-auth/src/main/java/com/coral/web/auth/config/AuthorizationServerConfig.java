@@ -34,7 +34,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import com.coral.base.common.jpa.enums.GlobalEnabledEnum;
-import com.coral.database.test.entity.OauthClientDetails;
+import com.coral.database.test.jpa.entity.OauthClientDetails;
 
 import lombok.extern.slf4j.Slf4j;
 

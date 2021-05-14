@@ -1,6 +1,6 @@
 package com.coral.enable.log.service;
 
-import com.coral.database.test.entity.SysLog;
+import com.coral.database.test.jpa.entity.SysLog;
 
 /**
  * @description: 日志

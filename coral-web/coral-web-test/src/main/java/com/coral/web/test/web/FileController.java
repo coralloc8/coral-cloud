@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.coral.database.test.enums.file.FileModuleEnum;
+import com.coral.database.test.jpa.enums.file.FileModuleEnum;
 import com.coral.service.file.dto.FileSaveDTO;
 import com.coral.service.file.service.IFileService;
 import com.coral.service.file.vo.FileListResVO;

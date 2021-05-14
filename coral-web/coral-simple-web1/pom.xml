@@ -5,7 +5,7 @@
     <parent>
         <artifactId>coral-web</artifactId>
         <groupId>com.coral.web</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>${project.appVersion}</version>
@@ -15,6 +15,11 @@
         <dependency>
             <groupId>com.coral.base</groupId>
             <artifactId>coral-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.coral.database</groupId>
+            <artifactId>coral-database-test-jpa</artifactId>
         </dependency>
 
         <dependency>

@@ -2,7 +2,7 @@ package com.coral.web.test.dto.menu;
 
 import java.util.List;
 
-import com.coral.database.test.entity.SysMenu;
+import com.coral.database.test.jpa.entity.SysMenu;
 
 import lombok.*;
 

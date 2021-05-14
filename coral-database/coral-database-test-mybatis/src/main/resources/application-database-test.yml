@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    primary:
+      name: mysql
+      url: jdbc:mysql://localhost:3306/test?charset=utf8&serverTimezone=GMT%2B8&autoReconnect=true&failOverReadOnly=false
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      filters: stat,wall,log4j2
+      maxActive: 10
+      initialSize: 1
+      maxWait: 60000
+      minIdle: 1
+      timeBetweenEvictionRunsMillis: 100000
+      # 最大7小时
+      maxEvictableIdleTimeMillis: 900000
+      # 最小 30分钟
+      minEvictableIdleTimeMillis: 600000
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      keepAlive: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+

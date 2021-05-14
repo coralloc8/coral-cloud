@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.coral.database.test.entity.*;
+import com.coral.database.test.jpa.entity.*;
 import com.coral.web.auth.service.IOauth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import com.coral.base.common.CollectionUtil;
 import com.coral.base.common.cache.ICacheService;
 import com.coral.base.common.jpa.enums.GlobalDeletedEnum;
 import com.coral.base.common.jpa.service.impl.JpaBaseServiceImpl;
-import com.coral.database.test.repository.OauthClientDetailsRepository;
-import com.coral.database.test.repository.SysRoleRepository;
-import com.coral.database.test.repository.SysUserRepository;
-import com.coral.database.test.repository.SysUserRoleRepository;
+import com.coral.database.test.jpa.repository.OauthClientDetailsRepository;
+import com.coral.database.test.jpa.repository.SysRoleRepository;
+import com.coral.database.test.jpa.repository.SysUserRepository;
+import com.coral.database.test.jpa.repository.SysUserRoleRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -23,7 +23,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.coral.base.common.jpa.enums.GlobalYesOrNoEnum;
 import com.coral.enable.log.annotation.LogAnnotation;
 import com.coral.enable.log.service.SysLogService;
-import com.coral.database.test.entity.SysLog;
+import com.coral.database.test.jpa.entity.SysLog;
 
 import lombok.extern.slf4j.Slf4j;
 

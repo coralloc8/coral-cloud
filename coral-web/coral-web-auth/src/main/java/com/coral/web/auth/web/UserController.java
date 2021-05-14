@@ -1,7 +1,7 @@
 package com.coral.web.auth.web;
 
 import com.coral.enable.log.annotation.LogAnnotation;
-import com.coral.database.test.entity.SysUser;
+import com.coral.database.test.jpa.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
