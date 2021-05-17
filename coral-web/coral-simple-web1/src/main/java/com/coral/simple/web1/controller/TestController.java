@@ -22,6 +22,7 @@ public class TestController {
     @Autowired
     private TestService testService;
 
+
     /**
      * 查看所有消息集合
      *
@@ -30,5 +31,15 @@ public class TestController {
     @GetMapping("list")
     public Result list(String name, Integer age) {
         return Result.success(testService.findAll(name, age));
+    }
+
+    /**
+     * 查看所有消息集合
+     *
+     * @return
+     */
+    @GetMapping("list2")
+    public Result list2(String name, Integer age) {
+        return Result.success(testService.findAll2(name, age));
     }
 }

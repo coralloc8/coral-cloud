@@ -1,7 +1,9 @@
 package com.coral.simple.web1.service;
 
+
 import com.coral.base.common.jpa.service.IJpaBaseService;
-import com.coral.database.test.jpa.entity.Test;
+import com.coral.database.test.jpa.primary.entity.Test;
+import com.coral.database.test.jpa.test2.entity.SecTest;
 
 import java.util.List;
 
@@ -13,6 +15,16 @@ import java.util.List;
  * @date 2021/5/13 10:34
  */
 public interface TestService extends IJpaBaseService<Test, Long> {
+
+
+    /**
+     * 查询所有
+     *
+     * @param name
+     * @param age
+     * @return
+     */
+    List<SecTest> findAll2(String name, Integer age);
 
     /**
      * 查询所有

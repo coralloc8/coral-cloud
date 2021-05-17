@@ -3,8 +3,8 @@ package com.coral.enable.log.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coral.enable.log.service.SysLogService;
-import com.coral.database.test.jpa.entity.SysLog;
-import com.coral.database.test.jpa.repository.SysLogRepository;
+import com.coral.database.test.jpa.primary.entity.SysLog;
+import com.coral.database.test.jpa.primary.repository.SysLogRepository;
 import org.springframework.stereotype.Service;
 
 /**

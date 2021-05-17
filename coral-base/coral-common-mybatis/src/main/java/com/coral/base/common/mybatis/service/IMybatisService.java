@@ -1,5 +1,9 @@
 package com.coral.base.common.mybatis.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.io.Serializable;
+
 /**
  * @author huss
  * @version 1.0
@@ -7,5 +11,5 @@ package com.coral.base.common.mybatis.service;
  * @description mybatis base service
  * @date 2021/5/11 17:31
  */
-public interface IMybatisService {
+public interface IMybatisService<T extends Serializable> extends IService<T> {
 }

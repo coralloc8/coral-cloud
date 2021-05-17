@@ -55,7 +55,10 @@
             <artifactId>tomcat-embed-core</artifactId>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
 
 
     </dependencies>

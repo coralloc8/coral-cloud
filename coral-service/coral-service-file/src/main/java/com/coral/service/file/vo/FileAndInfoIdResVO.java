@@ -1,6 +1,6 @@
 package com.coral.service.file.vo;
 
-import com.coral.database.test.jpa.enums.file.FileModuleEnum;
+import com.coral.database.test.jpa.primary.enums.file.FileModuleEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

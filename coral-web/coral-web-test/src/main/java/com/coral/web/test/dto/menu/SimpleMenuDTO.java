@@ -1,7 +1,7 @@
 package com.coral.web.test.dto.menu;
 
 import com.coral.base.common.convert.IConvert;
-import com.coral.database.test.jpa.entity.SysMenu;
+import com.coral.database.test.jpa.primary.entity.SysMenu;
 
 import lombok.Getter;
 import lombok.NonNull;

@@ -23,7 +23,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.coral.base.common.jpa.enums.GlobalEnabledEnum;
-import com.coral.database.test.jpa.entity.SysUser;
+import com.coral.database.test.jpa.primary.entity.SysUser;
 
 import lombok.extern.slf4j.Slf4j;
 

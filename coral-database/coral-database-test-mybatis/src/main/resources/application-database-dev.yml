@@ -50,7 +50,7 @@ mybatis-plus:
   # 别名包扫描路径，通过该属性可以给包中的类注册别名
   typeAliasesPackage:
   # 枚举类 扫描路径
-  typeEnumsPackage:
+  typeEnumsPackage: com.coral.**.enums
   # 以下配置均有默认值,可以不设置
   global-config:
     db-config:

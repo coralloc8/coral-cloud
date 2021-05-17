@@ -2,7 +2,7 @@ package com.coral.web.auth.vo;
 
 import javax.persistence.Convert;
 
-import com.coral.database.test.jpa.enums.file.FileModuleEnum;
+import com.coral.database.test.jpa.primary.enums.file.FileModuleEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

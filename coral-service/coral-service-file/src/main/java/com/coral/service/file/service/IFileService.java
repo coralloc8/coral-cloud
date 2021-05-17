@@ -10,7 +10,7 @@ import com.coral.service.file.vo.FileAndInfoIdResVO;
 import com.coral.service.file.vo.FileByFileIdVO;
 import com.coral.service.file.vo.FileListResVO;
 import com.coral.service.file.vo.FileResVO;
-import com.coral.database.test.jpa.enums.file.FileModuleEnum;
+import com.coral.database.test.jpa.primary.enums.file.FileModuleEnum;
 
 /**
  * @author huss

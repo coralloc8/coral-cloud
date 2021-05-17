@@ -72,7 +72,7 @@
 		<logger name="org.mybatis" level="INFO"></logger>
 		<!--打印sql语句 -->
 		<logger name="com.coral" level="DEBUG"></logger>
-		<root level="info">
+		<root level="debug">
 			<appender-ref ref="log" />
 			<appender-ref ref="Console" />
 			<appender-ref ref="RollingFileInfo" />
