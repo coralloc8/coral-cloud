@@ -1,4 +1,4 @@
-package com.coral.database.test.jpa.test2.entity;
+package com.coral.database.test.jpa.secondary.entity;
 
 import com.coral.base.common.jpa.entity.IdentityIdKey;
 import lombok.Data;

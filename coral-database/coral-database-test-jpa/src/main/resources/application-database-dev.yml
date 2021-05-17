@@ -1,4 +1,7 @@
 spring:
+  autoconfigure:
+    exclude:
+      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   aop:
     proxy-target-class: true
     auto: true

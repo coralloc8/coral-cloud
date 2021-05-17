@@ -3,7 +3,7 @@ package com.coral.simple.web1.service;
 
 import com.coral.base.common.jpa.service.IJpaBaseService;
 import com.coral.database.test.jpa.primary.entity.Test;
-import com.coral.database.test.jpa.test2.entity.SecTest;
+import com.coral.database.test.jpa.secondary.entity.SecTest;
 
 import java.util.List;
 

@@ -35,13 +35,13 @@ public class SecondaryJpaConfig {
 
     protected static final String COMMON_DAO_PACKAGE = "com.coral.base.common.jpa.repository";
 
-    protected static final String DEFAULT_DAO_PACKAGE = "com.coral.database.test.jpa.test2.repository";
+    protected static final String DEFAULT_DAO_PACKAGE = "com.coral.database.test.jpa.secondary.repository";
 
     protected static final String COMMON_ENTITY_PACKAGE = "com.coral.base.common.jpa.entity";
 
-    protected static final String DEFAULT_ENTITY_PACKAGE = "com.coral.database.test.jpa.test2.entity";
+    protected static final String DEFAULT_ENTITY_PACKAGE = "com.coral.database.test.jpa.secondary.entity";
 
-    protected static final String DEFAULT_DTO_PACKAGE = "com.coral.database.test.jpa.test2.dto";
+    protected static final String DEFAULT_DTO_PACKAGE = "com.coral.database.test.jpa.secondary.dto";
 
 
     @Qualifier("secondaryDataSource")

@@ -26,6 +26,7 @@ public class DataSourceConfig {
         return DruidDataSourceBuilder.create().build();
     }
 
+
     @Bean(name = "secondaryDataSource")
     @Qualifier("secondaryDataSource")
     @Primary
