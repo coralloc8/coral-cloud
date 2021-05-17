@@ -31,19 +31,6 @@ public class PredicateCreator {
         return this;
     }
 
-    /**
-     * @param predicate
-     * @param canLink   是否能link 能的话才会执行link
-     * @return
-     */
-    public PredicateCreator link(boolean canLink, Predicate predicate) {
-        if (canLink && Objects.nonNull(predicate)) {
-            predicate.accept()
-
-        }
-        return this;
-    }
-
     public Predicate build() {
         return ExpressionUtils.allOf(this.predicateList);
     }

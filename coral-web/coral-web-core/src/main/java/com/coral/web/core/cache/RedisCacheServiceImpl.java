@@ -1,11 +1,7 @@
 package com.coral.web.core.cache;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
+import com.coral.base.common.cache.ICacheService;
+import com.coral.base.common.exception.Exceptions;
 import com.coral.base.common.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,8 +9,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.coral.base.common.cache.ICacheService;
-import com.coral.base.common.exception.SystemRuntimeException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @author huss
@@ -62,11 +60,11 @@ public class RedisCacheServiceImpl<V> implements ICacheService<String, V> {
             }
             V v;
             if (obj instanceof List) {
-                v = (V)((List<Map>)obj).stream().map(e -> JsonUtil.toPojo(e, clazz)).collect(Collectors.toList());
+                v = (V) ((List<Map>) obj).stream().map(e -> JsonUtil.toPojo(e, clazz)).collect(Collectors.toList());
             } else if (obj instanceof Map) {
-                v = (V)JsonUtil.toPojo(((Map)obj), clazz);
+                v = (V) JsonUtil.toPojo(((Map) obj), clazz);
             } else {
-                v = (V)obj;
+                v = (V) obj;
             }
 
             return Optional.of(v);
@@ -112,20 +110,20 @@ public class RedisCacheServiceImpl<V> implements ICacheService<String, V> {
     }
 
     private List<String> keys(String patternKey) {
-        try {
-            ScanOptions options = ScanOptions.scanOptions().count(10000).match(patternKey).build();
-            RedisSerializer<String> redisSerializer = (RedisSerializer<String>)myRedisTemplate.getKeySerializer();
-            Cursor cursor = (Cursor)myRedisTemplate.executeWithStickyConnection(
+        ScanOptions options = ScanOptions.scanOptions().count(10000).match(patternKey).build();
+        RedisSerializer<String> redisSerializer = (RedisSerializer<String>) myRedisTemplate.getKeySerializer();
+        Cursor cursor = myRedisTemplate.executeWithStickyConnection(
                 redisConnection -> new ConvertingCursor<>(redisConnection.scan(options), redisSerializer::deserialize));
-            List<String> result = new ArrayList<>();
-            while (cursor.hasNext()) {
-                result.add(cursor.next().toString());
-            }
-            cursor.close();
-            return result;
-        } catch (IOException e) {
-            throw new SystemRuntimeException("cursor close error", e);
+        List<String> result = new ArrayList<>();
+        while (cursor.hasNext()) {
+            result.add(cursor.next().toString());
         }
+        try {
+            cursor.close();
+        } catch (Exception e) {
+            throw Exceptions.unchecked(e);
+        }
+        return result;
 
     }
 }

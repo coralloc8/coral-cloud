@@ -70,7 +70,10 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>com.coral.web</groupId>
+            <artifactId>coral-web-core</artifactId>
+        </dependency>
 
 
     </dependencies>

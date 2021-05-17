@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -89,16 +90,25 @@ public class JpaBaseServiceImpl<T, ID extends Serializable, R extends JpaBaseRep
 
     @Override
     public List<T> findAll(Predicate predicate) {
+        if (Objects.isNull(predicate)) {
+            return repository.findAll();
+        }
         return (List<T>) repository.findAll(predicate);
     }
 
     @Override
     public List<T> findAll(Predicate predicate, Sort sort) {
+        if (Objects.isNull(predicate)) {
+            return repository.findAll(sort);
+        }
         return (List<T>) repository.findAll(predicate, sort);
     }
 
     @Override
     public Page<T> findAll(Predicate predicate, Pageable pageable) {
+        if (Objects.isNull(predicate)) {
+            return repository.findAll(pageable);
+        }
         return repository.findAll(predicate, pageable);
     }
 }

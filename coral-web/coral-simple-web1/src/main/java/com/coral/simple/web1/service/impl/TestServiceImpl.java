@@ -25,10 +25,11 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
     @Override
     public List<Test> findAll(String name, Integer age) {
         Predicate predicate = PredicateCreator.builder()
-                .link(StringUtils.isNotBlank(name)? QTest.test.name.eq(name): null)
-                .link(Objects.nonNull(age), QTest.test.age.eq(age))
+                .link(StringUtils.isNotBlank(name) ? QTest.test.name.eq(name) : null)
+                .link(Objects.nonNull(age) ?  QTest.test.age.eq(age) : null)
                 .build();
 
         return findAll(predicate);
     }
+
 }
