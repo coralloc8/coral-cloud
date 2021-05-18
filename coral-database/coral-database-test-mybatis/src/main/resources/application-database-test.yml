@@ -27,7 +27,7 @@ spring:
 
 mybatis-plus:
   # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
-  mapper-locations: classpath*:mapper/**/*.xml
+  mapper-locations: classpath:mapper/**/*.xml
   # 别名包扫描路径，通过该属性可以给包中的类注册别名
   typeAliasesPackage:
   # 枚举类 扫描路径

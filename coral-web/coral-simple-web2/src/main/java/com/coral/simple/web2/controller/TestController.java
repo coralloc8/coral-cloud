@@ -1,6 +1,6 @@
-package com.coral.simple.web1.controller;
+package com.coral.simple.web2.controller;
 
-import com.coral.simple.web1.service.TestService;
+import com.coral.simple.web2.service.TestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

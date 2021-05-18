@@ -1,4 +1,4 @@
-package com.coral.database.test.mybatis.entity;
+package com.coral.database.test.mybatis.primary.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

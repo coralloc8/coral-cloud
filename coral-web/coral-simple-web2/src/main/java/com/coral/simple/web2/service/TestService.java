@@ -1,9 +1,9 @@
-package com.coral.simple.web1.service;
+package com.coral.simple.web2.service;
 
 
-import com.coral.base.common.jpa.service.IJpaBaseService;
-import com.coral.database.test.jpa.primary.entity.Test;
-import com.coral.database.test.jpa.secondary.entity.SecTest;
+import com.coral.base.common.mybatis.service.IMybatisService;
+import com.coral.database.test.mybatis.primary.entity.Test;
+import com.coral.database.test.mybatis.secondary.entity.SecTest;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @description test
  * @date 2021/5/13 10:34
  */
-public interface TestService extends IJpaBaseService<Test, Long> {
+public interface TestService extends IMybatisService<Test> {
 
     /**
      * 查询所有
@@ -25,6 +25,7 @@ public interface TestService extends IJpaBaseService<Test, Long> {
      * @return
      */
     Map<String, Object> findAll3(String name, Integer age);
+
     /**
      * 查询所有
      *

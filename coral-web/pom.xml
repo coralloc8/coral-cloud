@@ -20,6 +20,7 @@
         <module>coral-enable-task</module>
         <module>coral-enable-workflow</module>
         <module>coral-simple-web1</module>
+        <module>coral-simple-web2</module>
     </modules>
 
 </project>

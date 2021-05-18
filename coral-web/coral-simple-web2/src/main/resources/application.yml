@@ -1,0 +1,23 @@
+info:
+  author: huss
+  date: 2020年10月24日
+  remark: springboot web框架测试02
+  my-server-name: spring-simple-web2
+
+server:
+  port: 8085
+
+#spring
+spring:
+  autoconfigure:
+    exclude:
+      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  application:
+    name: ${info.my-server-name}
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
+#  main:
+#    allow-bean-definition-overriding: true

@@ -14,7 +14,9 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,6 +32,14 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
     @Autowired
     private SecTestRepository secTestRepository;
 
+
+    @Override
+    public Map<String, Object> findAll3(String name, Integer age) {
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("primary", findAll(name, age));
+        map.put("secondary", findAll2(name, age));
+        return map;
+    }
 
     @Override
     public List<SecTest> findAll2(String name, Integer age) {
