@@ -9,6 +9,9 @@ server:
 
 #spring
 spring:
+  autoconfigure:
+    exclude:
+      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   application:
     name: ${info.my-server-name}
   profiles:

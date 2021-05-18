@@ -13,7 +13,7 @@ import javax.sql.DataSource;
  * @author huss
  * @version 1.0
  * @className DataSourceConfig
- * @description todo
+ * @description 数据源自定义
  * @date 2021/5/17 17:48
  */
 @Configuration

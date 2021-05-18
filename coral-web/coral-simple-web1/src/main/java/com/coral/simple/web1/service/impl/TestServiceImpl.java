@@ -6,6 +6,7 @@ import com.coral.base.common.jpa.util.dsl.PredicateCreator;
 import com.coral.database.test.jpa.primary.entity.QTest;
 import com.coral.database.test.jpa.primary.entity.Test;
 import com.coral.database.test.jpa.primary.repository.TestRepository;
+import com.coral.database.test.jpa.secondary.entity.QSecTest;
 import com.coral.database.test.jpa.secondary.entity.SecTest;
 import com.coral.database.test.jpa.secondary.repository.SecTestRepository;
 import com.coral.simple.web1.service.TestService;
@@ -33,8 +34,8 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
     @Override
     public List<SecTest> findAll2(String name, Integer age) {
         Predicate predicate = PredicateCreator.builder()
-                .link(StringUtils.isNotBlank(name) ? QTest.test.name.eq(name) : null)
-                .link(Objects.nonNull(age) ? QTest.test.age.eq(age) : null)
+                .link(StringUtils.isNotBlank(name) ? QSecTest.secTest.name.eq(name) : null)
+                .link(Objects.nonNull(age) ? QSecTest.secTest.age.eq(age) : null)
                 .build();
         if (Objects.isNull(predicate)) {
             return secTestRepository.findAll();
