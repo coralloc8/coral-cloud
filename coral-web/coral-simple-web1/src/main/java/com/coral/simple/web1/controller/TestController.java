@@ -1,11 +1,11 @@
 package com.coral.simple.web1.controller;
 
+import com.coral.base.common.exception.SystemException;
+import com.coral.simple.web1.dto.TestSaveDTO;
 import com.coral.simple.web1.service.TestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author huss
@@ -51,5 +51,48 @@ public class TestController {
     @GetMapping("list3")
     public Result list3(String name, Integer age) {
         return Result.success(testService.findAll3(name, age));
+    }
+
+
+    /**
+     * 保存
+     *
+     * @return
+     */
+    @PostMapping("/save")
+    public Result save(@RequestBody TestSaveDTO saveDTO) {
+        testService.save(saveDTO.getName(), saveDTO.getAge());
+        return Result.success();
+    }
+
+    /**
+     * 保存
+     *
+     * @return
+     */
+    @PostMapping("/save2")
+    public Result save2(@RequestBody TestSaveDTO saveDTO) {
+        testService.save2(saveDTO.getName(), saveDTO.getAge());
+        return Result.success();
+    }
+    /**
+     * 保存
+     *
+     * @return
+     */
+    @PostMapping("/save3")
+    public Result save3(@RequestBody TestSaveDTO saveDTO) throws SystemException {
+        testService.save3(saveDTO.getName(), saveDTO.getAge());
+        return Result.success();
+    }
+    /**
+     * 保存
+     *
+     * @return
+     */
+    @PostMapping("/save4")
+    public Result save4(@RequestBody TestSaveDTO saveDTO) {
+        testService.save4(saveDTO.getName(), saveDTO.getAge());
+        return Result.success();
     }
 }

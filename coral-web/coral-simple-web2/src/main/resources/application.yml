@@ -12,6 +12,7 @@ spring:
   autoconfigure:
     exclude:
       - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   application:
     name: ${info.my-server-name}
   profiles:

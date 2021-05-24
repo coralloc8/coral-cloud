@@ -34,7 +34,7 @@
         <okhttp3.version>4.9.1</okhttp3.version>
         <flowable.version>6.6.0</flowable.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
-        <mybatis-plus-dynamic.version>3.3.2</mybatis-plus-dynamic.version>
+        <mybatis-plus-dynamic.version>3.3.5</mybatis-plus-dynamic.version>
     </properties>
 
 

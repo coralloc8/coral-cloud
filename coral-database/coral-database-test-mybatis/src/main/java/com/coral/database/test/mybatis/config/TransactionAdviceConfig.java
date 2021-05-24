@@ -1,12 +1,17 @@
 package com.coral.database.test.mybatis.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
@@ -14,25 +19,65 @@ import org.springframework.transaction.interceptor.RollbackRuleAttribute;
 import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 
 /**
  * @author huss
+ * @version 1.0
+ * @className TransactionAdviceConfig
+ * @description
+ * @date 2021/5/20 16:55
  */
 @Aspect
 @Configuration
+@AutoConfigureAfter({DataSourceConfiguration.class})
+@Slf4j
 public class TransactionAdviceConfig {
-    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..*.service.*.*(..))";
+    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..service..*.*(..))";
 
+    private static final int TX_METHOD_TIMEOUT = 300;
+
+    @Qualifier("primaryTransactionManager")
     @Autowired
-    private TransactionManager transactionManager;
+    private TransactionManager primaryTransactionManager;
 
-    @Bean
-    public TransactionInterceptor txAdvice() {
+    @Qualifier("secondaryTransactionManager")
+    @Autowired
+    private TransactionManager secondaryTransactionManager;
+
+
+    @Bean("primaryTransactionInterceptor")
+    public TransactionInterceptor primaryTransactionInterceptor() {
+        return create(primaryTransactionManager);
+    }
+
+    @Bean("primaryAdvisor")
+    public Advisor primaryAdvisor() {
+        return txAdviceAdvisor(primaryTransactionInterceptor());
+    }
+
+
+    ///////////////////////
+
+    @Bean("secondaryTransactionInterceptor")
+    public TransactionInterceptor secondaryTransactionInterceptor() {
+        return create(secondaryTransactionManager);
+    }
+
+    @Bean("secondaryPrimaryAdvisor")
+    public Advisor secondaryPrimaryAdvisor() {
+        return txAdviceAdvisor(secondaryTransactionInterceptor());
+    }
+
+
+
+    public TransactionInterceptor create(TransactionManager transactionManager) {
+        log.info(">>>>>TransactionInterceptor create...");
         RuleBasedTransactionAttribute required =
-            new RuleBasedTransactionAttribute(TransactionDefinition.PROPAGATION_REQUIRED,
-                Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
-        // required.setTimeout(5);
+                new RuleBasedTransactionAttribute(TransactionDefinition.PROPAGATION_REQUIRED,
+                        Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
+        required.setTimeout(TX_METHOD_TIMEOUT);
 
         RuleBasedTransactionAttribute readOnly = new RuleBasedTransactionAttribute();
         readOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
@@ -62,10 +107,11 @@ public class TransactionAdviceConfig {
         return new TransactionInterceptor(transactionManager, source);
     }
 
-    @Bean
-    public Advisor txAdviceAdvisor() {
+    public Advisor txAdviceAdvisor(TransactionInterceptor transactionInterceptor) {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(AOP_POINTCUT_EXPRESSION);
-        return new DefaultPointcutAdvisor(pointcut, txAdvice());
+        return new DefaultPointcutAdvisor(pointcut, transactionInterceptor);
     }
+
+
 }

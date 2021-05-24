@@ -29,19 +29,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `oauth_client_details`;
 CREATE TABLE `oauth_client_details`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `client_id` varchar(48) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `resource_ids` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `client_secret` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `scope` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `authorized_grant_types` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `web_server_redirect_uri` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `authorities` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `access_token_validity` int(11) NULL DEFAULT NULL,
-  `refresh_token_validity` int(11) NULL DEFAULT NULL,
-  `additional_information` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `autoapprove` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                                         `client_id` varchar(48) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                         `resource_ids` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `client_secret` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `scope` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `authorized_grant_types` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `web_server_redirect_uri` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `authorities` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `access_token_validity` int(11) NULL DEFAULT NULL,
+                                         `refresh_token_validity` int(11) NULL DEFAULT NULL,
+                                         `additional_information` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         `autoapprove` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -54,14 +54,14 @@ INSERT INTO `oauth_client_details` VALUES (1, 'test1', NULL, '{bcrypt}$2a$10$9W3
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_file`;
 CREATE TABLE `sys_file`  (
-  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件唯一编号',
-  `remark` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `save_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '1:本地 2:网络',
-  `relative_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '相对路径',
-  `deleted` tinyint(255) NULL DEFAULT 0 COMMENT '1:yes  0:no',
-  `md5` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+                             `no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件唯一编号',
+                             `remark` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `save_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '1:本地 2:网络',
+                             `relative_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '相对路径',
+                             `deleted` tinyint(255) NULL DEFAULT 0 COMMENT '1:yes  0:no',
+                             `md5` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -81,11 +81,11 @@ INSERT INTO `sys_file` VALUES (8, NULL, '我是测试的啊', '1', '2020\\06\\02
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_file_relation`;
 CREATE TABLE `sys_file_relation`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `file_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `file_module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `info_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                                      `file_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                      `file_module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                      `info_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -100,21 +100,21 @@ INSERT INTO `sys_file_relation` VALUES (3, '2', 'dXNlcl9oZWFkZXJfaW1hZ2U=', '3')
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '编号',
-  `parent_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '父级编号',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序，值越大，排序越靠前',
-  `unique_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单唯一关键字',
-  `path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '页面路由',
-  `page` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '页面路径',
-  `component` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '组件名称',
-  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '重定向url',
-  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单标题',
-  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标',
-  `right` int(11) NULL DEFAULT NULL COMMENT '权限总值',
-  `hidden` tinyint(1) NULL DEFAULT 0 COMMENT '0:否 1:是',
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:否 1:是',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                             `no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '编号',
+                             `parent_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '父级编号',
+                             `sort` int(11) NULL DEFAULT 0 COMMENT '排序，值越大，排序越靠前',
+                             `unique_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单唯一关键字',
+                             `path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '页面路由',
+                             `page` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '页面路径',
+                             `component` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '组件名称',
+                             `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '重定向url',
+                             `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单标题',
+                             `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标',
+                             `right` int(11) NULL DEFAULT NULL COMMENT '权限总值',
+                             `hidden` tinyint(1) NULL DEFAULT 0 COMMENT '0:否 1:是',
+                             `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:否 1:是',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -122,15 +122,15 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu_authority`;
 CREATE TABLE `sys_menu_authority`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `no` int(11) NULL DEFAULT NULL,
-  `menu_no` varchar(50) NULL DEFAULT NULL,
-  `icon` varchar(50) NULL DEFAULT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `unique_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `enabled` tinyint(1) NULL DEFAULT 1,
-  `deleted` tinyint(1) NULL DEFAULT 0,
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                                       `no` int(11) NULL DEFAULT NULL,
+                                       `menu_no` varchar(50) NULL DEFAULT NULL,
+                                       `icon` varchar(50) NULL DEFAULT NULL,
+                                       `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                       `unique_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                       `enabled` tinyint(1) NULL DEFAULT 1,
+                                       `deleted` tinyint(1) NULL DEFAULT 0,
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -138,12 +138,12 @@ CREATE TABLE `sys_menu_authority`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `no` int(11) NULL DEFAULT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `unique_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `deleted` tinyint(1) NULL DEFAULT 0,
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                             `no` int(11) NULL DEFAULT NULL,
+                             `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `unique_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `deleted` tinyint(1) NULL DEFAULT 0,
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -151,11 +151,11 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_right`;
 CREATE TABLE `sys_role_right`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `menu_no` varchar(50) NULL DEFAULT NULL,
-  `role_no` int(11) NULL DEFAULT NULL,
-  `right` int(11) NULL DEFAULT NULL COMMENT '权限值',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(11) NOT NULL AUTO_INCREMENT,
+                                   `menu_no` varchar(50) NULL DEFAULT NULL,
+                                   `role_no` int(11) NULL DEFAULT NULL,
+                                   `right` int(11) NULL DEFAULT NULL COMMENT '权限值',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -163,25 +163,25 @@ CREATE TABLE `sys_role_right`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `salt` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `work_no` int(11) NULL DEFAULT NULL,
-  `header_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `sex` tinyint(1) NULL DEFAULT NULL COMMENT '1:man 2:woman',
-  `is_admin` tinyint(1) NULL DEFAULT 0 COMMENT '1:yes 0:no',
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `create_user` bigint(20) NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `update_user` bigint(20) NULL DEFAULT NULL,
-  `enabled` tinyint(1) NULL DEFAULT 1 COMMENT '1:enable 0:disable',
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '1:yes 0:no',
-  `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                             `account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `salt` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `work_no` int(11) NULL DEFAULT NULL,
+                             `header_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `sex` tinyint(1) NULL DEFAULT NULL COMMENT '1:man 2:woman',
+                             `is_admin` tinyint(1) NULL DEFAULT 0 COMMENT '1:yes 0:no',
+                             `create_time` datetime(0) NULL DEFAULT NULL,
+                             `create_user` bigint(20) NULL DEFAULT NULL,
+                             `update_time` datetime(0) NULL DEFAULT NULL,
+                             `update_user` bigint(20) NULL DEFAULT NULL,
+                             `enabled` tinyint(1) NULL DEFAULT 1 COMMENT '1:enable 0:disable',
+                             `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '1:yes 0:no',
+                             `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -196,27 +196,33 @@ INSERT INTO `sys_user` VALUES (3, 'confirm', '{bcrypt}$2a$10$dnvN3NTYPPq2JZTQt9S
 -- ----------------------------
 DROP TABLE IF EXISTS `test`;
 CREATE TABLE `test`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `age` smallint(6) NULL DEFAULT NULL,
-  `money` double(255, 2) NULL DEFAULT NULL,
+                         `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+                         `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                         `age` smallint(6) NULL DEFAULT NULL,
+                         `money` double(255, 2) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
+  `sex` tinyint(1) DEFAULT '1' COMMENT '1男 0女',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of test
 -- ----------------------------
-INSERT INTO `test` VALUES (1, 'test1', 12, 244.00, '2020-05-22 11:52:12');
-INSERT INTO `test` VALUES (2, 'test2', 25, 1000000.00, '2020-05-22 11:52:15');
-INSERT INTO `test` VALUES (3, 'test3', 23, 1222222.00, '2020-05-22 11:54:38');
-INSERT INTO `test` VALUES (4, 'test4', 30, 30000000.00, '2020-05-22 15:43:00');
-INSERT INTO `test` VALUES (5, 'test5', 30, 30000000.00, '2020-05-22 16:43:00');
-INSERT INTO `test` VALUES (6, 'test6', 30, 30000000.00, '2020-05-22 16:11:00');
-INSERT INTO `test` VALUES (7, 'test7', 35, 22332233.00, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (8, 'test8', 35, 100000001.00, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (9, 'test9', 35, 100000001.00, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (10, 'test10', 35, 100000000.55, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (11, 'test11', 35, 100000000.55, '2020-05-24 13:11:00');
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (1, 'test1', 12, 244.00, '2020-05-22 11:52:12', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (2, 'test2', 25, 1000000.00, '2020-05-22 11:52:15', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (3, 'test3', 23, 1222222.00, '2020-05-22 11:54:38', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (4, 'test4', 30, 30000000.00, '2020-05-22 15:43:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (5, 'test5', 30, 30000000.00, '2020-05-22 16:43:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (6, 'test6', 30, 30000000.00, '2020-05-22 16:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (7, 'test7', 35, 22332233.00, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (8, 'test8', 35, 100000001.00, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (9, 'test9', 35, 100000001.00, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (10, 'test10', 35, 100000000.55, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (11, 'test11', 35, 100000000.55, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (12, 'test-001', 23, 3994820.89, '2021-05-20 16:24:07', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (13, 'test-001', 23, 31473536.42, '2021-05-20 16:24:48', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (14, 'test2-001', 23, 20555146.29, '2021-05-20 16:25:24', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (15, 'test1-2-001', 23, 40083937.03, '2021-05-20 16:27:58', 1);
+
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,5 +1,6 @@
 package com.coral.database.test.jpa.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -19,11 +20,13 @@ import java.util.Collections;
  * @description 事务通用拦截器
  * @date 2021/5/17 16:26
  */
+@Slf4j
 public class BaseTransactionInterceptor {
 
-    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..*.service.*.*(..))";
+    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..service..*.*(..))";
 
     public TransactionInterceptor create(TransactionManager transactionManager) {
+        log.debug(">>>>>TransactionInterceptor create...");
         RuleBasedTransactionAttribute required =
                 new RuleBasedTransactionAttribute(TransactionDefinition.PROPAGATION_REQUIRED,
                         Collections.singletonList(new RollbackRuleAttribute(Exception.class)));

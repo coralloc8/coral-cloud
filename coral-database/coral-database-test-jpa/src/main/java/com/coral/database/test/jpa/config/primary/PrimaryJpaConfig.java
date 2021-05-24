@@ -25,7 +25,6 @@ import java.util.Map;
  * @author huss
  */
 @Configuration
-@EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "primaryEntityManagerFactory",
         transactionManagerRef = "primaryTransactionManager",
         basePackages = {PrimaryJpaConfig.COMMON_DAO_PACKAGE, PrimaryJpaConfig.DEFAULT_DAO_PACKAGE})

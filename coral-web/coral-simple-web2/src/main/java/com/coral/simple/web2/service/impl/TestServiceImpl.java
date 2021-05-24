@@ -1,9 +1,11 @@
 package com.coral.simple.web2.service.impl;
 
 
-import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
+import com.coral.base.common.exception.BaseErrorMessageEnum;
+import com.coral.base.common.exception.SystemException;
+import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.base.common.mybatis.service.impl.MybatisServiceImpl;
-import com.coral.database.test.mybatis.config.DbType;
+import com.coral.database.test.mybatis.config.DbTypeEnum;
 import com.coral.database.test.mybatis.primary.entity.Test;
 import com.coral.database.test.mybatis.primary.mapper.TestMapper;
 import com.coral.database.test.mybatis.secondary.entity.SecTest;
@@ -12,6 +14,8 @@ import com.coral.simple.web2.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +30,6 @@ import java.util.Map;
 @Service
 public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implements TestService {
 
-    /**
-     * 测试查看源码用
-     */
-    private DynamicRoutingDataSource dynamicRoutingDataSource;
 
     @Autowired
     private SecTestMapper secTestMapper;
@@ -38,10 +38,11 @@ public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implem
     @Override
     public Map<String, Object> findAll3(String name, Integer age) {
         Map<String, Object> map = new HashMap<>(4);
-        map.put(DbType.PRIMARY, findAll(name, age));
-        map.put(DbType.SECONDARY, findAll2(name, age));
+        map.put(DbTypeEnum.SECONDARY.getCode(), findAll2(name, age));
+        map.put(DbTypeEnum.PRIMARY.getCode(), findAll(name, age));
         return map;
     }
+
 
     @Override
     public List<SecTest> findAll2(String name, Integer age) {
@@ -51,6 +52,53 @@ public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implem
     @Override
     public List<Test> findAll(String name, Integer age) {
         return getBaseMapper().findAll(name, age);
+    }
+
+    @Override
+    public void save(String name, Integer age) {
+        Test test = new Test();
+        test.setName(name);
+        test.setAge(age);
+        test.setMoney(crateMoney());
+        test.setCreateTime(LocalDateTime.now());
+        save(test);
+    }
+
+    @Override
+    public void save2(String name, Integer age) {
+        SecTest test = new SecTest();
+        test.setName(name);
+        test.setAge(age);
+        test.setMoney(crateMoney());
+        test.setCreateTime(LocalDateTime.now());
+        secTestMapper.insert(test);
+    }
+
+    @Override
+    public void save3(String name, Integer age) throws SystemException {
+        save(name, age);
+
+        if (age < 10) {
+            throw new SystemException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
+        }
+        save2(name, age);
+    }
+
+    @Override
+    public void save4(String name, Integer age) {
+        save(name, age);
+
+        if (age < 10) {
+            throw new SystemRuntimeException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
+        }
+        save2(name, age);
+    }
+
+    private Double crateMoney() {
+        double money = Math.random() * 100000000;
+        BigDecimal bg = new BigDecimal(money);
+        double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
     }
 
 }

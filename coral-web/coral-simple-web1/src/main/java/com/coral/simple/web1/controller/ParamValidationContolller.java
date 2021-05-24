@@ -27,7 +27,7 @@ public class ParamValidationContolller {
     @PostMapping("/test")
     public Result test(@RequestBody @Valid Person person, BindingResult result) {
         if (result.getErrorCount() > 0) {
-            return Result.faiture(result.getAllErrors());
+            return Result.failure(result.getAllErrors());
         }
 
         return Result.success(person);
@@ -40,7 +40,7 @@ public class ParamValidationContolller {
             
         
         if (!errorMsgs.isEmpty()) {
-            return Result.faiture(errorMsgs);
+            return Result.failure(errorMsgs);
         }
 
         return Result.success(person);

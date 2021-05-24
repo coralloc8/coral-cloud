@@ -9,9 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @time: 2020/10/24 14:58
  */
 @SpringBootApplication
-public class SimpleWebOneApplication {
+public class SimpleWebTwoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SimpleWebOneApplication.class, args);
+        SpringApplication.run(SimpleWebTwoApplication.class, args);
     }
 }

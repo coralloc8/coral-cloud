@@ -1,5 +1,7 @@
 package com.coral.database.test.mybatis.secondary.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -14,9 +16,7 @@ import java.time.LocalDateTime;
 @TableName("test")
 public class SecTest implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @TableId(value = "id",type = IdType.AUTO)
     private Long id;
 
     @Column(name = "name")

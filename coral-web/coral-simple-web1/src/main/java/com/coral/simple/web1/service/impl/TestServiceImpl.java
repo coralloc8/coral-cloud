@@ -1,6 +1,9 @@
 package com.coral.simple.web1.service.impl;
 
 import com.coral.base.common.StringUtils;
+import com.coral.base.common.exception.BaseErrorMessageEnum;
+import com.coral.base.common.exception.SystemException;
+import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.base.common.jpa.service.impl.JpaBaseServiceImpl;
 import com.coral.base.common.jpa.util.dsl.PredicateCreator;
 import com.coral.database.test.jpa.primary.entity.QTest;
@@ -14,6 +17,8 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +66,53 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
                 .build();
 
         return findAll(predicate);
+    }
+
+    @Override
+    public void save(String name, Integer age) {
+        Test test = new Test();
+        test.setName(name);
+        test.setAge(age);
+        test.setMoney(crateMoney());
+        test.setCreateTime(LocalDateTime.now());
+        save(test);
+    }
+
+    @Override
+    public void save2(String name, Integer age) {
+        SecTest test = new SecTest();
+        test.setName(name);
+        test.setAge(age);
+        test.setMoney(crateMoney());
+        test.setCreateTime(LocalDateTime.now());
+        secTestRepository.saveAndFlush(test);
+    }
+
+    @Override
+    public void save3(String name, Integer age) throws SystemException {
+        save(name, age);
+
+        if (age < 10) {
+            throw new SystemException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
+        }
+        save2(name, age);
+    }
+
+    @Override
+    public void save4(String name, Integer age) {
+        save(name, age);
+
+        if (age < 10) {
+            throw new SystemRuntimeException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
+        }
+        save2(name, age);
+    }
+
+    private Double crateMoney() {
+        double money = Math.random() * 100000000;
+        BigDecimal bg = new BigDecimal(money);
+        double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
     }
 
 }

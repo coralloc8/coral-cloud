@@ -201,22 +201,28 @@ CREATE TABLE `test`  (
   `age` smallint(6) NULL DEFAULT NULL,
   `money` double(255, 2) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
+  `sex` tinyint(1) DEFAULT '1' COMMENT '1男 0女',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of test
 -- ----------------------------
-INSERT INTO `test` VALUES (1, 'test1', 12, 244.00, '2020-05-22 11:52:12');
-INSERT INTO `test` VALUES (2, 'test2', 25, 1000000.00, '2020-05-22 11:52:15');
-INSERT INTO `test` VALUES (3, 'test3', 23, 1222222.00, '2020-05-22 11:54:38');
-INSERT INTO `test` VALUES (4, 'test4', 30, 30000000.00, '2020-05-22 15:43:00');
-INSERT INTO `test` VALUES (5, 'test5', 30, 30000000.00, '2020-05-22 16:43:00');
-INSERT INTO `test` VALUES (6, 'test6', 30, 30000000.00, '2020-05-22 16:11:00');
-INSERT INTO `test` VALUES (7, 'test7', 35, 22332233.00, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (8, 'test8', 35, 100000001.00, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (9, 'test9', 35, 100000001.00, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (10, 'test10', 35, 100000000.55, '2020-05-24 13:11:00');
-INSERT INTO `test` VALUES (11, 'test11', 35, 100000000.55, '2020-05-24 13:11:00');
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (1, 'test1', 12, 244.00, '2020-05-22 11:52:12', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (2, 'test2', 25, 1000000.00, '2020-05-22 11:52:15', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (3, 'test3', 23, 1222222.00, '2020-05-22 11:54:38', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (4, 'test4', 30, 30000000.00, '2020-05-22 15:43:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (5, 'test5', 30, 30000000.00, '2020-05-22 16:43:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (6, 'test6', 30, 30000000.00, '2020-05-22 16:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (7, 'test7', 35, 22332233.00, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (8, 'test8', 35, 100000001.00, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (9, 'test9', 35, 100000001.00, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (10, 'test10', 35, 100000000.55, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (11, 'test11', 35, 100000000.55, '2020-05-24 13:11:00', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (12, 'test-001', 23, 3994820.89, '2021-05-20 16:24:07', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (13, 'test-001', 23, 31473536.42, '2021-05-20 16:24:48', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (14, 'test2-001', 23, 20555146.29, '2021-05-20 16:25:24', 1);
+INSERT INTO `test`.`test` (`id`, `name`, `age`, `money`, `create_time`, `sex`) VALUES (15, 'test1-2-001', 23, 40083937.03, '2021-05-20 16:27:58', 1);
+
 
 SET FOREIGN_KEY_CHECKS = 1;

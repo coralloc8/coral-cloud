@@ -22,7 +22,12 @@ public class Result {
         return new Result(0, data);
     }
 
-    public static Result faiture(Object data) {
+    public static Result success() {
+        return new Result(0, null);
+    }
+
+
+    public static Result failure(Object data) {
         return new Result(1, data);
     }
 }

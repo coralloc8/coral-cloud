@@ -1,13 +1,10 @@
 package com.coral.database.test.mybatis.primary.mapper;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.coral.base.common.StringUtils;
 import com.coral.base.common.mybatis.mapper.MybatisMapper;
-import com.coral.database.test.mybatis.config.DbType;
 import com.coral.database.test.mybatis.primary.entity.Test;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +12,6 @@ import java.util.Objects;
 /**
  * @author huss
  */
-@DS(DbType.PRIMARY)
 public interface TestMapper extends MybatisMapper<Test> {
     /**
      * 查询所有
