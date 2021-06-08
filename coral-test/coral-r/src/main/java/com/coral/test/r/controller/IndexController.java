@@ -61,8 +61,9 @@ public class IndexController extends BaseController {
         }
 
 
-
+        long start  = System.currentTimeMillis();
         String result = RserveUtil.callRserve(HOST, PORT, indexQueryDTO.getFilePath(), indexQueryDTO.getFuncName(), params);
+        long end  = System.currentTimeMillis();
         log.info(">>>>>result:{}", result);
 
         if (StringUtils.isBlank(result)) {
@@ -73,6 +74,7 @@ public class IndexController extends BaseController {
 
         model.addAttribute("echart", res);
         model.addAttribute("json", result);
+        model.addAttribute("time", (end - start));
         return "index";
     }
 
