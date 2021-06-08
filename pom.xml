@@ -13,6 +13,7 @@
         <module>coral-database</module>
         <module>coral-service</module>
         <module>coral-web</module>
+        <module>coral-test</module>
 
     </modules>
 
