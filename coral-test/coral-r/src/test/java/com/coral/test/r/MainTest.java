@@ -1,8 +1,6 @@
 package com.coral.test.r;
 
 import org.rosuda.REngine.REXP;
-import org.rosuda.REngine.REXPDouble;
-import org.rosuda.REngine.REXPFactor;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -47,8 +45,8 @@ public class MainTest {
         REXP rexp = rConnection.eval(func);
 
         rConnection.close();
-
-        System.out.println("list: " + rexp.asList());
+        System.out.println("rexp:" + rexp);
+        System.out.println("list: " + rexp.asString());
         System.out.println(rexp.asList().keySet());
 
         Arrays.stream(rexp.asList().at("dept_name_now").asStrings()).forEach(System.out::println);

@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +31,10 @@ public class IndexController extends BaseController {
     private static final String HOST = "192.168.29.190";
     private static final int PORT = 6311;
 
+
+    private static final String FILE_PATH_KEY = "filePath";
+    private static final String FUNC_NAME_KEY = "funcName";
+
     private static final String FILE_PATH = "/home/zhyx/cdss_java.r";
 
     private static final String FUNC_NAME = "CDSS_stat";
@@ -48,16 +49,18 @@ public class IndexController extends BaseController {
 
         if (StringUtils.isBlank(indexQueryDTO.getFilePath())) {
             indexQueryDTO.setFilePath(FILE_PATH);
+
+            params.putIfAbsent("dept_name", "妇科");
+            params.putIfAbsent("time_select", "最近一个月");
+            params.putIfAbsent("data_name", "（警告）多正常值检验项目异常结果警示");
+            params.putIfAbsent("doctor_name", "赖紫玲");
+            params.putIfAbsent("message", "查看检验报告");
         }
         if (StringUtils.isBlank(indexQueryDTO.getFuncName())) {
             indexQueryDTO.setFuncName(FUNC_NAME);
         }
 
-        params.putIfAbsent("dept_name", "妇科");
-        params.putIfAbsent("time_select", "最近一个月");
-        params.putIfAbsent("data_name", "（警告）多正常值检验项目异常结果警示");
-        params.putIfAbsent("doctor_name", "赖紫玲");
-        params.putIfAbsent("message", "查看检验报告");
+
 
         String result = RserveUtil.callRserve(HOST, PORT, indexQueryDTO.getFilePath(), indexQueryDTO.getFuncName(), params);
         log.info(">>>>>result:{}", result);
@@ -78,7 +81,10 @@ public class IndexController extends BaseController {
         if (Objects.isNull(request)) {
             return Collections.emptyMap();
         }
-        return request.getParameterMap().entrySet().stream()
+        Map<String, String[]> paramMap=  new HashMap<>(request.getParameterMap());
+        paramMap.remove(FILE_PATH_KEY);
+        paramMap.remove(FUNC_NAME_KEY);
+        return paramMap.entrySet().stream()
                 .collect(Collectors.toMap(k -> k.getKey(), v -> Arrays.asList(v.getValue())));
     }
 

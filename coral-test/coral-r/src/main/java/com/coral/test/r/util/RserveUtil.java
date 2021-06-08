@@ -23,6 +23,7 @@ public class RserveUtil {
 
 
     public static String callRserve(String host, int port, String rPath, String funcName, Map<String, Object> args) {
+        log.info(">>>>>rPath:{},funcName:{},args:{}", rPath, funcName, args);
         RConnection rConnection = null;
         try {
             rConnection = new RConnection(host, port);
@@ -55,21 +56,22 @@ public class RserveUtil {
             log.error(">>>>>funcName为空...");
             return "";
         }
-        StringBuilder sb = new StringBuilder(funcName);
-        sb.append("(");
+        StringBuilder paramBuilder = new StringBuilder();
         if (Objects.nonNull(args)) {
             args.forEach((k, v) -> {
-                sb.append(k).append("='");
+                paramBuilder.append(k).append("='");
                 if (v instanceof List) {
-                    sb.append(String.join(",", ((List) v)));
+                    paramBuilder.append(String.join(",", ((List) v)));
                 } else {
-                    sb.append(v);
+                    paramBuilder.append(v);
                 }
-                sb.append("',");
+                paramBuilder.append("',");
             });
         }
-        String func = sb.substring(0, sb.length() - 1) + ")";
-        return func;
+        return new StringBuilder(funcName).append("(")
+                .append(paramBuilder.length() > 0 ? paramBuilder.substring(0, paramBuilder.length() - 1) : "")
+                .append(")")
+                .toString();
     }
 
 
