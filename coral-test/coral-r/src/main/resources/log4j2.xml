@@ -71,8 +71,8 @@
 		<logger name="org.hibernate" level="info"></logger>
 		<logger name="org.mybatis" level="INFO"></logger>
 		<!--打印sql语句 -->
-		<logger name="com.coral" level="DEBUG"></logger>
-		<root level="debug">
+		<logger name="com.coral" level="info"></logger>
+		<root level="info">
 			<appender-ref ref="log" />
 			<appender-ref ref="Console" />
 			<appender-ref ref="RollingFileInfo" />

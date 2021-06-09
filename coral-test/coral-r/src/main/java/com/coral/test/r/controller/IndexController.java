@@ -39,7 +39,6 @@ public class IndexController extends BaseController {
 
     private static final String FUNC_NAME = "CDSS_stat";
 
-
     @Autowired
     private HttpServletRequest request;
 
@@ -61,29 +60,72 @@ public class IndexController extends BaseController {
         }
 
 
-        long start  = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         String result = RserveUtil.callRserve(HOST, PORT, indexQueryDTO.getFilePath(), indexQueryDTO.getFuncName(), params);
-        long end  = System.currentTimeMillis();
-        log.info(">>>>>result:{}", result);
+        long end = System.currentTimeMillis();
+        log.debug(">>>>>r result:{}", result);
+        long rTime = end - start;
 
         if (StringUtils.isBlank(result)) {
             result = "{\"title\":{\"text\":\"ECharts 默认数据\"},\"tooltip\":{},\"legend\":{\"data\":[\"销量\"]},\"xAxis\":{\"data\":[\"衬衫\",\"羊毛衫\",\"雪纺衫\",\"裤子\",\"高跟鞋\",\"袜子\"]},\"yAxis\":{},\"series\":[{\"name\":\"销量\",\"type\":\"bar\",\"data\":[5,20,36,10,10,20]}]}";
-
         }
+        start = System.currentTimeMillis();
         Map res = JsonUtil.parse(result, Map.class);
-
+        end = System.currentTimeMillis();
+        long parseTime = end - start;
         model.addAttribute("echart", res);
         model.addAttribute("json", result);
-        model.addAttribute("time", (end - start));
+        model.addAttribute("rTime", rTime);
+        model.addAttribute("parseTime", parseTime);
         return "index";
     }
 
+
+    /**
+     * 组装echarts的option属性
+     * @param json
+     * @return
+     */
+    private Map buildEChartOptions(String json) {
+        List<Map> list = JsonUtil.parseArray(json, Map.class);
+
+        final String xAxisDataKey = "$xAxisData";
+        final String seriesDataKey = "$seriesData";
+
+        // {"yAxis":[{"show":true}],"xAxis":[{"data":[],"type":"category","boundaryGap":true}],"legend":{"data":["bar"]},"series":[{"data":[],"name":"bar","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"}],"title":[{"text":"Bar and step charts"}]}
+
+        String options = "{\n" +
+                "    \"yAxis\": [{\n" +
+                "        \"show\": true\n" +
+                "    }],\n" +
+                "    \"xAxis\": [{\n" +
+                "        \"data\": $xAxisData,\n" +
+                "        \"type\": \"category\",\n" +
+                "        \"boundaryGap\": true\n" +
+                "    }],\n" +
+                "    \"legend\": {\n" +
+                "        \"data\": [\"bar\"]\n" +
+                "    },\n" +
+                "    \"series\": [{\n" +
+                "        \"data\": $seriesData,\n" +
+                "        \"name\": \"bar\",\n" +
+                "        \"type\": \"bar\",\n" +
+                "        \"yAxisIndex\": 0,\n" +
+                "        \"xAxisIndex\": 0,\n" +
+                "        \"coordinateSystem\": \"cartesian2d\"\n" +
+                "    }],\n" +
+                "    \"title\": [{\n" +
+                "        \"text\": \"Bar and step charts\"\n" +
+                "    }]\n" +
+                "}";
+        return null;
+    }
 
     private Map<String, Object> getParams(HttpServletRequest request) {
         if (Objects.isNull(request)) {
             return Collections.emptyMap();
         }
-        Map<String, String[]> paramMap=  new HashMap<>(request.getParameterMap());
+        Map<String, String[]> paramMap = new HashMap<>(request.getParameterMap());
         paramMap.remove(FILE_PATH_KEY);
         paramMap.remove(FUNC_NAME_KEY);
         return paramMap.entrySet().stream()
@@ -101,6 +143,11 @@ public class IndexController extends BaseController {
          * 函数名称
          */
         private String funcName;
+
+        /**
+         * 是否元数据
+         */
+        private Boolean isMetadata;
 
     }
 
