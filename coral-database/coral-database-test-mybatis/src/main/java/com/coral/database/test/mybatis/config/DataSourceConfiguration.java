@@ -41,7 +41,6 @@ public class DataSourceConfiguration {
         xaDataSource.setXaDataSource(druidXADataSource);
         xaDataSource.setUniqueResourceName("dataSourcePrimary");
         this.setAtomikosDataSourceBean(xaDataSource, dataSourcePrimaryProperty);
-//        DbContextHolder.addDataSource(DbTypeEnum.PRIMARY.getCode(), druidDataSource);
         return xaDataSource;
     }
 
@@ -54,7 +53,6 @@ public class DataSourceConfiguration {
         xaDataSource.setXaDataSource(druidXADataSource);
         xaDataSource.setUniqueResourceName("dataSourceSecondary");
         this.setAtomikosDataSourceBean(xaDataSource, dataSourceSecondaryProperty);
-//        DbContextHolder.addDataSource(DbTypeEnum.SECONDARY.getCode(), druidDataSource);
         return xaDataSource;
     }
 
@@ -66,7 +64,6 @@ public class DataSourceConfiguration {
         xaDataSource.setXaDataSource(druidXADataSource);
         xaDataSource.setUniqueResourceName("dataSourceTertiary");
         this.setAtomikosDataSourceBean(xaDataSource, dataSourceTertiaryProperty);
-//        DbContextHolder.addDataSource(DbTypeEnum.SECONDARY.getCode(), druidDataSource);
         return xaDataSource;
     }
 
@@ -115,21 +112,6 @@ public class DataSourceConfiguration {
         return null;
 
     }
-//
-//    @Primary
-//    @Bean
-//    public DynamicDataSource dataSource(@Qualifier("dataSourcePrimary") DataSource dataSourcePrimary,
-//                                        @Qualifier("dataSourceSecondary") DataSource dataSourceSecondary) {
-//        DynamicDataSource dynamicDataSource = new DynamicDataSource();
-//        Map<Object, Object> targetDataResources = new HashMap<>(4);
-//        targetDataResources.put(DbTypeEnum.PRIMARY.getCode(), dataSourcePrimary);
-//        targetDataResources.put(DbTypeEnum.SECONDARY.getCode(), dataSourceSecondary);
-//        //设置默认数据源
-//        dynamicDataSource.setDefaultTargetDataSource(dataSourcePrimary);
-//        dynamicDataSource.setTargetDataSources(targetDataResources);
-//        DbContextHolder.setDefaultDs(DbTypeEnum.PRIMARY.getCode());
-//        return dynamicDataSource;
-//    }
 
     @Bean(name = "primaryTransactionManager")
     public DataSourceTransactionManager primaryTransactionManager() {

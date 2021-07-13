@@ -1,6 +1,5 @@
 package com.coral.database.test.mybatis.config.secondary;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.coral.database.test.mybatis.config.AtomikosDataSourceProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
