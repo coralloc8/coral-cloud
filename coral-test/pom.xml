@@ -14,5 +14,7 @@
 
     <modules>
         <module>coral-r</module>
+        <module>contract-server</module>
+        <module>contract-Client</module>
     </modules>
 </project>

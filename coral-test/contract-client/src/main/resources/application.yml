@@ -1,0 +1,13 @@
+
+# 契约测试
+stubrunner:
+  # LOCAL REMOTE
+  stubs-mode: LOCAL
+  # 在remote模式下需要配置repository username password
+  #repositoryRoot: https://xxx.xxx.net/repository/contract-test
+  #username: user
+  #password: xxx
+
+  ids:
+    # - [groupId]:artifactId:[version]:[classifier]:[port]
+    - com.coral.test:contract-server:+:18088

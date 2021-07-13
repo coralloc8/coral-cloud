@@ -54,6 +54,17 @@ public class TestController {
     }
 
     /**
+     * 查看所有消息集合
+     *
+     * @return
+     */
+    @GetMapping("list4")
+    public Result list4(String name, Integer age) {
+        return Result.success(testService.findAll4(name, age));
+    }
+
+
+    /**
      * 保存
      *
      * @return

@@ -18,9 +18,14 @@ public enum DbTypeEnum implements DbType<DbTypeEnum, String> {
     PRIMARY("mapper/primary", "主数据源"),
 
     /**
-     * 主数据源
+     * 测试第二数据源
      */
-    SECONDARY("secondary", "测试第二数据源");
+    SECONDARY("secondary", "测试第二数据源"),
+    /**
+     * 测试第三数据源
+     */
+    TERTIARY("tertiary","测试第三数据源")
+    ;
 
 
     @Getter

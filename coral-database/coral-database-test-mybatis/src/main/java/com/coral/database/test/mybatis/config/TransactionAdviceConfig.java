@@ -8,10 +8,8 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
@@ -19,7 +17,6 @@ import org.springframework.transaction.interceptor.RollbackRuleAttribute;
 import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import javax.sql.DataSource;
 import java.util.Collections;
 
 /**
@@ -47,6 +44,11 @@ public class TransactionAdviceConfig {
     private TransactionManager secondaryTransactionManager;
 
 
+    @Qualifier("tertiaryTransactionManager")
+    @Autowired
+    private TransactionManager tertiaryTransactionManager;
+
+
     @Bean("primaryTransactionInterceptor")
     public TransactionInterceptor primaryTransactionInterceptor() {
         return create(primaryTransactionManager);
@@ -69,6 +71,21 @@ public class TransactionAdviceConfig {
     public Advisor secondaryPrimaryAdvisor() {
         return txAdviceAdvisor(secondaryTransactionInterceptor());
     }
+
+    ///////////////////////
+
+
+    @Bean("tertiaryTransactionInterceptor")
+    public TransactionInterceptor tertiaryTransactionInterceptor() {
+        return create(tertiaryTransactionManager);
+    }
+
+    @Bean("tertiaryPrimaryAdvisor")
+    public Advisor tertiaryPrimaryAdvisor() {
+        return txAdviceAdvisor(tertiaryTransactionInterceptor());
+    }
+
+
 
 
 

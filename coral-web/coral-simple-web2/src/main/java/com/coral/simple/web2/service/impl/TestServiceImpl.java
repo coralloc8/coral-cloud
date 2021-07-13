@@ -2,7 +2,6 @@ package com.coral.simple.web2.service.impl;
 
 
 import com.coral.base.common.exception.BaseErrorMessageEnum;
-import com.coral.base.common.exception.SystemException;
 import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.base.common.mybatis.service.impl.MybatisServiceImpl;
 import com.coral.database.test.mybatis.config.DbTypeEnum;
@@ -10,6 +9,8 @@ import com.coral.database.test.mybatis.primary.entity.Test;
 import com.coral.database.test.mybatis.primary.mapper.TestMapper;
 import com.coral.database.test.mybatis.secondary.entity.SecTest;
 import com.coral.database.test.mybatis.secondary.mapper.SecTestMapper;
+import com.coral.database.test.mybatis.tertiary.entity.TerTest;
+import com.coral.database.test.mybatis.tertiary.mapper.TerTestMapper;
 import com.coral.simple.web2.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +36,23 @@ public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implem
     private SecTestMapper secTestMapper;
 
 
+    @Autowired
+    private TerTestMapper terTestMapper;
+
+
     @Override
-    public Map<String, Object> findAll3(String name, Integer age) {
+    public Map<String, Object> findAll4(String name, Integer age) {
         Map<String, Object> map = new HashMap<>(4);
         map.put(DbTypeEnum.SECONDARY.getCode(), findAll2(name, age));
         map.put(DbTypeEnum.PRIMARY.getCode(), findAll(name, age));
+        map.put(DbTypeEnum.TERTIARY.getCode(), findAll(name, age));
         return map;
+    }
+
+
+    @Override
+    public List<TerTest> findAll3(String name, Integer age) {
+        return terTestMapper.findAll(name, age);
     }
 
 
@@ -75,23 +87,25 @@ public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implem
     }
 
     @Override
-    public void save3(String name, Integer age) throws SystemException {
-        save(name, age);
-
-        if (age < 10) {
-            throw new SystemException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
-        }
-        save2(name, age);
+    public void save3(String name, Integer age) {
+        TerTest test = new TerTest();
+        test.setName(name);
+        test.setAge(age);
+        test.setMoney(crateMoney());
+        test.setCreateTime(LocalDateTime.now());
+        terTestMapper.insert(test);
     }
+
 
     @Override
     public void save4(String name, Integer age) {
+        save2(name, age);
         save(name, age);
+        save3(name, age);
 
         if (age < 10) {
             throw new SystemRuntimeException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
         }
-        save2(name, age);
     }
 
     private Double crateMoney() {

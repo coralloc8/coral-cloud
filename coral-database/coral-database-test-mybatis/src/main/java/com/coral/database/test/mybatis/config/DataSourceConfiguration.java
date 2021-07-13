@@ -1,14 +1,18 @@
 package com.coral.database.test.mybatis.config;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-import com.coral.base.common.mybatis.dynamic.DbContextHolder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.xa.DruidXADataSource;
+import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.coral.database.test.mybatis.config.primary.DataSourcePrimaryProperty;
+import com.coral.database.test.mybatis.config.secondary.DataSourceSecondaryProperty;
+import com.coral.database.test.mybatis.config.tertiary.DataSourceTertiaryProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * @author huss
@@ -20,21 +24,96 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfiguration {
 
-    @Primary
+    @Autowired
+    private DataSourcePrimaryProperty dataSourcePrimaryProperty;
+
+    @Autowired
+    private DataSourceSecondaryProperty dataSourceSecondaryProperty;
+
+    @Autowired
+    private DataSourceTertiaryProperty dataSourceTertiaryProperty;
+
     @Bean(name = "dataSourcePrimary")
-    @ConfigurationProperties(prefix = "spring.datasource.dynamic.datasource.primary")
     public DataSource dataSourcePrimary() {
-        DataSource druidDataSource = DruidDataSourceBuilder.create().build();
+        DruidXADataSource druidXADataSource = this.convert(dataSourcePrimaryProperty);
+        //
+        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+        xaDataSource.setXaDataSource(druidXADataSource);
+        xaDataSource.setUniqueResourceName("dataSourcePrimary");
+        this.setAtomikosDataSourceBean(xaDataSource, dataSourcePrimaryProperty);
 //        DbContextHolder.addDataSource(DbTypeEnum.PRIMARY.getCode(), druidDataSource);
-        return druidDataSource;
+        return xaDataSource;
     }
 
+
     @Bean(name = "dataSourceSecondary")
-    @ConfigurationProperties(prefix = "spring.datasource.dynamic.datasource.secondary")
     public DataSource dataSourceSecondary() {
-        DataSource druidDataSource = DruidDataSourceBuilder.create().build();
+        DruidXADataSource druidXADataSource = this.convert(dataSourceSecondaryProperty);
+        //
+        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+        xaDataSource.setXaDataSource(druidXADataSource);
+        xaDataSource.setUniqueResourceName("dataSourceSecondary");
+        this.setAtomikosDataSourceBean(xaDataSource, dataSourceSecondaryProperty);
 //        DbContextHolder.addDataSource(DbTypeEnum.SECONDARY.getCode(), druidDataSource);
-        return druidDataSource;
+        return xaDataSource;
+    }
+
+    @Bean(name = "dataSourceTertiary")
+    public DataSource dataSourceTertiary() {
+        DruidXADataSource druidXADataSource = this.convert(dataSourceTertiaryProperty);
+        //
+        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+        xaDataSource.setXaDataSource(druidXADataSource);
+        xaDataSource.setUniqueResourceName("dataSourceTertiary");
+        this.setAtomikosDataSourceBean(xaDataSource, dataSourceTertiaryProperty);
+//        DbContextHolder.addDataSource(DbTypeEnum.SECONDARY.getCode(), druidDataSource);
+        return xaDataSource;
+    }
+
+    private void setAtomikosDataSourceBean(AtomikosDataSourceBean atomikosDataSourceBean,
+                                           AtomikosDataSourceProperty atomikosDataSourceProperty) {
+        try {
+            atomikosDataSourceBean.setMinPoolSize(atomikosDataSourceProperty.getMinPoolSize());
+            atomikosDataSourceBean.setMaxPoolSize(atomikosDataSourceProperty.getMaxPoolSize());
+            atomikosDataSourceBean.setMaxLifetime(atomikosDataSourceProperty.getMaxLifetime());
+            atomikosDataSourceBean.setBorrowConnectionTimeout(atomikosDataSourceProperty.getBorrowConnectionTimeout());
+            atomikosDataSourceBean.setLoginTimeout(atomikosDataSourceProperty.getLoginTimeout());
+
+            atomikosDataSourceBean.setMaintenanceInterval(atomikosDataSourceProperty.getMaintenanceInterval());
+            atomikosDataSourceBean.setMaxIdleTime(atomikosDataSourceProperty.getMaxIdleTime());
+            atomikosDataSourceBean.setTestQuery(atomikosDataSourceProperty.getTestQuery());
+        } catch (SQLException r) {
+            r.printStackTrace();
+        }
+    }
+
+    private DruidXADataSource convert(DruidDataSource dataSource) {
+        try {
+            DruidXADataSource druidDataSource = new DruidXADataSource();
+            druidDataSource.setUrl(dataSource.getUrl());
+            druidDataSource.setUsername(dataSource.getUsername());
+            druidDataSource.setPassword(dataSource.getPassword());
+            druidDataSource.setDriverClassName(dataSource.getDriverClassName());
+            druidDataSource.setFilters(String.join(",", dataSource.getFilterClassNames()));
+            druidDataSource.setMaxActive(dataSource.getMaxActive());
+            druidDataSource.setInitialSize(dataSource.getInitialSize());
+            druidDataSource.setMaxWait(dataSource.getMaxWait());
+            druidDataSource.setMinIdle(dataSource.getMinIdle());
+            druidDataSource.setTimeBetweenEvictionRunsMillis(dataSource.getTimeBetweenEvictionRunsMillis());
+            druidDataSource.setMaxEvictableIdleTimeMillis(dataSource.getMaxEvictableIdleTimeMillis());
+            druidDataSource.setMinEvictableIdleTimeMillis(dataSource.getMinEvictableIdleTimeMillis());
+            druidDataSource.setValidationQuery(dataSource.getValidationQuery());
+            druidDataSource.setTestWhileIdle(dataSource.isTestWhileIdle());
+            druidDataSource.setTestOnBorrow(dataSource.isTestOnBorrow());
+            druidDataSource.setTestOnReturn(dataSource.isTestOnReturn());
+            druidDataSource.setKeepAlive(dataSource.isKeepAlive());
+            druidDataSource.setConnectProperties(dataSource.getConnectProperties());
+            return druidDataSource;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 //
 //    @Primary
@@ -52,16 +131,22 @@ public class DataSourceConfiguration {
 //        return dynamicDataSource;
 //    }
 
-    @Primary
     @Bean(name = "primaryTransactionManager")
     public DataSourceTransactionManager primaryTransactionManager() {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourcePrimary());
         return transactionManager;
     }
 
+
     @Bean(name = "secondaryTransactionManager")
     public DataSourceTransactionManager secondaryTransactionManager() {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceSecondary());
+        return transactionManager;
+    }
+
+    @Bean(name = "tertiaryTransactionManager")
+    public DataSourceTransactionManager tertiaryTransactionManager() {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceTertiary());
         return transactionManager;
     }
 

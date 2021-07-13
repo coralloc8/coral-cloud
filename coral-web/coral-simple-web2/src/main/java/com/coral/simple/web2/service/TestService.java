@@ -5,6 +5,7 @@ import com.coral.base.common.exception.SystemException;
 import com.coral.base.common.mybatis.service.IMybatisService;
 import com.coral.database.test.mybatis.primary.entity.Test;
 import com.coral.database.test.mybatis.secondary.entity.SecTest;
+import com.coral.database.test.mybatis.tertiary.entity.TerTest;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 public interface TestService extends IMybatisService<Test> {
 
+
     /**
      * 查询所有
      *
@@ -25,7 +27,17 @@ public interface TestService extends IMybatisService<Test> {
      * @param age
      * @return
      */
-    Map<String, Object> findAll3(String name, Integer age);
+    Map<String, Object> findAll4(String name, Integer age);
+
+
+    /**
+     * 查询所有
+     *
+     * @param name
+     * @param age
+     * @return
+     */
+    List<TerTest> findAll3(String name, Integer age);
 
     /**
      * 查询所有

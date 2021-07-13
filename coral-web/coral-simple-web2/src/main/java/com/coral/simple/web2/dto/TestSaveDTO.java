@@ -17,5 +17,4 @@ public class TestSaveDTO {
 
     private Integer age;
 
-    private SexGLo
 }
