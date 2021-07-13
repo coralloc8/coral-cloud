@@ -1,4 +1,4 @@
-package com.coral.database.test.mybatis.config.secondary;
+package com.coral.database.test.mybatis.config.datasource.secondary;
 
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;

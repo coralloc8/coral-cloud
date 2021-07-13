@@ -4,7 +4,7 @@ package com.coral.simple.web2.service.impl;
 import com.coral.base.common.exception.BaseErrorMessageEnum;
 import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.base.common.mybatis.service.impl.MybatisServiceImpl;
-import com.coral.database.test.mybatis.config.DbTypeEnum;
+import com.coral.database.test.mybatis.config.datasource.DbTypeEnum;
 import com.coral.database.test.mybatis.primary.entity.Test;
 import com.coral.database.test.mybatis.primary.mapper.TestMapper;
 import com.coral.database.test.mybatis.secondary.entity.SecTest;

@@ -1,4 +1,4 @@
-package com.coral.database.test.mybatis.config;
+package com.coral.database.test.mybatis.config.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author huss
  * @version 1.0
  * @className AtomikosDataSourceProperty
- * @description todo
+ * @description Atomikos 属性配置
  * @date 2021/7/13 19:35
  */
 @Data

@@ -1,5 +1,6 @@
 package com.coral.database.test.mybatis.config;
 
+import com.coral.database.test.mybatis.config.datasource.DataSourceConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
@@ -28,7 +29,7 @@ import java.util.Collections;
  */
 @Aspect
 @Configuration
-@AutoConfigureAfter({DataSourceConfiguration.class})
+@AutoConfigureAfter({DataSourceConfig.class})
 @Slf4j
 public class TransactionAdviceConfig {
     private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..service..*.*(..))";

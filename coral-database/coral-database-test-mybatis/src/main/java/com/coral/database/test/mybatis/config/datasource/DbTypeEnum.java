@@ -1,4 +1,4 @@
-package com.coral.database.test.mybatis.config;
+package com.coral.database.test.mybatis.config.datasource;
 
 import com.coral.base.common.mybatis.dynamic.DbType;
 import lombok.Getter;

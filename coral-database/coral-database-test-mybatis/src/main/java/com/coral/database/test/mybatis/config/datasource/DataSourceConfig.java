@@ -1,11 +1,11 @@
-package com.coral.database.test.mybatis.config;
+package com.coral.database.test.mybatis.config.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.xa.DruidXADataSource;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
-import com.coral.database.test.mybatis.config.primary.DataSourcePrimaryProperty;
-import com.coral.database.test.mybatis.config.secondary.DataSourceSecondaryProperty;
-import com.coral.database.test.mybatis.config.tertiary.DataSourceTertiaryProperty;
+import com.coral.database.test.mybatis.config.datasource.primary.DataSourcePrimaryProperty;
+import com.coral.database.test.mybatis.config.datasource.secondary.DataSourceSecondaryProperty;
+import com.coral.database.test.mybatis.config.datasource.tertiary.DataSourceTertiaryProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ import java.sql.SQLException;
  * @date 2021/5/21 13:21
  */
 @Configuration
-public class DataSourceConfiguration {
+public class DataSourceConfig {
 
     @Autowired
     private DataSourcePrimaryProperty dataSourcePrimaryProperty;
@@ -66,6 +66,27 @@ public class DataSourceConfiguration {
         this.setAtomikosDataSourceBean(xaDataSource, dataSourceTertiaryProperty);
         return xaDataSource;
     }
+
+
+    @Bean(name = "primaryTransactionManager")
+    public DataSourceTransactionManager primaryTransactionManager() {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourcePrimary());
+        return transactionManager;
+    }
+
+
+    @Bean(name = "secondaryTransactionManager")
+    public DataSourceTransactionManager secondaryTransactionManager() {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceSecondary());
+        return transactionManager;
+    }
+
+    @Bean(name = "tertiaryTransactionManager")
+    public DataSourceTransactionManager tertiaryTransactionManager() {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceTertiary());
+        return transactionManager;
+    }
+
 
     private void setAtomikosDataSourceBean(AtomikosDataSourceBean atomikosDataSourceBean,
                                            AtomikosDataSourceProperty atomikosDataSourceProperty) {
@@ -111,25 +132,6 @@ public class DataSourceConfiguration {
         }
         return null;
 
-    }
-
-    @Bean(name = "primaryTransactionManager")
-    public DataSourceTransactionManager primaryTransactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourcePrimary());
-        return transactionManager;
-    }
-
-
-    @Bean(name = "secondaryTransactionManager")
-    public DataSourceTransactionManager secondaryTransactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceSecondary());
-        return transactionManager;
-    }
-
-    @Bean(name = "tertiaryTransactionManager")
-    public DataSourceTransactionManager tertiaryTransactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceTertiary());
-        return transactionManager;
     }
 
 }

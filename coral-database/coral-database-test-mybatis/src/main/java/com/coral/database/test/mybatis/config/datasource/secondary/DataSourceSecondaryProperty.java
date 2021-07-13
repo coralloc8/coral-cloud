@@ -1,6 +1,6 @@
-package com.coral.database.test.mybatis.config.secondary;
+package com.coral.database.test.mybatis.config.datasource.secondary;
 
-import com.coral.database.test.mybatis.config.AtomikosDataSourceProperty;
+import com.coral.database.test.mybatis.config.datasource.AtomikosDataSourceProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
  * @date 2021/7/13 19:19
  */
 @Component
-@ConfigurationProperties(prefix = "spring.datasource.dynamic.datasource.secondary")
+@ConfigurationProperties(prefix = "spring.datasource.secondary")
 public class DataSourceSecondaryProperty extends AtomikosDataSourceProperty {
 }
