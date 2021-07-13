@@ -2,6 +2,8 @@ package com.coral.database.test.mybatis.config.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.xa.DruidXADataSource;
+import com.atomikos.icatch.jta.UserTransactionImp;
+import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.coral.database.test.mybatis.config.datasource.primary.DataSourcePrimaryProperty;
 import com.coral.database.test.mybatis.config.datasource.secondary.DataSourceSecondaryProperty;
@@ -9,9 +11,12 @@ import com.coral.database.test.mybatis.config.datasource.tertiary.DataSourceTert
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.context.annotation.Primary;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.sql.DataSource;
+import javax.transaction.UserTransaction;
 import java.sql.SQLException;
 
 /**
@@ -67,26 +72,13 @@ public class DataSourceConfig {
         return xaDataSource;
     }
 
-
-    @Bean(name = "primaryTransactionManager")
-    public DataSourceTransactionManager primaryTransactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourcePrimary());
-        return transactionManager;
-    }
-
-
-    @Bean(name = "secondaryTransactionManager")
-    public DataSourceTransactionManager secondaryTransactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceSecondary());
-        return transactionManager;
-    }
-
-    @Bean(name = "tertiaryTransactionManager")
-    public DataSourceTransactionManager tertiaryTransactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceTertiary());
-        return transactionManager;
-    }
-
+//    @Bean(name = "transactionManager")
+//    @Primary
+//    public TransactionManager regTransactionManager() {
+//        UserTransactionManager userTransactionManager = new UserTransactionManager();
+//        UserTransaction userTransaction = new UserTransactionImp();
+//        return new JtaTransactionManager(userTransaction, userTransactionManager);
+//    }
 
     private void setAtomikosDataSourceBean(AtomikosDataSourceBean atomikosDataSourceBean,
                                            AtomikosDataSourceProperty atomikosDataSourceProperty) {

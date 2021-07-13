@@ -7,12 +7,12 @@ import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.RollbackRuleAttribute;
 import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
@@ -24,7 +24,7 @@ import java.util.Collections;
  * @author huss
  * @version 1.0
  * @className TransactionAdviceConfig
- * @description
+ * @description 自定义事务拦截器
  * @date 2021/5/20 16:55
  */
 @Aspect
@@ -32,66 +32,30 @@ import java.util.Collections;
 @AutoConfigureAfter({DataSourceConfig.class})
 @Slf4j
 public class TransactionAdviceConfig {
-    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..service..*.*(..))";
+
+
+    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.coral..*.service..*.*(..))";
 
     private static final int TX_METHOD_TIMEOUT = 300;
 
-    @Qualifier("primaryTransactionManager")
     @Autowired
-    private TransactionManager primaryTransactionManager;
-
-    @Qualifier("secondaryTransactionManager")
-    @Autowired
-    private TransactionManager secondaryTransactionManager;
+    private TransactionManager transactionManager;
 
 
-    @Qualifier("tertiaryTransactionManager")
-    @Autowired
-    private TransactionManager tertiaryTransactionManager;
-
-
-    @Bean("primaryTransactionInterceptor")
-    public TransactionInterceptor primaryTransactionInterceptor() {
-        return create(primaryTransactionManager);
+    @Bean("cusTransactionInterceptor")
+    public TransactionInterceptor cusTransactionInterceptor() {
+        ProxyTransactionManagementConfiguration n = null;
+        return create(transactionManager);
     }
 
-    @Bean("primaryAdvisor")
-    public Advisor primaryAdvisor() {
-        return txAdviceAdvisor(primaryTransactionInterceptor());
+    @Bean("cusAdvisor")
+    public Advisor cusAdvisor() {
+        return txAdviceAdvisor(cusTransactionInterceptor());
     }
-
-
-    ///////////////////////
-
-    @Bean("secondaryTransactionInterceptor")
-    public TransactionInterceptor secondaryTransactionInterceptor() {
-        return create(secondaryTransactionManager);
-    }
-
-    @Bean("secondaryPrimaryAdvisor")
-    public Advisor secondaryPrimaryAdvisor() {
-        return txAdviceAdvisor(secondaryTransactionInterceptor());
-    }
-
-    ///////////////////////
-
-
-    @Bean("tertiaryTransactionInterceptor")
-    public TransactionInterceptor tertiaryTransactionInterceptor() {
-        return create(tertiaryTransactionManager);
-    }
-
-    @Bean("tertiaryPrimaryAdvisor")
-    public Advisor tertiaryPrimaryAdvisor() {
-        return txAdviceAdvisor(tertiaryTransactionInterceptor());
-    }
-
-
-
 
 
     public TransactionInterceptor create(TransactionManager transactionManager) {
-        log.info(">>>>>TransactionInterceptor create...");
+        log.info(">>>>>TransactionInterceptor create {}...", transactionManager);
         RuleBasedTransactionAttribute required =
                 new RuleBasedTransactionAttribute(TransactionDefinition.PROPAGATION_REQUIRED,
                         Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
