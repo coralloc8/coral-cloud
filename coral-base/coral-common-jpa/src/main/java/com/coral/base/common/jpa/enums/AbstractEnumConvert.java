@@ -16,6 +16,7 @@ public abstract class AbstractEnumConvert<E extends Enum<E> & IEnum<E, R>, R ext
 
     private Class<E> clazz;
 
+
     public AbstractEnumConvert(Class<E> clazz) {
         log.debug("#####clazz:{}", clazz);
         this.clazz = clazz;
