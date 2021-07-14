@@ -1,6 +1,7 @@
 package com.coral.simple.web2.service.impl;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.coral.base.common.exception.BaseErrorMessageEnum;
 import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.base.common.mybatis.service.impl.MybatisServiceImpl;
@@ -31,6 +32,8 @@ import java.util.Map;
 @Service
 public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implements TestService {
 
+    @Autowired
+    private TestMapper testMapper;
 
     @Autowired
     private SecTestMapper secTestMapper;
@@ -43,9 +46,9 @@ public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implem
     @Override
     public Map<String, Object> findAll4(String name, Integer age) {
         Map<String, Object> map = new HashMap<>(4);
-        map.put(DbTypeEnum.SECONDARY.getCode(), findAll2(name, age));
         map.put(DbTypeEnum.PRIMARY.getCode(), findAll(name, age));
-        map.put(DbTypeEnum.TERTIARY.getCode(), findAll(name, age));
+        map.put(DbTypeEnum.TERTIARY.getCode(), findAll3(name, age));
+        map.put(DbTypeEnum.SECONDARY.getCode(), findAll2(name, age));
         return map;
     }
 
@@ -57,13 +60,13 @@ public class TestServiceImpl extends MybatisServiceImpl<TestMapper, Test> implem
 
 
     @Override
-    public List<SecTest> findAll2(String name, Integer age) {
-        return secTestMapper.findAll(name, age);
+    public IPage<SecTest> findAll2(String name, Integer age) {
+        return secTestMapper.page(5, 1, name, age);
     }
 
     @Override
     public List<Test> findAll(String name, Integer age) {
-        return getBaseMapper().findAll(name, age);
+        return testMapper.findAll(name, age);
     }
 
     @Override

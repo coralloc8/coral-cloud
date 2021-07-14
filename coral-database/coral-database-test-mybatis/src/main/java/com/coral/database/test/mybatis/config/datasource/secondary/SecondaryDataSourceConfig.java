@@ -1,13 +1,13 @@
 package com.coral.database.test.mybatis.config.datasource.secondary;
 
-import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.coral.database.test.mybatis.config.datasource.MybatisSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
@@ -26,14 +26,13 @@ public class SecondaryDataSourceConfig {
      */
     static final String MAPPER_LOCATION = "classpath*:mapper/secondary/*.xml";
 
+    @Autowired
+    private MybatisSessionFactory mybatisSessionFactory;
+
 
     @Bean(name = "secondarySqlSessionFactory")
     public SqlSessionFactory secondarySqlSessionFactory(@Qualifier("dataSourceSecondary") DataSource dataSource) throws Exception {
-        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
-        bean.setDataSource(dataSource);
-        //设置mapper配置文件
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION));
-        return bean.getObject();
+        return mybatisSessionFactory.sqlSessionFactory(dataSource, MAPPER_LOCATION);
     }
 
     /**

@@ -3,6 +3,8 @@ package com.coral.database.test.mybatis.tertiary.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.coral.base.common.mybatis.enums.GlobalSexEnum;
+import jdk.nashorn.internal.objects.Global;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
  * @author huss
  */
 @Data
-@TableName("test")
+@TableName("test3")
 public class TerTest implements Serializable {
 
     @TableId(value = "id",type = IdType.AUTO)
@@ -27,4 +29,6 @@ public class TerTest implements Serializable {
     private Double money;
 
     private LocalDateTime createTime;
+
+    private GlobalSexEnum sex;
 }

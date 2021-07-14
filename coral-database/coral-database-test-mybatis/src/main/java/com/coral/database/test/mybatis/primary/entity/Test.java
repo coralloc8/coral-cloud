@@ -3,6 +3,7 @@ package com.coral.database.test.mybatis.primary.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.coral.base.common.mybatis.enums.GlobalSexEnum;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -27,4 +28,6 @@ public class Test implements Serializable {
     private Double money;
 
     private LocalDateTime createTime;
+
+    private GlobalSexEnum sex;
 }

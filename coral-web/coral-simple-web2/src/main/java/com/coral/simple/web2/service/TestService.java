@@ -1,6 +1,7 @@
 package com.coral.simple.web2.service;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.coral.base.common.exception.SystemException;
 import com.coral.base.common.mybatis.service.IMybatisService;
 import com.coral.database.test.mybatis.primary.entity.Test;
@@ -46,7 +47,7 @@ public interface TestService extends IMybatisService<Test> {
      * @param age
      * @return
      */
-    List<SecTest> findAll2(String name, Integer age);
+    IPage<SecTest> findAll2(String name, Integer age);
 
     /**
      * 查询所有

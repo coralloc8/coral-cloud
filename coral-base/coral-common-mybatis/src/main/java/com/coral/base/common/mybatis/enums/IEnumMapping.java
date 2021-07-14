@@ -1,4 +1,4 @@
-package com.coral.database.test.mybatis.enums;
+package com.coral.base.common.mybatis.enums;
 
 import com.baomidou.mybatisplus.annotation.IEnum;
 
