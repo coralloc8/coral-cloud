@@ -38,7 +38,7 @@ public class Oauth2ServiceImpl extends JpaBaseServiceImpl<OauthClientDetails, Lo
 
     @Override
     public List<SysUser> findOauth2UserByUsername(String username) {
-        return sysUserRepository.findByAccountAndDeleted(username, GlobalDeletedEnum.NO);
+        return sysUserRepository.findByAccountAndDeleted(username, GlobalDeletedEnum.NORMAL);
     }
 
     @Override

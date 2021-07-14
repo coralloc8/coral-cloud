@@ -1,17 +1,16 @@
-package com.coral.base.common.jpa.vo;
+package com.coral.base.common.jpa.bo;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import com.coral.base.common.enums.IEnum;
+import com.coral.base.common.exception.OperationNotSupportedException;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import com.coral.base.common.enums.IEnum;
-import com.coral.base.common.exception.OperationNotSupportedException;
-
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author huss
@@ -103,16 +102,19 @@ public class JpaPage {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         pageNum = (pageNum == null || pageNum < 1) ? 1 : pageNum;
 
-        Sort sort = null;
-        if (sorts != null && !sorts.isEmpty()) {
-            List<Sort.Order> orders = new LinkedList<>();
-            for (JpaSort s : sorts) {
-                Sort.Direction direction = s.getDirection().equalsIgnoreCase(MyDirection.ASC.getName())
-                    ? Sort.Direction.ASC : Sort.Direction.DESC;
-                orders.add(new Sort.Order(direction, s.getName()));
-            }
-            sort = Sort.by(orders);
+        if (Objects.isNull(getSorts()) || getSorts().isEmpty()) {
+            //默认降序
+            this.addSort(JpaSort.of("id", MyDirection.DESC));
         }
+
+        List<Sort.Order> orders = new LinkedList<>();
+        for (JpaSort s : sorts) {
+            Sort.Direction direction = s.getDirection().equalsIgnoreCase(MyDirection.ASC.getName())
+                    ? Sort.Direction.ASC : Sort.Direction.DESC;
+            orders.add(new Sort.Order(direction, s.getName()));
+        }
+        Sort sort = Sort.by(orders);
+
 
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         log.info(">>>>>pageable:{}", pageable);

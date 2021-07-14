@@ -4,7 +4,7 @@ import com.coral.base.common.enums.IEnum;
 
 /**
  * 删除状态
- * 
+ *
  * @author huss
  */
 
@@ -13,13 +13,13 @@ public enum GlobalDeletedEnum implements IEnum<GlobalDeletedEnum, Integer> {
     // 1:yes 0:no
 
     /**
-     * yes
+     * 正常
      */
-    YES(1, "yes"),
+    NORMAL(1, "正常"),
     /**
-     * no
+     * 已删除
      */
-    NO(0, "no"),
+    DELETED(-1, "已删除"),
 
     ;
 

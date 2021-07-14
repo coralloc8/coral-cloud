@@ -38,5 +38,5 @@ public class SysRole extends IdentityIdKey {
      * 已删除
      */
     @Convert(converter = GlobalDeletedEnum.Convert.class)
-    private GlobalDeletedEnum deleted = GlobalDeletedEnum.NO;
+    private GlobalDeletedEnum deleted = GlobalDeletedEnum.NORMAL;
 }

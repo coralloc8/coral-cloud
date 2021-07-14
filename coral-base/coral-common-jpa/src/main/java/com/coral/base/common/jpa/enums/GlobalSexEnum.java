@@ -11,13 +11,13 @@ import com.coral.base.common.enums.IEnum;
 public enum GlobalSexEnum implements IEnum<GlobalSexEnum, Integer> {
 
     /**
-     * male
+     * 男
      */
-    MALE(1, "male"),
+    MALE(1, "男"),
     /**
-     * female
+     * 女
      */
-    FEMALE(2, "female"),
+    FEMALE(0, "女"),
 
     ;
 

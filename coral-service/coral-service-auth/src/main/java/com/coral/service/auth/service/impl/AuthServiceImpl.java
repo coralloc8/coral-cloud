@@ -61,7 +61,7 @@ public class AuthServiceImpl implements IAuthService {
 
         Supplier<LoginUser> supplier = () -> {
 
-            List<SysUser> users = sysUserRepository.findByAccountAndDeleted(finalAccount, GlobalDeletedEnum.NO);
+            List<SysUser> users = sysUserRepository.findByAccountAndDeleted(finalAccount, GlobalDeletedEnum.NORMAL);
 
             if (users == null || users.isEmpty()) {
                 return new LoginUser.EmptyLoginUser();

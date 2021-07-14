@@ -70,7 +70,7 @@ public class MenuServiceImpl extends JpaBaseServiceImpl<SysMenu, Long, SysMenuRe
         // 条件组装
         return PredicateCreator.builder()
             // 没有删除的
-            .link(QSysMenu.sysMenu.deleted.eq(GlobalDeletedEnum.NO))
+            .link(QSysMenu.sysMenu.deleted.eq(GlobalDeletedEnum.NORMAL))
             //
             .link(StringUtils.isBlank(menuFilter.getKeyword()) ? null :
             //

@@ -23,6 +23,6 @@ public class IdAndStatusKey extends IdentityIdKey {
     protected GlobalEnabledEnum enabled = GlobalEnabledEnum.ENABLE;
 
     @Convert(converter = GlobalDeletedEnum.Convert.class)
-    protected GlobalDeletedEnum deleted = GlobalDeletedEnum.NO;
+    protected GlobalDeletedEnum deleted = GlobalDeletedEnum.NORMAL;
 
 }

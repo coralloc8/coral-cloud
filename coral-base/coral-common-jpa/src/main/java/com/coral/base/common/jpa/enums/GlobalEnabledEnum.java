@@ -13,13 +13,13 @@ public enum GlobalEnabledEnum implements IEnum<GlobalEnabledEnum, Integer> {
     // 1:enable 0:disable
 
     /**
-     * enable
+     * 启用
      */
-    ENABLE(1, "enable"),
+    ENABLE(1, "启用"),
     /**
-     * disable
+     * 禁用
      */
-    DISABLE(0, "disable"),
+    DISABLE(0, "禁用"),
 
     ;
 

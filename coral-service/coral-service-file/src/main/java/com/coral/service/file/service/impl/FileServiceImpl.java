@@ -72,7 +72,7 @@ public class FileServiceImpl implements IFileService {
         for (String no : fileNos) {
             SysFile sysFile = fileRepository.findByNo(no);
             if (sysFile != null) {
-                sysFile.setDeleted(GlobalDeletedEnum.YES);
+                sysFile.setDeleted(GlobalDeletedEnum.DELETED);
                 fileRepository.save(sysFile);
             }
         }

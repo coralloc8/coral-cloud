@@ -10,7 +10,7 @@ Contract.make {
             queryParameters {
                 parameter "age": $(consumer(regex(number())), producer(20))
                 //只匹配汉字和字母
-                parameter "name": $(consumer(regex("[\u0020a-zA-Z\u4e00-\u9fa5]+")), producer(""))
+                parameter "name": $(consumer(regex(onlyAlphaUnicode())), producer(""))
             }
         }
 

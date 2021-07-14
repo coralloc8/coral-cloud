@@ -13,13 +13,13 @@ public enum GlobalYesOrNoEnum implements IEnum<GlobalYesOrNoEnum, Integer> {
     // 1:yes 0:no
 
     /**
-     * yes
+     * 是
      */
-    YES(1, "yes"),
+    YES(1, "是"),
     /**
-     * no
+     * 否
      */
-    NO(0, "no"),
+    NO(0, "否"),
 
     ;
 

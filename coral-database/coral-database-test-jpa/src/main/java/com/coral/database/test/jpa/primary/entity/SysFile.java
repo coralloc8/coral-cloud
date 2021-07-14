@@ -33,6 +33,6 @@ public class SysFile extends IdentityIdKey {
     private String md5;
 
     @Convert(converter = GlobalDeletedEnum.Convert.class)
-    private GlobalDeletedEnum deleted = GlobalDeletedEnum.NO;
+    private GlobalDeletedEnum deleted = GlobalDeletedEnum.NORMAL;
 
 }

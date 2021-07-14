@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,7 @@ public class XmlUtilTest {
                 )
                 .build();
 
-        String xml = XmlUtil.createXml(xmlBean, "row");
+        String xml = XmlUtil.createXml(xmlBean, "row", StandardCharsets.UTF_8);
         System.out.println(xml);
     }
 
@@ -52,9 +53,10 @@ public class XmlUtilTest {
         List<String> lines = FileUtil.readFile(new FileInputStream(Paths.get(path).toFile()), "gb2312");
         String xml = String.join("", lines);
         System.out.println("xml:" + xml);
-        Map map = XmlUtil.parseXml(xml, Map.class);
+        XmlUtil.XmlParseConfig xmlParseConfig = new XmlUtil.XmlParseConfig(false, null, Map.class);
+        List<Map> list = XmlUtil.parseXml(xml, xmlParseConfig);
         System.out.println("-------------------------------------------------------");
-        System.out.println(map);
+        System.out.println(list);
 
     }
 

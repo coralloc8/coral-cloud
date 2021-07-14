@@ -4,6 +4,7 @@ import com.coral.base.common.StringUtils;
 import com.coral.base.common.exception.BaseErrorMessageEnum;
 import com.coral.base.common.exception.SystemException;
 import com.coral.base.common.exception.SystemRuntimeException;
+import com.coral.base.common.jpa.bo.JpaPage;
 import com.coral.base.common.jpa.service.impl.JpaBaseServiceImpl;
 import com.coral.base.common.jpa.util.dsl.PredicateCreator;
 import com.coral.database.test.jpa.primary.entity.QTest;
@@ -15,6 +16,8 @@ import com.coral.database.test.jpa.secondary.repository.SecTestRepository;
 import com.coral.simple.web1.service.TestService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -47,15 +50,16 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
     }
 
     @Override
-    public List<SecTest> findAll2(String name, Integer age) {
+    public Page<SecTest> findAll2(String name, Integer age) {
         Predicate predicate = PredicateCreator.builder()
                 .link(StringUtils.isNotBlank(name) ? QSecTest.secTest.name.eq(name) : null)
                 .link(Objects.nonNull(age) ? QSecTest.secTest.age.eq(age) : null)
                 .build();
+        Pageable pageable = JpaPage.of(5, 1).buildPageable();
         if (Objects.isNull(predicate)) {
-            return secTestRepository.findAll();
+            return secTestRepository.findAll(pageable);
         }
-        return (List<SecTest>) secTestRepository.findAll(predicate);
+        return secTestRepository.findAll(predicate, pageable);
     }
 
     @Override
@@ -91,7 +95,6 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
     @Override
     public void save3(String name, Integer age) throws SystemException {
         save(name, age);
-
         if (age < 10) {
             throw new SystemException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
         }
@@ -101,11 +104,10 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
     @Override
     public void save4(String name, Integer age) {
         save(name, age);
-
+        save2(name, age);
         if (age < 10) {
             throw new SystemRuntimeException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
         }
-        save2(name, age);
     }
 
     private Double crateMoney() {
