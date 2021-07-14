@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 public class DataSourceConfig {
 
     @Bean(name = "primaryDataSource")
-    @Qualifier("primaryDataSource")
+    @Primary
     @ConfigurationProperties(prefix = "spring.datasource.primary")
     public DataSource primaryDataSource() {
         return DruidDataSourceBuilder.create().build();
@@ -28,10 +28,14 @@ public class DataSourceConfig {
 
 
     @Bean(name = "secondaryDataSource")
-    @Qualifier("secondaryDataSource")
-    @Primary
     @ConfigurationProperties(prefix = "spring.datasource.secondary")
     public DataSource secondaryDataSource() {
+        return DruidDataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "tertiaryDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.tertiary")
+    public DataSource tertiaryDataSource() {
         return DruidDataSourceBuilder.create().build();
     }
 }

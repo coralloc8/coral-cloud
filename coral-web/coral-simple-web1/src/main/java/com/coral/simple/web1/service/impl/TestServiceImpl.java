@@ -2,9 +2,9 @@ package com.coral.simple.web1.service.impl;
 
 import com.coral.base.common.StringUtils;
 import com.coral.base.common.exception.BaseErrorMessageEnum;
-import com.coral.base.common.exception.SystemException;
 import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.base.common.jpa.bo.JpaPage;
+import com.coral.base.common.jpa.enums.GlobalSexEnum;
 import com.coral.base.common.jpa.service.impl.JpaBaseServiceImpl;
 import com.coral.base.common.jpa.util.dsl.PredicateCreator;
 import com.coral.database.test.jpa.primary.entity.QTest;
@@ -13,6 +13,8 @@ import com.coral.database.test.jpa.primary.repository.TestRepository;
 import com.coral.database.test.jpa.secondary.entity.QSecTest;
 import com.coral.database.test.jpa.secondary.entity.SecTest;
 import com.coral.database.test.jpa.secondary.repository.SecTestRepository;
+import com.coral.database.test.jpa.tertiary.entity.TerTest;
+import com.coral.database.test.jpa.tertiary.repository.TerTestRepository;
 import com.coral.simple.web1.service.TestService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
 
     @Autowired
     private SecTestRepository secTestRepository;
+    @Autowired
+    private TerTestRepository terTestRepository;
 
 
     @Override
@@ -79,6 +83,7 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
         test.setAge(age);
         test.setMoney(crateMoney());
         test.setCreateTime(LocalDateTime.now());
+        test.setSex(GlobalSexEnum.MALE);
         save(test);
     }
 
@@ -89,22 +94,26 @@ public class TestServiceImpl extends JpaBaseServiceImpl<Test, Long, TestReposito
         test.setAge(age);
         test.setMoney(crateMoney());
         test.setCreateTime(LocalDateTime.now());
+        test.setSex(GlobalSexEnum.MALE);
         secTestRepository.saveAndFlush(test);
     }
 
     @Override
-    public void save3(String name, Integer age) throws SystemException {
-        save(name, age);
-        if (age < 10) {
-            throw new SystemException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
-        }
-        save2(name, age);
+    public void save3(String name, Integer age) {
+        TerTest test = new TerTest();
+        test.setName(name);
+        test.setAge(age);
+        test.setMoney(crateMoney());
+        test.setCreateTime(LocalDateTime.now());
+        test.setSex(GlobalSexEnum.MALE);
+        terTestRepository.saveAndFlush(test);
     }
 
     @Override
     public void save4(String name, Integer age) {
         save(name, age);
         save2(name, age);
+        save3(name, age);
         if (age < 10) {
             throw new SystemRuntimeException(BaseErrorMessageEnum.ILLEGAL_PARAMETER);
         }
