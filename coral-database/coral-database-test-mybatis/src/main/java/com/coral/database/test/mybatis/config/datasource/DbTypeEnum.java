@@ -15,7 +15,7 @@ public enum DbTypeEnum implements DbType<DbTypeEnum, String> {
     /**
      * 主数据源
      */
-    PRIMARY("mapper/primary", "主数据源"),
+    PRIMARY("primary", "主数据源"),
 
     /**
      * 测试第二数据源
