@@ -13,14 +13,13 @@
 package com.coral.base.common.json.module;
 
 import com.coral.base.common.AnnotationUtil;
-import com.coral.base.common.json.JsonNullSerializer;
 import com.coral.base.common.StringPool;
 import com.coral.base.common.json.JsonIgnoreNull;
+import com.coral.base.common.json.JsonNullSerializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
-
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -70,7 +69,8 @@ public class BladeBeanSerializerModifier extends BeanSerializerModifier {
             // 兼容之前的接口返参json序列化,以前的接口对null值直接返回给前端,后续新的接口可以配置null值处理或者忽略null值
 
             //空值需要序列化的
-            if (nullSerializerOpt.isPresent()) {
+            boolean notNeed = nullSerializerOpt.isPresent() && !nullSerializerOpt.get().value();
+            if (!notNeed) {
                 JavaType type = writer.getType();
                 Class<?> clazz = type.getRawClass();
                 if (type.isTypeOrSubTypeOf(Number.class)) {
