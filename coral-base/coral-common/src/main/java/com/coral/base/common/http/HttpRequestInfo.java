@@ -67,6 +67,11 @@ public class HttpRequestInfo {
     private Charset charset;
 
     /**
+     * 文件信息 当 applicationType = FORM_DATA时才有作用
+     */
+    private FileInfo fileInfo;
+
+    /**
      * 添加请求头
      *
      * @param key

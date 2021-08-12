@@ -1,7 +1,7 @@
 package com.coral.base.common.http;
 
-import com.coral.base.common.json.JsonUtil;
 import com.coral.base.common.StringUtils;
+import com.coral.base.common.json.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @description: http 工具类
@@ -254,6 +255,23 @@ public class HttpUtil {
                 String xmlStr = httpRequestInfo.getParams().get(HttpRequestInfo.DEFAULT_PARAM_KEY).toString();
                 requestBody = RequestBody.create(xmlStr, MediaType.parse(APPLICATION_XML + httpRequestInfo.getCharsetName()));
                 requestBuilder.addHeader(CONTENT_TYPE, APPLICATION_XML + httpRequestInfo.getCharsetName());
+                break;
+            case FORM_DATA:
+                FileInfo fileInfo = httpRequestInfo.getFileInfo();
+                RequestBody fileBody = RequestBody.create(fileInfo.getFileBytes(), MediaType.parse(fileInfo.getMediaType()));
+
+                MultipartBody.Builder builder = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart(fileInfo.getFileKey(), fileInfo.getFileName(), fileBody);
+
+                if (httpRequestInfo.getParams() != null) {
+                    for (Map.Entry<String, Object> entry : httpRequestInfo.getParams().entrySet()) {
+                        if (Objects.nonNull(entry.getValue())) {
+                            builder.addFormDataPart(entry.getKey(), entry.getValue().toString());
+                        }
+                    }
+                }
+                requestBody = builder.build();
                 break;
             case FORM:
             default:
