@@ -1,15 +1,11 @@
 package com.coral.enable.log.aop;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.coral.base.common.jpa.enums.GlobalYesOrNoEnum;
 import com.coral.base.common.json.JsonUtil;
+import com.coral.database.test.jpa.primary.entity.SysLog;
+import com.coral.enable.log.annotation.LogAnnotation;
+import com.coral.enable.log.service.SysLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,12 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.coral.base.common.jpa.enums.GlobalYesOrNoEnum;
-import com.coral.enable.log.annotation.LogAnnotation;
-import com.coral.enable.log.service.SysLogService;
-import com.coral.database.test.jpa.primary.entity.SysLog;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author huss
@@ -55,14 +52,16 @@ public class LogRecordAop {
         Object result;
         SysLog sysLog = new SysLog();
         try {
-            ServletRequestAttributes attributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
 
-            // 获取方法参数
+            // 设置子线程共享
+            RequestContextHolder.setRequestAttributes(attributes, true);
 
+            // 获取方法参数
             List<Object> httpReqArgs = new ArrayList<>();
 
-            MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
+            MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             LogAnnotation logAnnotation = methodSignature.getMethod().getDeclaredAnnotation(LogAnnotation.class);
 
             // 参数值
@@ -71,7 +70,7 @@ public class LogRecordAop {
             String params = null;
             for (Object object : args) {
                 if (object instanceof HttpServletRequest) {
-                    request = (HttpServletRequest)object;
+                    request = (HttpServletRequest) object;
                 } else if (object instanceof HttpServletResponse) {
                     //
                 } else {
@@ -79,7 +78,7 @@ public class LogRecordAop {
                 }
             }
             String moudle =
-                logAnnotation.value() + ":" + methodSignature.getDeclaringTypeName() + "/" + methodSignature.getName();
+                    logAnnotation.value() + ":" + methodSignature.getDeclaringTypeName() + "/" + methodSignature.getName();
             sysLog.setModule(moudle);
 
             if (!Objects.isNull(request)) {
