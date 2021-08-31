@@ -7,5 +7,5 @@ package com.coral.base.common.http;
  */
 public enum ApplicationType {
 
-    FORM, JSON, XML, FORM_DATA;
+    FORM, JSON, XML, SOAP_XML, FORM_DATA;
 }

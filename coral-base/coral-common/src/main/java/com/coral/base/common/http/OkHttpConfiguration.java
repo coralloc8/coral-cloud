@@ -40,10 +40,8 @@ public class OkHttpConfiguration {
     }
 
     public HttpLoggingInterceptor httpLoggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> {
-            log.info("OKHttp-----{}", message);
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> log.info("OKHttp-----{}", message));
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return interceptor;
     }
 

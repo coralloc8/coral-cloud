@@ -1,9 +1,10 @@
 package com.coral.base.common.http;
 
-import com.coral.base.common.StringUtils;
+
 import com.coral.base.common.json.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -30,6 +31,8 @@ public class HttpUtil {
     private final static String APPLICATION_FORM = "application/x-www-form-urlencoded; charset=";
 
     private final static String APPLICATION_JSON = "application/json; charset=";
+
+    private final static String APPLICATION_SOAP_XML = "application/soap+xml;charset=";
 
     private final static String APPLICATION_XML = "application/xml; charset=";
 
@@ -98,7 +101,7 @@ public class HttpUtil {
         // 同步请求
         HttpResponseInfo httpResponseInfo = new HttpResponseInfo(HTTP_STATUS_OK, resultData);
         long end = Instant.now().getEpochSecond();
-        log.info(">>>>>http sync mock request end，time consuming：{}", (end - start));
+        log.info(">>>>> http sync mock request end, time consuming:{}, response:{}", (end - start), httpResponseInfo);
         return httpResponseInfo;
     }
 
@@ -116,15 +119,15 @@ public class HttpUtil {
         // 同步请求
         try {
             Response response = getOkHttpClient().newCall(request).execute();
+
             Integer status = response.code();
-            return new HttpResponseInfo(status, response.body() != null ? response.body().string() : "");
+            httpResponseInfo = new HttpResponseInfo(status, response.body() != null ? response.body().string() : "");
         } catch (IOException e) {
-            log.error(">>>>>http sync request error:", e);
+            log.error(">>>>> http sync request error:", e);
             httpResponseInfo = new HttpResponseInfo(e);
         }
-
         long end = Instant.now().getEpochSecond();
-        log.info(">>>>>http sync request end，time consuming：{}", (end - start));
+        log.info(">>>>> http sync request end, time consuming:{}, response:{}", (end - start), httpResponseInfo);
         return httpResponseInfo;
 
     }
@@ -150,14 +153,14 @@ public class HttpUtil {
             @Override
             public void onResponse(Call call, Response response) {
                 try {
-                    long end = Instant.now().getEpochSecond();
-                    log.info(">>>>>http async request end，time consuming：{}", (end - start));
                     Integer status = response.code();
                     HttpResponseInfo httpResponseInfo =
                             new HttpResponseInfo(status, response.body() != null ? response.body().string() : "");
+                    long end = Instant.now().getEpochSecond();
+                    log.info(">>>>> http async request end, time consuming：{}, response:{}", (end - start), httpResponseInfo);
                     callBack.onSuccessful(httpResponseInfo);
                 } catch (IOException e) {
-                    log.error(">>>>>onResponse error:", e);
+                    log.error(">>>>> onResponse error:", e);
                     callBack.onSuccessful(new HttpResponseInfo(e));
                 }
             }
@@ -256,6 +259,12 @@ public class HttpUtil {
                 requestBody = RequestBody.create(xmlStr, MediaType.parse(APPLICATION_XML + httpRequestInfo.getCharsetName()));
                 requestBuilder.addHeader(CONTENT_TYPE, APPLICATION_XML + httpRequestInfo.getCharsetName());
                 break;
+            case SOAP_XML:
+                String xml = httpRequestInfo.getParams().get(HttpRequestInfo.DEFAULT_PARAM_KEY).toString();
+                requestBody = RequestBody.create(xml, MediaType.parse(APPLICATION_SOAP_XML + httpRequestInfo.getCharsetName()));
+                requestBuilder.addHeader(CONTENT_TYPE, APPLICATION_SOAP_XML + httpRequestInfo.getCharsetName());
+                break;
+
             case FORM_DATA:
                 FileInfo fileInfo = httpRequestInfo.getFileInfo();
                 RequestBody fileBody = RequestBody.create(fileInfo.getFileBytes(), MediaType.parse(fileInfo.getMediaType()));
@@ -277,7 +286,8 @@ public class HttpUtil {
             default:
                 FormBody.Builder formBody = new FormBody.Builder();
                 if (httpRequestInfo.getParams() != null) {
-                    httpRequestInfo.getParams().entrySet()
+                    httpRequestInfo.getParams().entrySet().stream()
+                            .filter(e -> Objects.nonNull(e.getValue()))
                             .forEach(en -> formBody.add(en.getKey(), en.getValue().toString()));
                 }
                 requestBody = formBody.build();
