@@ -1,0 +1,72 @@
+springdoc:
+  # OpenAPI文档相关参数
+  api-docs:
+    # OpenAPI文档开关, true: 开启OpenAPI文档访问功能, false: 关闭。
+    enabled: true
+    # JSON格式的OpenAPI文档的访问路径
+    path: /v3/api-docs
+  # 扫描哪些包来生成OpenAPI文档, 多个包名用逗号分隔
+  packages-to-scan: *
+  # 路径匹配规则, API路径符合这些匹配规则才会包含到OpenAPI文档中, 多个规则用逗号分隔
+  paths-to-match: /*
+  # 返回媒体类型匹配规则, 返回媒体类型符合这些匹配规则才会包含到OpenAPI文档中, 多个规则用逗号分隔
+  produces-to-match: /*
+  # 请求头匹配规则, 请求头符合这些匹配规则才会包含到OpenAPI文档中, 多个规则用逗号分隔
+  headers-to-match: /*
+  # 请求媒体类型匹配规则, 请求媒体类型符合这些匹配规则才会包含到OpenAPI文档中, 多个规则用逗号分隔
+  consumes-to-match: /*
+  # 排除路径匹配规则, API路径符合这些匹配规则会排除在OpenAPI文档之外, 多个规则用逗号分隔
+  paths-to-exclude:
+  # 排除包匹配规则, 包名符合这些匹配规则会排除在OpenAPI文档之外, 多个规则用逗号分隔
+  packages-to-exclude:
+  # 默认请求媒体类型
+  default-consumes-media-type: application/json
+  # 默认返回的响应媒体类型
+  default-produces-media-type: '*/*'
+  # 是否禁用OpenAPI文档缓存,
+  # 禁用后每次访问${springdoc.api-docs.path}都会重新生成(适合开发调试阶段)当响应会比较缓慢。
+  cache.disabled: false
+  # 是否显示Spring Actuator的接口
+  show-actuator: false
+  # 是否自动将类名生成为Tag
+  auto-tag-classes: true
+  # 是否包含返回ModelAndView对象的接口
+  model-and-view-allowed: false
+  # 是否从 @ControllerAdvice 注解获取接口的响应信息.
+  override-with-generic-response: true
+  # 是否开启接口分组功能, 开启后, 一个App可以生成多个OpenAPI文档, 每个文档显示一部分接口。
+  api-docs.groups.enabled: true
+  # 分组配置
+  group-configs:
+      # 分组名称
+    - group: XXX
+      # 同`springdoc.packages-to-scan`
+      packages-to-scan: *
+      # 同`springdoc.paths-to-match`
+      paths-to-match: /*
+      # 同`springdoc.paths-to-exclude`
+      paths-to-exclude: ``
+      # 同`springdoc.packages-to-exclude`
+      packages-to-exclude:
+      # 同`springdoc.produces-to-match`
+      produces-to-match: /*
+      # 同`springdoc.consumes-to-match`
+      consumes-to-match: /*
+      # 同`springdoc.headers-to-match`
+      headers-to-match: /*
+  # webjar资源的访问路径前缀
+  webjars.prefix: /webjars
+  # 是否翻译属性值, true: Schema中的属性的值可以用Spring的表达式来编写, 然后运行时自动转成真实的取值
+  api-docs.resolve-schema-properties: false
+  # 删除无效的引用定义
+  remove-broken-reference-definitions: true
+  # 是否格式化输出的OpenAPI文档, 方便人类阅读
+  writer-with-default-pretty-printer: false
+  # 是否启用 deprecating model converter.
+  model-converters.deprecating-converter.enabled: true
+  # 生成的Schema等组件的名称是否使用全名(类似java的Class.getName和getSimpleName的区别)
+  use-fqn: false # FQN是指 fully qualified names.
+  # 是否显示spring security的登录接口
+  show-login-endpoint: false
+  # 是否预加载OpenAPI文档, true: 程序启动的时候就生成OpenAPI文档, false: 第一次访问OpenAPI文档的时候生成。
+  pre-loading-enabled: false

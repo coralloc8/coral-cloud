@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  session-timeout: 30
+  servlet:
+    context-path:
+    encoding:
+      charset: UTF-8
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 800
+
+# doc文档
+springdoc:
+  # 是否启用doc 生产环境在外网的话可以选择关闭该功能
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    #自定义swagger前端请求路径，输入http：127.0.0.1:8080/doc 会自动重定向到swagger页面
+    # path: /doc
+    # 不显示默认示例
+    disable-swagger-default-url: true

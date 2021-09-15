@@ -1,6 +1,6 @@
 package com.coral.base.common.json.module;
 
-import com.coral.base.common.EnumFactory;
+import com.coral.base.common.EnumUtil;
 import com.coral.base.common.StringUtils;
 import com.coral.base.common.enums.IEnum;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -106,7 +106,7 @@ public class EnumModule extends SimpleModule {
             log.debug(">>>>>EnumJsonDeserializer deserialize asText:{}, findPropertyType:{}", asText, findPropertyType);
             if (findPropertyType != null && findPropertyType.isEnum()
                     && IEnum.class.isAssignableFrom(findPropertyType)) {
-                return (Enum) EnumFactory.codeOf(asText, findPropertyType).get();
+                return (Enum) EnumUtil.codeOf(findPropertyType, asText);
             }
             throw new IllegalArgumentException("value is not enum");
 

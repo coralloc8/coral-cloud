@@ -1,0 +1,66 @@
+info:
+  author: huss
+  date: 2021年6月7日
+  remark: opendoc
+  my-server-name: opendoc
+
+server:
+  port: 8080
+
+#spring
+spring:
+  application:
+    name: ${info.my-server-name}
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      enable: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+
+#  main:
+#    allow-bean-definition-overriding: true
+
+# openapi 文档配置
+springdoc:
+  version: 1.0
+  name: 诊后管理系统接口文档
+  description: 诊后管理系统接口文档
+  url: http://localhost:${server.port}${server.servlet.context-path}/doc.html
+  groups:
+    - group: app
+      # 多个,分割
+      packagesToScan: com.coral.test.opendoc.modules.app
+      # 多个,分割
+      packagesToExclude:
+      tags:
+        - name: 1.0.0
+          desc: app登录
+        - name: 1.0.1
+          desc: app版本测试
+    - group: admin
+      packagesToScan:
+      packagesToExclude: com.coral.test.opendoc.modules.app
+      tags:
+        - name: 1.4.7
+          desc: 医生登录账号管理、医院科室对照、医院门诊数据同步
+        - name: 1.5.0
+          desc: 测试版本
+
+

@@ -31,8 +31,8 @@ public class LogAop {
 
     private static final List<String> URLS = Arrays.asList("login", "logout");
 
-    @Pointcut("execution(public * com.coral.web..*.*Controller..*(..)) ||"
-        + " execution(public * com.coral.web..*.*Control..*(..)) ||"
+    @Pointcut("execution(public * com.coral..*.*Controller..*(..)) ||"
+        + " execution(public * com.coral..*.*Control..*(..)) ||"
         + " execution(public * org.springframework.security.oauth2.provider.endpoint.TokenEndpoint..*(..))")
     public void webLog() {
 
