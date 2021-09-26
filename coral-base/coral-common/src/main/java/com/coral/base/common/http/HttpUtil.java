@@ -273,6 +273,11 @@ public class HttpUtil {
                         .setType(MultipartBody.FORM)
                         .addFormDataPart(fileInfo.getFileKey(), fileInfo.getFileName(), fileBody);
 
+                if (httpRequestInfo.getParams().containsKey(HttpRequestInfo.DEFAULT_PARAM_KEY)) {
+                    String tempJson = httpRequestInfo.getParams().get(HttpRequestInfo.DEFAULT_PARAM_KEY).toString();
+                    httpRequestInfo.getParams().putAll(JsonUtil.toMap(tempJson));
+                }
+
                 if (httpRequestInfo.getParams() != null) {
                     for (Map.Entry<String, Object> entry : httpRequestInfo.getParams().entrySet()) {
                         if (Objects.nonNull(entry.getValue())) {
