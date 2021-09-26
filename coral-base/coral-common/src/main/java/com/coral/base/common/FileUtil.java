@@ -7,19 +7,19 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author huss
@@ -27,10 +27,36 @@ import java.util.List;
 @Slf4j
 public class FileUtil {
 
+
+    public static Optional<String> findProjectRootPath() {
+        try {
+            String root = new File("").getCanonicalPath();
+            return Optional.of(root);
+        } catch (IOException e) {
+            log.error("Error:", e);
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<OutputStream> createFileOutputStream(String rootPath, String path) {
+        try {
+            Path filePath = Paths.get(rootPath, path);
+            if (!Files.exists(filePath.getParent())) {
+                Files.createDirectory(filePath.getParent());
+            }
+
+            return Optional.of(Files.newOutputStream(Paths.get(rootPath, path), StandardOpenOption.CREATE_NEW));
+        } catch (IOException e) {
+            log.error("Error:", e);
+        }
+        return Optional.empty();
+    }
+
     /**
      * 读取文件
+     *
      * @param inputStream 文件流
-     * @param charset 字符编码
+     * @param charset     字符编码
      * @return
      */
     public static List<String> readFile(FileInputStream inputStream, String charset) {

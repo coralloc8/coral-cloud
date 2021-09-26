@@ -36,65 +36,66 @@ import java.io.IOException;
  */
 public class Jackson2HttpMessageConverter extends AbstractReadWriteJackson2HttpMessageConverter {
 
-	@Nullable
-	private String jsonPrefix;
+    @Nullable
+    private String jsonPrefix;
 
-	/**
-	 * Construct a new {@link Jackson2HttpMessageConverter} using default configuration
-	 * provided by {@link Jackson2ObjectMapperBuilder}.
-	 */
-	public Jackson2HttpMessageConverter() {
-		this(MyJackson2ObjectMapperBuilder.json().build());
-	}
+    /**
+     * Construct a new {@link Jackson2HttpMessageConverter} using default configuration
+     * provided by {@link Jackson2ObjectMapperBuilder}.
+     */
+    public Jackson2HttpMessageConverter() {
+        this(MyJackson2ObjectMapperBuilder.json().build());
+    }
 
-	/**
-	 * Construct a new {@link Jackson2HttpMessageConverter} with a custom {@link ObjectMapper}.
-	 * You can use {@link Jackson2ObjectMapperBuilder} to build it easily.
-	 * @param objectMapper ObjectMapper
-	 * @see Jackson2ObjectMapperBuilder#json()
-	 */
-	public Jackson2HttpMessageConverter(ObjectMapper objectMapper) {
-		super(objectMapper, initWriteObjectMapper(objectMapper), MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
-	}
+    /**
+     * Construct a new {@link Jackson2HttpMessageConverter} with a custom {@link ObjectMapper}.
+     * You can use {@link Jackson2ObjectMapperBuilder} to build it easily.
+     *
+     * @param objectMapper ObjectMapper
+     * @see Jackson2ObjectMapperBuilder#json()
+     */
+    public Jackson2HttpMessageConverter(ObjectMapper objectMapper) {
+        super(objectMapper, initWriteObjectMapper(objectMapper), MediaType.APPLICATION_JSON, new MediaType("application", "*+json"), MediaType.APPLICATION_OCTET_STREAM);
+    }
 
-	private static ObjectMapper initWriteObjectMapper(ObjectMapper readObjectMapper) {
-		// 拷贝 readObjectMapper
-		ObjectMapper writeObjectMapper = readObjectMapper.copy();
-		// null 处理
-		writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
+    private static ObjectMapper initWriteObjectMapper(ObjectMapper readObjectMapper) {
+        // 拷贝 readObjectMapper
+        ObjectMapper writeObjectMapper = readObjectMapper.copy();
+        // null 处理
+        writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
 //		writeObjectMapper.getSerializerProvider().setNullValueSerializer(BladeBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);
-		return writeObjectMapper;
-	}
+        return writeObjectMapper;
+    }
 
-	/**
-	 * Specify a custom prefix to use for this view's JSON output.
-	 * Default is none.
-	 *
-	 * @param jsonPrefix jsonPrefix
-	 * @see #setPrefixJson
-	 */
-	public void setJsonPrefix(String jsonPrefix) {
-		this.jsonPrefix = jsonPrefix;
-	}
+    /**
+     * Specify a custom prefix to use for this view's JSON output.
+     * Default is none.
+     *
+     * @param jsonPrefix jsonPrefix
+     * @see #setPrefixJson
+     */
+    public void setJsonPrefix(String jsonPrefix) {
+        this.jsonPrefix = jsonPrefix;
+    }
 
-	/**
-	 * Indicate whether the JSON output by this view should be prefixed with ")]}', ". Default is false.
-	 * <p>Prefixing the JSON string in this manner is used to help prevent JSON Hijacking.
-	 * The prefix renders the string syntactically invalid as a script so that it cannot be hijacked.
-	 * This prefix should be stripped before parsing the string as JSON.
-	 *
-	 * @param prefixJson prefixJson
-	 * @see #setJsonPrefix
-	 */
-	public void setPrefixJson(boolean prefixJson) {
-		this.jsonPrefix = (prefixJson ? ")]}', " : null);
-	}
+    /**
+     * Indicate whether the JSON output by this view should be prefixed with ")]}', ". Default is false.
+     * <p>Prefixing the JSON string in this manner is used to help prevent JSON Hijacking.
+     * The prefix renders the string syntactically invalid as a script so that it cannot be hijacked.
+     * This prefix should be stripped before parsing the string as JSON.
+     *
+     * @param prefixJson prefixJson
+     * @see #setJsonPrefix
+     */
+    public void setPrefixJson(boolean prefixJson) {
+        this.jsonPrefix = (prefixJson ? ")]}', " : null);
+    }
 
-	@Override
-	protected void writePrefix(JsonGenerator generator, Object object) throws IOException {
-		if (this.jsonPrefix != null) {
-			generator.writeRaw(this.jsonPrefix);
-		}
-	}
+    @Override
+    protected void writePrefix(JsonGenerator generator, Object object) throws IOException {
+        if (this.jsonPrefix != null) {
+            generator.writeRaw(this.jsonPrefix);
+        }
+    }
 
 }
