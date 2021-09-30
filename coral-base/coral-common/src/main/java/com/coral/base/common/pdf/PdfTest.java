@@ -87,6 +87,7 @@ public class PdfTest {
         paragraph.setSpacingBefore(5f); //设置段落上空白
         paragraph.setSpacingAfter(10f); //设置段落下空白
 
+
         // 直线
         Paragraph p1 = new Paragraph();
         p1.add(new Chunk(new LineSeparator()));
@@ -135,11 +136,19 @@ public class PdfTest {
         table.addCell(createCell("", textfont));
 
 
+
         //住院/门诊号  科室   体重
         Phrase para = new Paragraph("住院/门诊号：", textfont);
         Chunk underline = new Chunk("测试数据啊       ");
         underline.setUnderline(0.1f, -1f);
         para.add(underline);
+
+        Image image2 = Image.getInstance("https://img-blog.csdn.net/20180801174617455?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNzg0ODcxMA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70");
+        image2.setIndentationLeft(130f);
+        image2.scaleAbsoluteWidth(50f);
+        image2.scaleAbsoluteHeight(20f);
+
+        para.add(image2);
 
 
         /////////////////////
