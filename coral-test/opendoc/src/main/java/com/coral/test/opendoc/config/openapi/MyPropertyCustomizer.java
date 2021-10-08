@@ -5,10 +5,13 @@ import com.coral.base.common.enums.IEnum;
 import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.util.Json;
+import io.swagger.v3.oas.models.media.DateTimeSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.PropertyCustomizer;
 import org.springframework.stereotype.Component;
+
+import java.time.temporal.TemporalAccessor;
 
 /**
  * @author huss
@@ -30,9 +33,29 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
      */
     @Override
     public Schema customize(Schema property, AnnotatedType type) {
-        property = buildEnumSchema(property, type);
+        JavaType javaType = Json.mapper().constructType(type.getType());
+        property = buildTimeSchema(property, type, javaType);
+        property = buildEnumSchema(property, type, javaType);
         return property;
     }
+    /**
+     * 时间转化
+     *
+     * @param property
+     * @param type
+     * @return
+     */
+    private Schema buildTimeSchema(Schema property, AnnotatedType type, JavaType javaType) {
+        boolean isTemporalAccessor = TemporalAccessor.class.isAssignableFrom(javaType.getRawClass());
+        if (!isTemporalAccessor) {
+            return property;
+        }
+        log.info(">>>>>time重写...type:{}", type.getType().getTypeName());
+        Schema newSchema = new DateTimeSchema();
+        SchemaUtil.copySchema(property, newSchema);
+        return newSchema;
+    }
+
 
 
     /**
@@ -42,8 +65,7 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
      * @param type
      * @return
      */
-    private Schema buildEnumSchema(Schema property, AnnotatedType type) {
-        JavaType javaType = Json.mapper().constructType(type.getType());
+    private Schema buildEnumSchema(Schema property, AnnotatedType type,JavaType javaType) {
         boolean isIEnum = IEnum.class.isAssignableFrom(javaType.getRawClass());
         if (!isIEnum) {
             return property;

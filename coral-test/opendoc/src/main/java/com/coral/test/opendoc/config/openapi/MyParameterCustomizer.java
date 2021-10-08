@@ -74,14 +74,7 @@ public class MyParameterCustomizer implements ParameterCustomizer {
         }
 
         io.swagger.v3.oas.models.media.Schema newSchema = new IntegerSchema();
-        newSchema.setDescription(oldSchema.getDescription());
-        newSchema.setName(oldSchema.getName());
-        newSchema.set$ref(oldSchema.get$ref());
-        newSchema.setDeprecated(oldSchema.getDeprecated());
-        newSchema.setRequired(oldSchema.getRequired());
-        newSchema.properties(oldSchema.getProperties());
-        newSchema.setReadOnly(oldSchema.getReadOnly());
-        newSchema.setTitle(oldSchema.getTitle());
+        SchemaUtil.copySchema(oldSchema, newSchema);
 
 
         newSchema.setEnum(codes);
