@@ -52,7 +52,7 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
         String desc = EnumUtil.description((Class<? extends IEnum>) javaType.getRawClass());
 
         //返参碰到枚举类型的重写数据结构
-        property = SchemaUtil.getSchema(EnumSchema.class, property.getDescription() + "  " + desc);
+        property = SchemaUtil.getSchema(EnumSchema.class, javaType.getRawClass().getSimpleName(), property.getDescription() + "  " + desc);
 
         return property;
     }

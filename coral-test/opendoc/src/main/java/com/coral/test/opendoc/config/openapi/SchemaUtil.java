@@ -14,11 +14,11 @@ import io.swagger.v3.oas.models.media.Schema;
  */
 public class SchemaUtil {
 
-    public static Schema getSchema(Class className, String description) {
+    public static Schema getSchema(Class className, String schemaName, String description) {
         ResolvedSchema resolvedSchema = ModelConverters.getInstance()
                 .resolveAsResolvedSchema(
                         new AnnotatedType(className).resolveAsRef(false));
-        return resolvedSchema.schema.description(description);
+        return resolvedSchema.schema.description(description).name(schemaName);
     }
 
 }
