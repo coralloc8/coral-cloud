@@ -1,18 +1,15 @@
 package com.coral.base.common.excel;
 
-import java.util.List;
-
-import com.coral.base.common.excel.model.ExcelWrite;
-import org.apache.poi.ss.usermodel.*;
-
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import com.alibaba.excel.event.Handler;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.handler.CellWriteHandler;
 import com.alibaba.excel.write.handler.SheetWriteHandler;
+import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
@@ -22,9 +19,14 @@ import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.alibaba.excel.write.style.row.AbstractRowHeightStyleStrategy;
 import com.coral.base.common.StringUtils;
-
+import com.coral.base.common.excel.model.ExcelWrite;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.*;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @description: 写excel
@@ -43,9 +45,19 @@ public class ExcelWriteHandler {
      */
     private final static int DEFAULT_WIDTH = 25;
 
+    public ExcelWriteHandler() {
+    }
+
+    public ExcelWriteHandler(List<WriteHandler> handlers) {
+        this.handlers = handlers;
+    }
+
+    @Getter
+    private List<WriteHandler> handlers;
+
     /**
      * @see https://www.yuque.com/easyexcel/doc/write#1bea3540
-     * 
+     *
      *      <1> 日期、数字或者自定义格式转换
      *      <p>
      *      使用{@link com.alibaba.excel.annotation.ExcelProperty}配合使用注解
@@ -59,12 +71,12 @@ public class ExcelWriteHandler {
      *      </p>
      *      <p />
      *
-     * 
+     *
      */
 
     /**
      * 写入excel
-     * 
+     *
      * @param excelWrite
      */
     public void write(@NonNull ExcelWrite excelWrite) {
@@ -86,14 +98,18 @@ public class ExcelWriteHandler {
                     excelWriterSheetBuilder = EasyExcel.writerSheet(write.getSheet(), write.getSheetName());
                 }
                 excelWriterSheetBuilder.head(write.getHeadVoClass())
-                    // 设置默认样式
-                    .registerWriteHandler(this.createDefaultStyle())
-                    // 设置sheet
-                    .registerWriteHandler(new CustomSheetWriteHandler())
-                    // 设置row
-                    .registerWriteHandler(new CustomRowHeightHandler())
-                    // 自动宽度
-                    .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy());
+                        // 设置默认样式
+                        .registerWriteHandler(this.createDefaultStyle())
+                        // 设置sheet
+                        .registerWriteHandler(new CustomSheetWriteHandler())
+                        // 设置row
+                        .registerWriteHandler(new CustomRowHeightHandler())
+                        // 自动宽度
+                        .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy());
+
+                if (Objects.nonNull(getHandlers()) && !getHandlers().isEmpty()) {
+                    getHandlers().forEach(e -> excelWriterSheetBuilder.registerWriteHandler(e));
+                }
 
                 finalExcelWriter.write(write.getData(), excelWriterSheetBuilder.build());
             });
@@ -144,7 +160,7 @@ public class ExcelWriteHandler {
             // writeSheetHolder.getSheet().addValidationData(dataValidation);
 
             // 设置默认行高和列宽
-            writeSheetHolder.getSheet().setDefaultRowHeight((short)DEFAULT_HEIGHT);
+            writeSheetHolder.getSheet().setDefaultRowHeight((short) DEFAULT_HEIGHT);
             writeSheetHolder.getSheet().setDefaultColumnWidth(DEFAULT_WIDTH);
             writeSheetHolder.getSheet().setDefaultRowHeightInPoints(DEFAULT_HEIGHT);
 
@@ -156,25 +172,25 @@ public class ExcelWriteHandler {
 
         @Override
         public void beforeCellCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row,
-            Head head, Integer columnIndex, Integer relativeRowIndex, Boolean isHead) {
+                                     Head head, Integer columnIndex, Integer relativeRowIndex, Boolean isHead) {
 
         }
 
         @Override
         public void afterCellCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Cell cell,
-            Head head, Integer relativeRowIndex, Boolean isHead) {
+                                    Head head, Integer relativeRowIndex, Boolean isHead) {
 
         }
 
         @Override
         public void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
-            CellData cellData, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
+                                           CellData cellData, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
 
         }
 
         @Override
         public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
-            List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
+                                     List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
             // 这里可以对cell进行任何操作
             log.info("第{}行，第{}列写入完成。", cell.getRowIndex(), cell.getColumnIndex());
             // if (isHead && cell.getColumnIndex() == 0) {
@@ -189,7 +205,7 @@ public class ExcelWriteHandler {
 
     /**
      * excel默认样式
-     * 
+     *
      * @return
      */
     private HorizontalCellStyleStrategy createDefaultStyle() {
@@ -198,7 +214,7 @@ public class ExcelWriteHandler {
         // 头部背景色设置
         headWriteCellStyle.setFillForegroundColor(IndexedColors.CORAL.getIndex());
         WriteFont headWriteFont = new WriteFont();
-        headWriteFont.setFontHeightInPoints((short)14);
+        headWriteFont.setFontHeightInPoints((short) 14);
         headWriteCellStyle.setWriteFont(headWriteFont);
 
         // 内容的策略
@@ -223,11 +239,11 @@ public class ExcelWriteHandler {
 
         WriteFont contentWriteFont = new WriteFont();
         // 字体大小
-        contentWriteFont.setFontHeightInPoints((short)12);
+        contentWriteFont.setFontHeightInPoints((short) 12);
         contentWriteCellStyle.setWriteFont(contentWriteFont);
         // 这个策略是 头是头的样式 内容是内容的样式 其他的策略可以自己实现
         HorizontalCellStyleStrategy horizontalCellStyleStrategy =
-            new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+                new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
 
         return horizontalCellStyleStrategy;
     }
