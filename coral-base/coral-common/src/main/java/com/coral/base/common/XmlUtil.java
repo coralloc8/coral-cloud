@@ -228,7 +228,7 @@ public class XmlUtil {
             } else {
                 Object obj = innerMap.get(perNodeName);
                 List innerList;
-                if (obj instanceof Map) {
+                if (!(obj instanceof List)) {
                     // map 转 list
                     innerList = new ArrayList();
                     innerList.add(innerMap.remove(perNodeName));
