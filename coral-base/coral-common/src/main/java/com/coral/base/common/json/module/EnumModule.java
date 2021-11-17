@@ -106,7 +106,16 @@ public class EnumModule extends SimpleModule {
             log.debug(">>>>>EnumJsonDeserializer deserialize asText:{}, findPropertyType:{}", asText, findPropertyType);
             if (findPropertyType != null && findPropertyType.isEnum()
                     && IEnum.class.isAssignableFrom(findPropertyType)) {
-                return (Enum) EnumUtil.codeOf(findPropertyType, asText);
+                try {
+                    return (Enum) EnumUtil.codeOf(findPropertyType, asText);
+                } catch (Exception e) {
+                    try {
+                        log.error(">>>>> enum 序列化失败，尝试使用name序列化...");
+                        return (Enum) EnumUtil.nameOf(findPropertyType, asText);
+                    } catch (Exception e2) {
+                        throw new IllegalArgumentException("value is not enum");
+                    }
+                }
             }
             throw new IllegalArgumentException("value is not enum");
 
