@@ -1,10 +1,7 @@
 package com.coral.base.common;
 
 import com.coral.base.common.exception.SystemRuntimeException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -20,12 +17,31 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author huss
  */
 @Slf4j
 public class FileUtil {
+
+    /**
+     * 递归遍历文件下的所有文件
+     *
+     * @param dir
+     * @param filter
+     * @param files
+     */
+    public void findAllFiles(@NonNull File dir, Predicate<File> filter, List<File> files) {
+        File[] currentFiles = dir.listFiles();
+        for (File file : currentFiles) {
+            if (file.isFile() && filter.test(file)) {
+                files.add(file);
+            } else if (file.isDirectory()) {
+                this.findAllFiles(file, filter, files);
+            }
+        }
+    }
 
 
     public static Optional<String> findProjectRootPath() {
