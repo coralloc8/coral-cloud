@@ -32,13 +32,13 @@ public class FileUtil {
      * @param filter
      * @param files
      */
-    public void findAllFiles(@NonNull File dir, Predicate<File> filter, List<File> files) {
+    public static void findAllFiles(@NonNull File dir, Predicate<File> filter, List<File> files) {
         File[] currentFiles = dir.listFiles();
         for (File file : currentFiles) {
             if (file.isFile() && filter.test(file)) {
                 files.add(file);
             } else if (file.isDirectory()) {
-                this.findAllFiles(file, filter, files);
+                findAllFiles(file, filter, files);
             }
         }
     }
