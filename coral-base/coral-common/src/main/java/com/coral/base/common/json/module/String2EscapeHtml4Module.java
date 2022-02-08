@@ -13,14 +13,14 @@ import java.io.IOException;
 
 /**
  * string xss过滤
- * 
+ *
  * @author huss
  */
 @Slf4j
 public class String2EscapeHtml4Module extends SimpleModule {
 
     public String2EscapeHtml4Module() {
-        super(PackageVersion.VERSION);
+        super(String2EscapeHtml4Module.class.getName(), PackageVersion.VERSION);
         super.addDeserializer(String.class, new String2EscapeHtml4Deserializer());
     }
 
@@ -28,7 +28,7 @@ public class String2EscapeHtml4Module extends SimpleModule {
 
         @Override
         public String deserialize(JsonParser p, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+                throws IOException, JsonProcessingException {
 
             String value = p.getValueAsString();
             log.debug(">>>>> String2EscapeHtml4Deserializer. name：{}, value：{}", p.currentName(), value);

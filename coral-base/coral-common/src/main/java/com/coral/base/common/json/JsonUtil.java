@@ -1,21 +1,19 @@
 package com.coral.base.common.json;
 
 
-import com.coral.base.common.exception.Exceptions;
 import com.coral.base.common.DatePattern;
 import com.coral.base.common.StringPool;
-import com.coral.base.common.json.module.*;
-import com.coral.base.common.json.module.*;
+import com.coral.base.common.exception.Exceptions;
 import com.coral.base.common.json.module.*;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -286,7 +284,7 @@ public class JsonUtil {
             // 设置地点为中国
             INSTANCE.setLocale(CHINA);
             // 去掉默认的时间戳格式
-            INSTANCE.enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            INSTANCE.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             // 设置为中国上海时区
             INSTANCE.setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
             // 序列化时，日期的统一格式
@@ -302,8 +300,11 @@ public class JsonUtil {
             INSTANCE.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
             INSTANCE.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
             // 日期格式化
+
             INSTANCE.registerModules(new ParameterNamesModule(), new BladeJavaTimeModule(), new EnumModule(),
-                    new String2EscapeHtml4Module());
+                    new String2EscapeHtml4Module()
+
+            );
             // 字段属性自定义转换处理
             INSTANCE.setSerializerFactory(INSTANCE.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
             // 属性可视化范围

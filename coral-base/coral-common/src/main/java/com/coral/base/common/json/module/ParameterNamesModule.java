@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 
 /**
  * double 默认保留两位小数，四舍五入
- * 
+ *
  * @author huss
  */
 public class ParameterNamesModule extends SimpleModule {
 
     public ParameterNamesModule() {
-        super(PackageVersion.VERSION);
+        super(ParameterNamesModule.class.getName(), PackageVersion.VERSION);
         super.addSerializer(Double.class, new DoubleJsonSerializer());
         super.addSerializer(double.class, new DoubleJsonSerializer());
     }

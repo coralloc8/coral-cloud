@@ -28,7 +28,7 @@ import java.util.Map;
 public class EnumModule extends SimpleModule {
 
     public EnumModule() {
-        super(PackageVersion.VERSION);
+        super(EnumModule.class.getName(), PackageVersion.VERSION);
         super.addSerializer(IEnum.class, new EnumJsonSerializer());
         // 此处添加Enum序列化才有效
         super.addDeserializer(Enum.class, new EnumJsonDeserializer());

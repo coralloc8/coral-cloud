@@ -34,12 +34,12 @@ import java.time.LocalTime;
 public class BladeJavaTimeModule extends SimpleModule {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     public BladeJavaTimeModule() {
-        super(PackageVersion.VERSION);
+        super(BladeJavaTimeModule.class.getName(), PackageVersion.VERSION);
         this.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeUtil.DATETIME_FORMAT));
         this.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeUtil.DATE_FORMAT));
         this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeUtil.TIME_FORMAT));
