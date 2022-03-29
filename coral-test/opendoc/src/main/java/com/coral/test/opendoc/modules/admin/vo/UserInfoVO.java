@@ -1,5 +1,6 @@
 package com.coral.test.opendoc.modules.admin.vo;
 
+import com.coral.test.opendoc.common.constants.DefConstant;
 import com.coral.test.opendoc.common.enums.GlobalStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ public class UserInfoVO {
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
-    @Schema(description = "状态")
+    @Schema(description = "状态", format = DefConstant.DOC_FORMAT_ENUM)
     private GlobalStatus status;
 
 }

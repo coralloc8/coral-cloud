@@ -2,16 +2,21 @@ package com.coral.test.opendoc.config.openapi;
 
 import com.coral.base.common.EnumUtil;
 import com.coral.base.common.enums.IEnum;
+import com.coral.test.opendoc.common.constants.DefConstant;
 import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.DateTimeSchema;
+import io.swagger.v3.oas.models.media.IntegerSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.PropertyCustomizer;
 import org.springframework.stereotype.Component;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author huss
@@ -38,6 +43,7 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
         property = buildEnumSchema(property, type, javaType);
         return property;
     }
+
     /**
      * 时间转化
      *
@@ -57,7 +63,6 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
     }
 
 
-
     /**
      * 创建枚举schema
      *
@@ -65,18 +70,45 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
      * @param type
      * @return
      */
-    private Schema buildEnumSchema(Schema property, AnnotatedType type,JavaType javaType) {
+    private Schema buildEnumSchema(Schema property, AnnotatedType type, JavaType javaType) {
         boolean isIEnum = IEnum.class.isAssignableFrom(javaType.getRawClass());
         if (!isIEnum) {
             return property;
         }
-        log.info(">>>>>enum重写...type:{}", type.getType().getTypeName());
-        String desc = EnumUtil.description((Class<? extends IEnum>) javaType.getRawClass());
+        Class<? extends IEnum> clazz = (Class<IEnum>) javaType.getRawClass();
+        String desc = EnumUtil.description(clazz);
 
-        //返参碰到枚举类型的重写数据结构
-        property = SchemaUtil.getSchema(EnumSchema.class, javaType.getRawClass().getSimpleName(), property.getDescription() + "  " + desc);
+        if (DefConstant.DOC_FORMAT_ENUM.equals(property.getFormat())) {
+            log.info(">>>>>enum重写...type:{}", type.getType().getTypeName());
+            //返参碰到枚举类型的重写数据结构
+            property = SchemaUtil.getSchema(EnumSchema.class, javaType.getRawClass().getSimpleName(),
+                    property.getDescription() + "  " + desc);
+            return property;
+        }
+        log.info(">>>>>enum重新设置description和enums...type:{}", type.getType().getTypeName());
+        desc = property.getDescription() + "   " + desc;
+        property.description(desc);
 
+        //设置枚举值
+        IEnum[] enums = clazz.getEnumConstants();
+        List enumArray = Stream.of(enums)
+                .map(e -> e.getCode())
+                .collect(Collectors.toList());
+
+        Class<?> codeClazz = enums[0].getCode().getClass();
+        if (!String.class.isAssignableFrom(codeClazz)) {
+            return this.buildIntSchema(property, enumArray);
+        }
+
+        property.setEnum(enumArray);
         return property;
+    }
+
+    private Schema buildIntSchema(Schema property, List enumArray) {
+        Schema newSchema = new IntegerSchema();
+        SchemaUtil.copySchema(property, newSchema);
+        newSchema.setEnum(enumArray);
+        return newSchema;
     }
 
 }

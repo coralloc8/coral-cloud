@@ -33,5 +33,10 @@ public interface DefConstant {
      */
     String PAGE_SIZE = "20";
 
+    /**
+     * doc 枚举类型自定义格式化
+     */
+    String DOC_FORMAT_ENUM = "MyEnum";
+
 
 }

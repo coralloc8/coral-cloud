@@ -1,10 +1,17 @@
 package com.coral.test.opendoc.config.openapi;
 
 import com.coral.base.common.BeanCopierUtil;
+import com.coral.base.common.EnumUtil;
+import com.coral.base.common.enums.IEnum;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.converter.ResolvedSchema;
+import io.swagger.v3.oas.models.media.IntegerSchema;
 import io.swagger.v3.oas.models.media.Schema;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author huss
