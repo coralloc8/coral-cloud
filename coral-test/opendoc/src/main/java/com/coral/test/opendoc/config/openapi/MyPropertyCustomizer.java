@@ -1,19 +1,18 @@
 package com.coral.test.opendoc.config.openapi;
 
+
 import com.coral.base.common.EnumUtil;
 import com.coral.base.common.enums.IEnum;
 import com.coral.test.opendoc.common.constants.DefConstant;
 import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.util.Json;
-import io.swagger.v3.oas.models.media.DateTimeSchema;
 import io.swagger.v3.oas.models.media.IntegerSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.PropertyCustomizer;
 import org.springframework.stereotype.Component;
 
-import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,29 +38,30 @@ public class MyPropertyCustomizer implements PropertyCustomizer {
     @Override
     public Schema customize(Schema property, AnnotatedType type) {
         JavaType javaType = Json.mapper().constructType(type.getType());
-        property = buildTimeSchema(property, type, javaType);
+//        property = buildTimeSchema(property, type, javaType);
         property = buildEnumSchema(property, type, javaType);
         return property;
     }
 
-    /**
-     * 时间转化
-     *
-     * @param property
-     * @param type
-     * @return
-     */
-    private Schema buildTimeSchema(Schema property, AnnotatedType type, JavaType javaType) {
-        boolean isTemporalAccessor = TemporalAccessor.class.isAssignableFrom(javaType.getRawClass());
-        if (!isTemporalAccessor) {
-            return property;
-        }
-        log.info(">>>>>time重写...type:{}", type.getType().getTypeName());
-        Schema newSchema = new DateTimeSchema();
-        SchemaUtil.copySchema(property, newSchema);
-        return newSchema;
-    }
-
+//    /**
+//     * 时间转化
+//     *
+//     * @param property
+//     * @param type
+//     * @return
+//     */
+//    private Schema buildTimeSchema(Schema property, AnnotatedType type, JavaType javaType) {
+//        boolean isTemporalAccessor = TemporalAccessor.class.isAssignableFrom(javaType.getRawClass());
+//
+//        if (!isTemporalAccessor) {
+//            return property;
+//        }
+//        log.info(">>>>>time重写...type:{}", type.getType().getTypeName());
+//        Schema newSchema = new DateTimeSchema();
+//        SchemaUtil.copySchema(property, newSchema);
+//        return newSchema;
+//
+//    }
 
     /**
      * 创建枚举schema

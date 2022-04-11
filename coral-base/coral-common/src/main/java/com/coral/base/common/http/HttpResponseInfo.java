@@ -1,5 +1,6 @@
 package com.coral.base.common.http;
 
+import com.coral.base.common.http.response.IResponse;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HttpResponseInfo {
+public class HttpResponseInfo implements IResponse {
 
     /**
      * http状态码
@@ -36,11 +37,16 @@ public class HttpResponseInfo {
 
     /**
      * 是否成功
-     * 
+     *
      * @return
      */
     public boolean isOK() {
         return httpStatus != null && httpStatus.equals(200) && error == null;
+    }
+
+    @Override
+    public boolean success() {
+        return isOK();
     }
 
     public boolean hasError() {

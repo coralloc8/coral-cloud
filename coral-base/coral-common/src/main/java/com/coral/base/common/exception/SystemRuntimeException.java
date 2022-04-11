@@ -29,8 +29,7 @@ public class SystemRuntimeException extends RuntimeException {
      * Description: 构造函数
      * </p>
      *
-     * @param errorMessage
-     *            异常信息
+     * @param errorMessage 异常信息
      */
     public SystemRuntimeException(IErrorMessage errorMessage, Object... args) {
         super(errorMessage.getErrorMsg());

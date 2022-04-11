@@ -1,0 +1,52 @@
+
+server:
+  port: 16000
+  session-timeout: 30
+  servlet:
+    context-path:
+    encoding:
+      charset: UTF-8
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 800
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #利用微服务名进行路由
+      default-filters:
+        - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
+        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
+        - AddResponseHeader=Access-Control-Allow-Credentials,true
+      routes:
+        - id: user-server
+          uri: lb://user-server
+          predicates:
+            - Path=/user/api/**
+          filters:
+            - StripPrefix=2
+            - name: RequestRateLimiter #基于redis漏斗限流
+              args:
+                key-resolver: "#{@ipAndUrlKeyResolver}"
+                redis-rate-limiter:
+                  replenishRate: 10 #每秒补充10个
+                  burstCapacity: 20 #突发20个
+                  requestedTokens: 1 #每次请求消耗1个
+            - name: CircuitBreaker
+              args:
+                name: myCircuitBreaker
+                fallbackUri: forward:/fallback
+        - id: order-server
+          uri: lb://order-server
+          predicates:
+            - Path=/order/api/**
+          filters:
+            - StripPrefix=2
+            - name: CircuitBreaker
+              args:
+                name: myCircuitBreaker
+                fallbackUri: forward:/fallback

@@ -1,6 +1,7 @@
 package com.coral.base.common.http;
 
 import com.coral.base.common.StringPool;
+import com.coral.base.common.http.request.IRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
 @NoArgsConstructor
 @Builder
 @Data
-public class HttpRequestInfo {
+public class HttpRequestInfo implements IRequest {
 
     public final static String DEFAULT_PARAM_KEY = "ALL";
 

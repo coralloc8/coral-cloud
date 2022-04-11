@@ -38,14 +38,33 @@ public class OpenApiProperties {
      */
     private String url;
 
+
     private List<Group> groups;
+
+    /**
+     * 联系人
+     */
+    private String contactName;
+
+    private String contactEmail;
 
 
     @Data
     public static class Group {
+
         private String group;
 
         private String packagesToScan;
+
+        private String pathsToMatch;
+
+        private String pathsToExclude;
+
+        private String consumesToMatch;
+
+        private String producesToMatch;
+
+        private String headersToMatch;
 
         private String packagesToExclude;
 

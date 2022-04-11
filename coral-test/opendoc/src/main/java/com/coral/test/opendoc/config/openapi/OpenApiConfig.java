@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.SpringBootVersion;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,8 +37,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OpenApiConfig {
 
+    @Getter
     private final OpenApiProperties openApiProperties;
 
+    @Getter
     private final ApplicationContext context;
 
     @Getter
@@ -96,16 +99,40 @@ public class OpenApiConfig {
         return tags;
     }
 
-    private GroupedOpenApi createGroupedOpenApi(String groupName) {
+    /**
+     * 创建组api
+     *
+     * @param groupName
+     * @return
+     */
+    protected GroupedOpenApi createGroupedOpenApi(String groupName) {
         OpenApiProperties.Group group = getGroups().get(groupName);
         GroupedOpenApi.Builder builder = GroupedOpenApi.builder()
                 .group(group.getGroup())
-                .addOpenApiCustomiser(api -> api.tags(initTags(group)))
-
-                ;
+                .addOpenApiCustomiser(api -> api.tags(initTags(group)));
 
         if (StringUtils.isNotBlank(group.getPackagesToScan())) {
             builder.packagesToScan(group.getPackagesToScan());
+        }
+
+        if (StringUtils.isNotBlank(group.getPathsToMatch())) {
+            builder.pathsToMatch(group.getPathsToMatch());
+        }
+
+        if (StringUtils.isNotBlank(group.getConsumesToMatch())) {
+            builder.consumesToMatch(group.getConsumesToMatch());
+        }
+
+        if (StringUtils.isNotBlank(group.getHeadersToMatch())) {
+            builder.headersToMatch(group.getHeadersToMatch());
+        }
+
+        if (StringUtils.isNotBlank(group.getProducesToMatch())) {
+            builder.producesToMatch(group.getProducesToMatch());
+        }
+
+        if (StringUtils.isNotBlank(group.getPathsToExclude())) {
+            builder.pathsToExclude(group.getPathsToExclude());
         }
 
         if (StringUtils.isNotBlank(group.getPackagesToExclude())) {
@@ -116,17 +143,7 @@ public class OpenApiConfig {
         return builder.build();
     }
 
-    @Bean
-    public GroupedOpenApi app() {
-        return this.createGroupedOpenApi("app");
-    }
-
-    @Bean
-    public GroupedOpenApi admin() {
-        return this.createGroupedOpenApi("admin");
-    }
-
-
+    @ConditionalOnMissingBean(OpenAPI.class)
     @Bean
     public OpenAPI createRestApi() {
         return new OpenAPI()
@@ -149,14 +166,14 @@ public class OpenApiConfig {
                         .type(SecurityScheme.Type.APIKEY)
                         .name("token")
                         .in(In.HEADER)
-                        .description("pc端登录必须token")
+                        .description("普通token")
                 )
                 .addSecuritySchemes("Authorization",
                         new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
                                 .bearerFormat("JWT")
-                                .description("app端登录必须jwt token")
+                                .description("jwt token")
                                 .flows(
                                         new OAuthFlows()
                                 )
@@ -168,10 +185,14 @@ public class OpenApiConfig {
      * API 页面上半部分展示信息
      */
     private Info apiInfo() {
+        String contactName = StringUtils.isBlank(openApiProperties.getContactName()) ? "智慧医学" : openApiProperties.getContactName();
+
+        String contactEmail = StringUtils.isBlank(openApiProperties.getContactEmail()) ? "452327322@qq.com" : openApiProperties.getContactEmail();
+
         return new Info()
                 .title(openApiProperties.getName())
                 .description(openApiProperties.getDescription())
-                .contact(new Contact().name("智慧医学").email("452327322@qq.com"))
+                .contact(new Contact().name(contactName).email(contactEmail))
                 .version("Application Version: " + openApiProperties.getVersion() + ", " +
                         "Spring Boot Version: " + SpringBootVersion.getVersion())
                 ;

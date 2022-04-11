@@ -1,0 +1,11 @@
+info:
+  author: huss
+  date: 2022年4月2日
+  remark: gateway-server
+  my-server-name: gateway-server
+
+spring:
+  application:
+    name: ${info.my-server-name}
+  profiles:
+    active: core

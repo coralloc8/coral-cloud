@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  * @description 枚举
  * @date 2021/9/14 19:26
  */
-@Schema(name = "Enum", description = "枚举")
+@Schema(description = "枚举")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

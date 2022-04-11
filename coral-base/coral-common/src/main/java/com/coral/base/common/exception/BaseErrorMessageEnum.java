@@ -4,7 +4,7 @@ import com.coral.base.common.enums.I18nMessageKey;
 
 /**
  * 基础错误信息，默认全英文提示
- * 
+ *
  * @author huss
  */
 public enum BaseErrorMessageEnum implements IErrorCodeMessage<BaseErrorMessageEnum>, I18nMessageKey {
@@ -65,6 +65,16 @@ public enum BaseErrorMessageEnum implements IErrorCodeMessage<BaseErrorMessageEn
      * 不支持此操作
      */
     OPERATION_NOT_SUPPORT(10009, "this operation is not supported"),
+
+    /**
+     * 服务不可用，触发熔断机制
+     */
+    SERVICE_UNAVAILABLE(10010, "the service is unavailable, triggering the circuit breaker"),
+
+    /**
+     * 接口不可用，触发熔断机制
+     */
+    INTERFACE_UNAVAILABLE(10011, "the interface is unavailable, triggering the circuit breaker"),
 
     ;
 

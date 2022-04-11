@@ -76,7 +76,6 @@ public class MyParameterCustomizer implements ParameterCustomizer {
         io.swagger.v3.oas.models.media.Schema newSchema = new IntegerSchema();
         SchemaUtil.copySchema(oldSchema, newSchema);
 
-
         newSchema.setEnum(codes);
         //重写enum的值
         parameterModel.setSchema(newSchema);
