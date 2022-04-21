@@ -1,0 +1,20 @@
+[
+  {
+    "targets": [
+      "192.168.100.161:16201"
+    ],
+    "labels": {
+      "instance": "192.168.100.161:16201",
+      "service": "order-server"
+    }
+  },
+  {
+    "targets": [
+      "192.168.100.161:16200"
+    ],
+    "labels": {
+      "instance": "192.168.100.161:16200",
+      "service": "order-server"
+    }
+  }
+]

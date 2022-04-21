@@ -36,7 +36,5 @@ public class UserApplication {
             log.info(">>>>>init...");
             openApiConfig.printVersion();
         }
-
-
     }
 }

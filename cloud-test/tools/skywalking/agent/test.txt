@@ -1,0 +1,3 @@
+# javaagent
+-javaagent:E:\projects\mine\java\coral-cloud\cloud-test\tools\skywalking\agent\skywalking-agent.jar -Dskywalking.agent.service_name=user-server -Dskywalking.collector.backend_service=192.168.29.61:11800
+
