@@ -30,7 +30,7 @@ public class ModifyUtil {
     public static <T> T update(Object currVal, T t, IGetter<T> methodGetter, StringBuilder logBuilder) {
         try {
             String className = t.getClass().getSimpleName();
-            String fieldName = ColumnUtil.getPropertyName(methodGetter);
+            String fieldName = LambdaFieldUtil.getFieldName(methodGetter);
             Object oldVal = methodGetter.apply(t);
 
             boolean empty = Objects.isNull(currVal) ||

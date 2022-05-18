@@ -3,6 +3,7 @@ package com.coral.base.common.json;
 
 import com.coral.base.common.DatePattern;
 import com.coral.base.common.StringPool;
+import com.coral.base.common.StringUtils;
 import com.coral.base.common.exception.Exceptions;
 import com.coral.base.common.json.module.*;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -13,15 +14,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Jackson工具类
@@ -167,17 +167,23 @@ public class JsonUtil {
      * @return List
      */
     public static <T> List<T> parseArray(String content, Class<T> valueTypeRef) {
+        if (StringUtils.isBlank(content)) {
+            return Collections.emptyList();
+        }
         try {
-
             if (!StringUtils.startsWithIgnoreCase(content, StringPool.LEFT_SQ_BRACKET)) {
                 content = StringPool.LEFT_SQ_BRACKET + content + StringPool.RIGHT_SQ_BRACKET;
             }
-            List<Map<String, Object>> list =
-                    getInstance().readValue(content, new TypeReference<List<Map<String, Object>>>() {
-                    });
-            List<T> result = new ArrayList<>();
-            for (Map<String, Object> map : list) {
-                result.add(toPojo(map, valueTypeRef));
+            List<T> result;
+            if (StringUtils.isBaseWrapType(valueTypeRef)) {
+                result = getInstance().readValue(content, new TypeReference<List<T>>() {
+                });
+
+            } else {
+                List<Map<String, Object>> list = getInstance().readValue(content,
+                        new TypeReference<List<Map<String, Object>>>() {
+                        });
+                result = list.stream().map(e -> toPojo(e, valueTypeRef)).collect(Collectors.toList());
             }
             return result;
         } catch (IOException e) {
