@@ -1,0 +1,61 @@
+{
+  "properties": {
+    "patientId": {
+      "type": "text",
+      "analyzer": "patient_number_ngram_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "cardNo": {
+      "type": "text",
+      "analyzer": "patient_number_ngram_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "outPatientNumber": {
+      "type": "text",
+      "analyzer": "patient_number_ngram_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "outPatientNo": {
+      "type": "text",
+      "analyzer": "patient_number_ngram_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "patientName": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        },
+        "pinyin": {
+          "type": "text",
+          "store": false,
+          "term_vector": "with_offsets",
+          "analyzer": "pinyin_analyzer",
+          "boost": 10
+        }
+      }
+    }
+  }
+}

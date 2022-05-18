@@ -75,6 +75,8 @@
         <!--打印sql语句 -->
         <logger name="com.coral" level="debug"></logger>
 
+        <logger name="org.elasticsearch" level="info"/>
+
         <root level="info">
             <!--			<appender-ref ref="log" />-->
             <appender-ref ref="Console"/>

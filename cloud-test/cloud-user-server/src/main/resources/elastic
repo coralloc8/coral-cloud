@@ -1,0 +1,205 @@
+# 用户门诊病历信息查看
+GET /hospital_user_record_mz/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "should": [
+              {
+                "match": {
+                  "nowMedicalHistory": "流涕"
+                }
+              },
+              {
+                "match": {
+                  "nowMedicalHistory": {
+                    "query": "清涕",
+                    "operator": "and"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "filter": {
+        "bool": {
+          "must_not": [
+            {
+              "match_phrase": {
+                "nowMedicalHistory": "无流涕"
+              }
+            },
+            {
+              "match_phrase": {
+                "nowMedicalHistory": "暂无流涕"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "_source": [
+    "mainSuit",
+    "nowMedicalHistory",
+    "id"
+  ],
+  "from": 0,
+  "size": 10,
+  "sort": [
+    {
+      "createTime": "desc"
+    }
+  ],
+  "highlight": {
+    "pre_tags": "<font color='red'>",
+    "post_tags": "</font>",
+    "fields": {
+      "nowMedicalHistory": {}
+    }
+  }
+}
+
+
+
+GET /hospital_user_record_mz/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "outPatientTime": {
+              "from": "2022-05-08T00:00:00.000",
+              "to": "2022-05-08T23:59:59.999"
+            }
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "match": {
+                  "nowMedicalHistory": "流涕"
+                }
+              },
+              {
+                "match": {
+                  "nowMedicalHistory": {
+                    "query": "清涕",
+                    "operator": "AND"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+GET /hospital_user_record_mz/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "wildcard": {
+            "outPatientNumber": "210*"
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+# 查看字段分词
+GET /hospital_user_record_mz/_doc/4508756/_termvectors?fields=physicalExamine
+
+
+# 用户信息查看
+GET /person/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "nested": {
+            "path": "children",
+            "query": {
+              "bool": {
+                "must": [
+                  {
+                    "match": {
+                      "children.personName": "赵三"
+                    }
+                  },
+                  {
+                    "match": {
+                      "children.age": 12.5
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+
+GET /hospital_user_record_mz/_mapping
+
+GET /person
+
+
+DELETE /person
+
+
+# 查看字段分词
+GET /person/_doc/1651829453162/_termvectors?fields=character
+
+
+# 默认分词
+GET _analyze
+{
+  "text":"210700008008"
+}
+
+# ngram分词
+GET _analyze
+{
+  "tokenizer": "ngram",
+  "text":"中国共产党"
+}
+
+# ik_smart分词
+GET _analyze
+{
+  "analyzer": "ik_smart",
+  "text":"中国共产党"
+}
+
+# ik_max_word分词
+GET _analyze
+{
+  "analyzer": "ik_max_word",
+  "text":"中国共产党"
+}
+
+# standard分词
+GET _analyze
+{
+  "analyzer": "standard",
+  "text":"中国共产党"
+}
+

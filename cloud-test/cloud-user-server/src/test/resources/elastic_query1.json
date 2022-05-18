@@ -1,0 +1,62 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "should": [
+              {
+                "match": {
+                  "nowMedicalHistory": "流涕"
+                }
+              },
+              {
+                "match": {
+                  "nowMedicalHistory": {
+                    "query": "清涕",
+                    "operator": "and"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "filter": {
+        "bool": {
+          "must_not": [
+            {
+              "match_phrase": {
+                "nowMedicalHistory": "无流涕"
+              }
+            },
+            {
+              "match_phrase": {
+                "nowMedicalHistory": "暂无流涕"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "_source": [
+    "mainSuit",
+    "nowMedicalHistory",
+    "id"
+  ],
+  "from": 0,
+  "size": 10,
+  "sort": [
+    {
+      "createTime": "desc"
+    }
+  ],
+  "highlight": {
+    "pre_tags": "<font color='red'>",
+    "post_tags": "</font>",
+    "fields": {
+      "nowMedicalHistory": {}
+    }
+  }
+}

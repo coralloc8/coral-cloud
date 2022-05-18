@@ -1,15 +1,16 @@
 package com.coral.cloud.user.controller;
 
 import com.coral.base.common.exception.SystemRuntimeException;
-import com.coral.cloud.order.feign.dto.OrderInfoDTO;
-import com.coral.cloud.order.feign.service.UserOrderFeign;
 import com.coral.cloud.user.common.config.UserProperty;
 import com.coral.cloud.user.common.errormsg.UserErrorMessage;
 import com.coral.cloud.user.dto.UserSaveDTO;
+import com.coral.cloud.user.event.producer.UserCreateProducer;
+import com.coral.cloud.user.event.producer.UserModifyMessage;
+import com.coral.cloud.user.event.producer.UserModifyProducer;
+import com.coral.cloud.user.service.UserService;
 import com.coral.cloud.user.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,14 @@ public class UserController implements UserApi {
     private UserProperty userProperty;
 
     @Autowired
-    private UserOrderFeign userOrderFeign;
+    private UserService userService;
+
+    @Autowired
+    private UserModifyProducer userModifyProducer;
+
+    @Autowired
+    private UserCreateProducer userCreateProducer;
+
 
     static {
         IntStream.rangeClosed(0, 5).forEach(e -> USERS.add(UserInfoVO.createUser(String.valueOf(e + 1), "")));
@@ -63,23 +71,7 @@ public class UserController implements UserApi {
     @GetMapping("/{userNo}")
     @Override
     public ResponseEntity<UserInfoVO> findUserDetailInfo(@PathVariable String userNo) {
-        return USERS.stream().filter(e -> e.getUserNo().equals(userNo)).findAny()
-                .map(user -> {
-                    try {
-                        ResponseEntity<List<OrderInfoDTO>> orderResponse = userOrderFeign.findUserOrderInfos(userNo);
-                        if (orderResponse.getStatusCode().equals(HttpStatus.OK)) {
-                            log.info(">>>>>user orders:{}", orderResponse.getBody());
-                            // 测试order实例挂了一个后会不会进入重试并负载到另外一个在线的实例上，并最终返回数据结果
-                            user.setOrders(orderResponse.getBody());
-                        } else {
-                            log.info("用户订单数据查询失败，请检查");
-                        }
-                    } catch (Exception e) {
-                        log.error(">>>>>查询用户订单接口失败,error:", e);
-                    }
-                    return ResponseEntity.ok(user);
-                })
-                .orElseThrow(() -> new SystemRuntimeException(UserErrorMessage.USER_NOT_EXIST));
+        return ResponseEntity.ok(userService.findUserDetail(userNo, USERS));
     }
 
     /**
@@ -93,6 +85,8 @@ public class UserController implements UserApi {
     public ResponseEntity<UserInfoVO> saveUser(@RequestBody UserSaveDTO userSaveDTO) {
         UserInfoVO userInfoVO = UserInfoVO.createUserWithName(userSaveDTO.getUsername());
         USERS.add(userInfoVO);
+        //发送事件
+        userCreateProducer.send(new UserModifyMessage(userInfoVO.getUserNo(), userInfoVO.getUsername()));
         return ResponseEntity.ok(userInfoVO);
     }
 
@@ -109,6 +103,8 @@ public class UserController implements UserApi {
         return USERS.stream().filter(e -> e.getUserNo().equals(userNo)).findAny()
                 .map(user -> {
                     user.setUsername(userSaveDTO.getUsername());
+                    //发送事件
+                    userModifyProducer.send(new UserModifyMessage(userNo, user.getUsername()));
                     return ResponseEntity.ok(user);
                 })
                 .orElseThrow(() -> new SystemRuntimeException(UserErrorMessage.USER_NOT_EXIST));

@@ -1,9 +1,90 @@
-
-#nacos配置
 spring:
   cloud:
+    # nacos 注册中心
     nacos:
       discovery:
         server-addr: 192.168.29.61:8848 #nacos中心地址
         group: DEFAULT_GROUP
         namespace: a68ad4b8-0e4e-40bb-bfa0-a564d4b3c9c2 #test
+    # 消息中心
+    function:
+      # 方法路由，根据headers中的type属性查找方法
+      routing-expression: headers['COMMON_TYPE']
+    # stream
+    stream:
+      default-binder: rocketmq_61_1
+      function:
+        destination:
+        routing:
+          enabled: true
+      bindings:
+        # 消费者
+        functionRouter-in-0:
+          binder: rocketmq_61_1
+          destination: user-server-event
+          content-type: application/json
+          group: coral-cloud-test
+        # 生产者
+        user-server-event:
+          binder: rocketmq_61_1
+          content-type: application/json
+          destination: user-server-event
+
+      rocketmq:
+        bindings:
+          user-server-event:
+            # 生产者 配置
+            producer:
+              # 是否同步发送消息，默认为 false 异步
+              sync: false
+              group: coral-cloud-test # 生产者分组
+              send-message-timeout: 3000 # 发送消息超时时间，单位：毫秒。默认为 3000 。
+              compress-message-body-threshold: 4096 # 消息压缩阀值，当消息体的大小超过该阀值后，进行消息压缩。默认为 4 * 1024B
+              max-message-size: 4194304 # 消息体的最大允许大小。。默认为 4 * 1024 * 1024B
+              retry-times-when-send-failed: 2 # 同步发送消息时，失败重试次数。默认为 2 次。
+              retry-times-when-send-async-failed: 2 # 异步发送消息时，失败重试次数。默认为 2 次。
+              retry-next-server: true # 发送消息给 Broker 时，如果发送失败，是否重试另外一台 Broker 。默认为 false
+      #          xx:
+      #            customer:
+      #              # false:集群消费 true:广播消费
+      #              broadcasting: false
+      #              # 是否同步发送消息，默认为 false 异步
+      #              sync: false
+      #              # true:顺序消费 false:并发消费
+      #              orderly: false
+
+      binders:
+        rocketmq_61_1:
+          type: rocketmq
+          environment:
+            spring.cloud.stream:
+              rocketmq:
+                binder:
+                  name-server: 192.168.29.61:9876
+        rocketmq_61_2:
+          type: rocketmq
+          environment:
+            spring.cloud.stream:
+              rocketmq:
+                binder:
+                  name-server: 192.168.29.61:9876
+  # elasticsearch
+  elasticsearch:
+    uris: 192.168.29.61:9400,192.168.29.61:9401,192.168.29.61:9402
+    username: elastic
+    password: zhyx1202
+    connection-timeout: 5
+    socket-timeout: 60
+  # redis
+  redis:
+    database: 14
+    host: 192.168.29.183
+    port: 6379
+    password: redis_ywz    # 密码（默认为空）
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+

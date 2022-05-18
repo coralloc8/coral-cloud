@@ -129,6 +129,14 @@
             <artifactId>coral-common</artifactId>
         </dependency>
 
+        <!-- file online start -->
+<!--        <dependency>
+            <groupId>cn.keking</groupId>
+            <artifactId>kkFileView</artifactId>
+            <version>4.1.0</version>
+        </dependency>-->
+        <!-- file online end -->
+
         <!--添加热部署-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,0 +1,47 @@
+{
+  "index": {
+    "analysis": {
+      "analyzer": {
+        "default": {
+          "tokenizer": "ik_max_word"
+        },
+        "pinyin_analyzer": {
+          "tokenizer": "my_pinyin",
+          "char_filter": {},
+          "filter": {}
+        },
+        "patient_number_ngram_analyzer": {
+          "tokenizer": "my_ngram_analyzer",
+          "char_filter": {},
+          "filter": {}
+        }
+      },
+      "tokenizer": {
+        "my_pinyin": {
+          "type": "pinyin",
+          "keep_separate_first_letter": false,
+          "keep_first_letter": true,
+          "keep_full_pinyin": true,
+          "keep_joined_full_pinyin": true,
+          "keep_none_chinese": true,
+          "keep_original": true,
+          "limit_first_letter_length": 16,
+          "lowercase": true,
+          "trim_whitespace": true,
+          "remove_duplicated_term": true
+        },
+        "my_ngram_analyzer": {
+          "type": "ngram",
+          "min_gram": 3,
+          "max_gram": 4,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  }
+}
+
+

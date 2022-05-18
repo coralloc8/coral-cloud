@@ -38,5 +38,6 @@ public interface DefConstant {
      */
     String DOC_FORMAT_ENUM = "MyEnum";
 
+    String SUCCESS = "success";
 
 }

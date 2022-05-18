@@ -6,6 +6,7 @@ import com.coral.web.core.support.converter.StringToEnumConverterFactory;
 import com.coral.web.core.support.converter.StringToLocalDate;
 import com.coral.web.core.support.converter.StringToLocalDateTime;
 import com.coral.web.core.support.converter.StringToLocalTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * @author huss
  */
+@Slf4j
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
 
@@ -35,7 +37,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(converter -> converter instanceof MappingJackson2HttpMessageConverter);
         Jackson2HttpMessageConverter jackson2HttpMessageConverter = new Jackson2HttpMessageConverter();
-        converters.add(jackson2HttpMessageConverter);
+        converters.add(0, jackson2HttpMessageConverter);
     }
 
     /**
@@ -62,11 +64,14 @@ public class WebConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("doc.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
         //springboot 集成swagger2.2后静态资源404，添加如下两行配置
+        String filePreviewPath = System.getProperty("user.dir") + "/kkfile/file/";
+        log.info(">>>>>file:{}", filePreviewPath);
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/static/", "file:" + filePreviewPath);
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
         super.addResourceHandlers(registry);
     }
 }
