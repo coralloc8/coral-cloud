@@ -1,5 +1,5 @@
 # 用户门诊病历信息查看
-GET /hospital_user_record_mz/_search
+GET /index-hospital_user_record_mz/_search
 {
   "query": {
     "bool": {
@@ -65,7 +65,7 @@ GET /hospital_user_record_mz/_search
 
 
 
-GET /hospital_user_record_mz/_search
+GET /index-hospital_user_record_mz/_search
 {
   "query": {
     "bool": {
@@ -103,14 +103,14 @@ GET /hospital_user_record_mz/_search
 }
 
 
-GET /hospital_user_record_mz/_search
+GET /index-hospital_user_record_mz/_search
 {
   "query": {
     "bool": {
       "should": [
         {
-          "wildcard": {
-            "outPatientNumber": "210*"
+          "match": {
+            "patientName.pinyin": "张心然"
           }
         }
       ]
@@ -119,8 +119,37 @@ GET /hospital_user_record_mz/_search
 }
 
 
+
+GET /index-hospital_user_record_mz/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "match_phrase": {
+            "outPatientNumber": "0080"
+          }
+        },
+        {
+          "match": {
+            "outPatientNumber.keyword": "0080"
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+GET /index-hospital_user_record_mz/_doc/4521787/_termvectors?fields=outPatientNumber
+
+
 # 查看字段分词
-GET /hospital_user_record_mz/_doc/4508756/_termvectors?fields=physicalExamine
+GET /index-hospital_user_record_mz/_doc/4508756/_termvectors?fields=physicalExamine
+
+
+
+GET /index-hospital_user_record_mz/_doc/4508756/_termvectors?fields=physicalExamine
 
 
 # 用户信息查看
@@ -157,7 +186,61 @@ GET /person/_search
 
 
 
-GET /hospital_user_record_mz/_mapping
+GET /index-hospital_user_record_mz/_mapping
+
+
+DELETE index-hospital_user_record_mz
+
+
+
+DELETE /_index_template/policy_index_template
+
+
+GET /_index_template/policy_index_template
+
+
+
+# 创建公共模板 index-*
+PUT /_index_template/policy_index_template
+{
+  "index_patterns": [
+    "index-*"
+  ],
+  "template": {
+    "settings": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
+      "max_result_window": 100000,
+      "refresh_interval": "30s",
+      "index": {
+        "search.slowlog.threshold.query.warn": "10s",
+        "search.slowlog.threshold.query.info": "5s",
+        "search.slowlog.threshold.query.debug": "2s",
+        "search.slowlog.threshold.query.trace": "500ms",
+        "search.slowlog.threshold.fetch.warn": "1s",
+        "search.slowlog.threshold.fetch.info": "800ms",
+        "search.slowlog.threshold.fetch.debug": "500ms",
+        "search.slowlog.threshold.fetch.trace": "200ms",
+        "indexing.slowlog.threshold.index.warn": "10s",
+        "indexing.slowlog.threshold.index.info": "5s",
+        "indexing.slowlog.threshold.index.debug": "2s",
+        "indexing.slowlog.threshold.index.trace": "500ms",
+        "analysis": {}
+      }
+    }
+  },
+  "priority": 500
+}
+
+
+
+
+
+
+
+
+
+
 
 GET /person
 
@@ -170,36 +253,184 @@ GET /person/_doc/1651829453162/_termvectors?fields=character
 
 
 # 默认分词
-GET _analyze
+POST _analyze
 {
   "text":"210700008008"
 }
 
-# ngram分词
-GET _analyze
+
+# 一致性hash(指纹)
+POST _analyze
 {
-  "tokenizer": "ngram",
-  "text":"中国共产党"
+  "analyzer": "fingerprint",
+  "text": "Yes yes, Gödel said this sentence is consistent and."
+}
+
+POST _analyze
+{
+  "analyzer": "fingerprint",
+  "text": "快乐新年"
+}
+
+
+# 关键字
+POST _analyze
+{
+  "analyzer": "keyword",
+  "text": "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone."
+}
+
+POST _analyze
+{
+  "analyzer": "pattern",
+  "text": "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone."
+}
+
+POST _analyze
+{
+  "tokenizer": {
+    "type":"pattern",
+    "pattern":"\\W|_",
+    "lowercase":true
+  },
+  "text": "John_Smith@foo-bar.com"
+}
+
+POST _analyze
+{
+  "tokenizer": {
+    "type": "char_group",
+    "tokenize_on_chars": [
+      "whitespace",
+      "-",
+      "\n"
+    ]
+  },
+  "text": "The QUICK brown-fox"
+}
+
+
+POST _analyze
+{
+  "tokenizer": "keyword",
+  "filter": [ "lowercase"],
+  "text": "john.SMITH@example.COM"
+}
+
+POST _analyze
+{
+  "tokenizer": "lowercase",
+  "text": "john.SMITH@example.COM"
+}
+
+
+POST _analyze
+{
+  "tokenizer": "letter",
+  "text": "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone."
+}
+
+POST _analyze
+{
+  "tokenizer": "uax_url_email",
+  "text": "Email me at john.smith@global-international.com huss@qq.com"
+}
+
+
+# ngram分词
+POST _analyze
+{
+  "tokenizer": {
+     "type": "ngram",
+      "min_gram": 3,
+      "max_gram": 4,
+      "token_chars": [
+        "letter",
+        "digit"
+      ]
+  },
+  "text": "210700008008"
+}
+
+POST _analyze
+{
+  "tokenizer": {
+    "type": "ngram",
+    "min_gram": 2,
+    "max_gram": 3,
+    "token_chars": [
+      "letter",
+      "digit"
+    ]
+  },
+  "text": "神志清，精神反应可，无皮疹，颈软，无抵抗。"
+}
+
+
+
+# edge_naram分词
+POST _analyze
+{
+  "tokenizer": {
+    "type": "edge_ngram",
+    "min_gram": 3,
+    "max_gram": 17,
+    "token_chars": [
+      "letter",
+      "digit"
+    ]
+  },
+  "text": "13662550203"
+}
+
+POST _analyze
+{
+  "tokenizer": {
+    "type": "edge_ngram",
+    "min_gram": 2,
+    "max_gram": 10,
+    "token_chars": [
+      "letter",
+      "digit"
+    ]
+  },
+  "text": "反复腹泻1周"
 }
 
 # ik_smart分词
-GET _analyze
+POST _analyze
 {
   "analyzer": "ik_smart",
   "text":"中国共产党"
 }
 
 # ik_max_word分词
-GET _analyze
+POST _analyze
 {
   "analyzer": "ik_max_word",
-  "text":"中国共产党"
+  "text":"神志清，精神反应可，无皮疹，颈软，无抵抗。口唇红润。咽红，双扁桃体1度。双肺呼吸音清，未及啰音。心音有力，律齐，未及杂音。腹软，未及包块，无压痛，肠鸣音正常。四肢肌力肌张力正常，肢端暖，CRT1秒。神经系统查体未见异常。"
 }
 
+POST _analyze
+{
+  "analyzer": "ik_max_word",
+  "text":"无发热，有咳嗽，有痰，无呕吐及腹泻。"
+}
+
+
+POST _analyze
+{
+  "analyzer": "ik_max_word",
+  "text":"腹部不适 1月 复诊"
+}
+
+
 # standard分词
-GET _analyze
+POST _analyze
 {
   "analyzer": "standard",
   "text":"中国共产党"
 }
+
+
 
