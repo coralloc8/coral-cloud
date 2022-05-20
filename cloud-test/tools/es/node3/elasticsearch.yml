@@ -1,0 +1,137 @@
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: es7
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node3
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+path.data: /data/tools/elasticsearch/node3/data
+#
+# Path to log files:
+#
+path.logs: /data/tools/elasticsearch/node3/logs
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# By default Elasticsearch is only accessible on localhost. Set a different
+# address here to expose this node on the network:
+#
+network.host: 0.0.0.0
+#
+# By default Elasticsearch listens for HTTP traffic on the first free port it
+# finds starting at 9200. Set a specific HTTP port here:
+#
+http.port: 9402
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when this node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+discovery.seed_hosts: ["127.0.0.1:19400","127.0.0.1:19401","127.0.0.1:19402"]
+#
+# Bootstrap the cluster using an initial set of master-eligible nodes:
+#
+
+#cluster.initial_master_nodes: ["node1","node2","node3"]
+
+#
+# For more information, consult the discovery and cluster formation module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+#action.destructive_requires_name: true
+#
+# ---------------------------------- Security ----------------------------------
+#
+#                                 *** WARNING ***
+#
+# Elasticsearch security features are not enabled by default.
+# These features are free, but require configuration changes to enable them.
+# This means that users don’t have to provide credentials and can get full access
+# to the cluster. Network connections are also not encrypted.
+#
+# To protect your data, we strongly encourage you to enable the Elasticsearch security features. 
+# Refer to the following documentation for instructions.
+#
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/configuring-stack-security.html
+#
+#
+
+
+## 每隔多长时间ping一个node
+###master选举/节点间通讯超时时间(这个时间的配置需要根据实际情况设置)
+discovery.zen.fd.ping_interval: 30s
+### 每次ping的超时时间
+discovery.zen.fd.ping_timeout: 120s
+### 一个node被ping多少次失败就认为是故障了
+discovery.zen.fd.ping_retries: 6
+###集群脑裂问题参数配置
+### elasticsearch则可以配置返回消息的节点数量, 一般情况下会配置(n/2 + 1)个节点
+discovery.zen.minimum_master_nodes: 2
+### 多少个节点启动后就可以组成集群
+gateway.recover_after_nodes: 2
+### 期望多少个节点联通之后才开始分配shard
+gateway.expected_nodes: 2
+### 超时时间
+#gateway.recover_after_time: 1m
+node.master: true
+node.data: true
+node.ingest: true
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+
+transport.port: 19402
+
+
+
+http.cors.allow-headers: Authorization,X-Requested-With,Content-Length,Content-Type
+xpack.security.enabled: true
+xpack.license.self_generated.type: basic
+xpack.security.transport.ssl.enabled: true
+
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: elastic-certificates.p12
+
