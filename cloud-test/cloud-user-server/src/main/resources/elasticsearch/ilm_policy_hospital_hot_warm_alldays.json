@@ -1,0 +1,28 @@
+// PUT /_ilm/policy/ilm_hospital_hot_warm_alldays.json
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_age": "30d",
+            "max_primary_shard_size": "50gb",
+            "max_docs": 2
+          },
+          "set_priority": {
+            "priority": 100
+          }
+        },
+        "min_age": "0ms"
+      },
+      "warm": {
+        "min_age": "7d",
+        "actions": {
+          "set_priority": {
+            "priority": 50
+          }
+        }
+      }
+    }
+  }
+}

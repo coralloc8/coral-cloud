@@ -3,7 +3,7 @@ package com.coral.cloud.user;
 import com.coral.base.common.DateTimeUtil;
 import com.coral.base.common.json.JsonUtil;
 import com.coral.base.common.reflection.LambdaFieldUtil;
-import com.coral.cloud.user.entity.HospitalUserRecordMzDocument;
+import com.coral.cloud.user.entity.userrecord.HospitalUserRecordMzSearchDocument;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
@@ -24,14 +24,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -76,11 +69,11 @@ public class ElasticService {
 
     @BeforeEach
     void init() {
-        nowMedicalHistoryKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getNowMedicalHistory);
-        mainSuitKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getMainSuit);
-        idKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getId);
-        createTimeKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getCreateTime);
-        outPatientTimeKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getOutPatientTime);
+        nowMedicalHistoryKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getNowMedicalHistory);
+        mainSuitKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getMainSuit);
+        idKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getId);
+        createTimeKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getCreateTime);
+        outPatientTimeKey = LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getOutPatientTime);
     }
 
 
@@ -132,7 +125,7 @@ public class ElasticService {
         log.info(">>>>>highlight dsl:\n{}", query.getHighlightFields());
         log.info(">>>>>page dsl:\n{}", query.getPageable());
 
-        SearchHits<HospitalUserRecordMzDocument> documentSearchHits = elasticsearchRestTemplate.search(query, HospitalUserRecordMzDocument.class);
+        SearchHits<HospitalUserRecordMzSearchDocument> documentSearchHits = elasticsearchRestTemplate.search(query, HospitalUserRecordMzSearchDocument.class);
         documentSearchHits.forEach(System.out::println);
     }
 
@@ -162,7 +155,7 @@ public class ElasticService {
                 .build();
         log.info(">>>>>query dsl:\n{}", query.getQuery());
 
-        SearchHits<HospitalUserRecordMzDocument> hits = elasticsearchRestTemplate.search(query, HospitalUserRecordMzDocument.class);
+        SearchHits<HospitalUserRecordMzSearchDocument> hits = elasticsearchRestTemplate.search(query, HospitalUserRecordMzSearchDocument.class);
 
         hits.forEach(System.out::println);
     }
@@ -176,8 +169,8 @@ public class ElasticService {
     public void query3() {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
                 .must(QueryBuilders.multiMatchQuery("8008",
-                                LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getOutPatientNumber),
-                                LambdaFieldUtil.getFieldName(HospitalUserRecordMzDocument::getOutPatientNo)
+                                LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getOutPatientNumber),
+                                LambdaFieldUtil.getFieldName(HospitalUserRecordMzSearchDocument::getOutPatientNo)
                         )
                 );
 
@@ -187,12 +180,10 @@ public class ElasticService {
 
         log.info(">>>>>query dsl:\n{}", query.getQuery());
 
-        SearchHits<HospitalUserRecordMzDocument> hits = elasticsearchRestTemplate.search(query, HospitalUserRecordMzDocument.class);
+        SearchHits<HospitalUserRecordMzSearchDocument> hits = elasticsearchRestTemplate.search(query, HospitalUserRecordMzSearchDocument.class);
 
         hits.forEach(System.out::println);
     }
-
-
 
 
 }

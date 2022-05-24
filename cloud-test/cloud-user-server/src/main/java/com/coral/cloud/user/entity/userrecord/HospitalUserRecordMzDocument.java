@@ -1,4 +1,4 @@
-package com.coral.cloud.user.entity;
+package com.coral.cloud.user.entity.userrecord;
 
 import com.coral.cloud.user.common.constants.IkConstant;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author huss
  * @version 1.0
  * @className HospitalUserRecordMzDocument
- * @description 用户门诊记录文档
+ * @description 用户门诊记录文档 索引创建
  * @date 2022/5/9 14:42
  */
 @Data
@@ -21,15 +21,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setting(settingPath = "elasticsearch/index-hospital_user_record_mz-setting.json")
 @Mapping(mappingPath = "elasticsearch/index-hospital_user_record_mz-mapping.json")
-@Document(indexName = "index-hospital_user_record_mz")
+@Document(indexName = "#{@documentIndex.hospitalUserRecordMz.initIndex}")
 public class HospitalUserRecordMzDocument {
-
     /**
      * 主键id
      */
     @Id
     private Long id;
-
     /**
      * 医院编码
      */
@@ -52,23 +50,19 @@ public class HospitalUserRecordMzDocument {
      * 门诊号
      */
     private String outPatientNumber;
-
     /**
      * 患者名称
      */
     private String patientName;
-
     /**
      * 就诊流水号
      */
     private String outPatientNo;
-
     /**
      * 就诊时间
      */
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     private LocalDateTime outPatientTime;
-
     /**
      * 初步诊断
      */

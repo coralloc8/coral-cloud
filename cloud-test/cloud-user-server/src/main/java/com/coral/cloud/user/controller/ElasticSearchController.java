@@ -3,10 +3,11 @@ package com.coral.cloud.user.controller;
 import com.coral.base.common.IOUtil;
 import com.coral.base.common.json.JsonUtil;
 import com.coral.cloud.user.common.constants.DefConstant;
-import com.coral.cloud.user.entity.HospitalUserRecordMzDocument;
 import com.coral.cloud.user.entity.PersonDocument;
-import com.coral.cloud.user.repository.HospUserRecordMzRepository;
+import com.coral.cloud.user.entity.userrecord.HospitalUserRecordMzWriteDocument;
+import com.coral.cloud.user.repository.HospUserRecordMzSearchRepository;
 import com.coral.cloud.user.repository.PersonRepository;
+import com.coral.cloud.user.service.HospitalUserRecordMzWriteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,10 @@ public class ElasticSearchController implements ElasticSearchApi {
     private PersonRepository repository;
 
     @Autowired
-    private HospUserRecordMzRepository hospUserRecordMzRepository;
+    private HospUserRecordMzSearchRepository hospUserRecordMzSearchRepository;
+
+    @Autowired
+    private HospitalUserRecordMzWriteService hospitalUserRecordMzWriteService;
 
 
     /**
@@ -68,7 +72,8 @@ public class ElasticSearchController implements ElasticSearchApi {
         String jsonPath = "/mock/hospital_user_record_mz.json";
         try {
             String json = IOUtil.readStream(this.getClass().getResourceAsStream(jsonPath));
-            hospUserRecordMzRepository.saveAll(JsonUtil.parseArray(json, HospitalUserRecordMzDocument.class));
+            hospitalUserRecordMzWriteService.save(JsonUtil.parseArray(json, HospitalUserRecordMzWriteDocument.class));
+//            hospitalUserRecordMzWriteService.save2(JsonUtil.parseArray(json, HospitalUserRecordMzWriteDocument.class));
         } catch (IOException e) {
             log.error(">>>>>解析数据异常", e);
         }

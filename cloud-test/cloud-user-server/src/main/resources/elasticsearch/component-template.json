@@ -1,9 +1,5 @@
-// PUT /_index_template/policy_index_template
-
+// PUT /_component_template/ct_default
 {
-  "index_patterns": [
-    "index-*"
-  ],
   "template": {
     "settings": {
       "number_of_shards": 3,
@@ -26,6 +22,5 @@
         "analysis": {}
       }
     }
-  },
-  "priority": 500
+  }
 }

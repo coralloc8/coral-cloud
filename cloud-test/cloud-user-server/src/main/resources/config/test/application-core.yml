@@ -88,3 +88,12 @@ spring:
         max-idle: 8
         min-idle: 0
 
+# es index配置
+elasticsearch:
+  index:
+    # 医院用户门诊病历记录
+    hospital-user-record-mz:
+      prefix: hospital_user_record_mz
+#      search: hospital_user_record_mz-search
+#      write: hospital_user_record_mz-write
+#      init-index: <index-hospital_user_record_mz-{now/d}-1>

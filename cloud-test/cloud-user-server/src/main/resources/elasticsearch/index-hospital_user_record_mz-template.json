@@ -1,0 +1,22 @@
+// PUT /_index_template/it_hospital_user_record_mz
+{
+  "index_patterns": [
+    "index-hospital_user_record_mz-*"
+  ],
+  "template": {
+    "mappings": {},
+    "settings": {
+      "lifecycle": {
+        "name": "ilm_hospital_hot_warm_alldays",
+        "rollover_alias": "hospital_user_record_mz-write"
+      }
+    },
+    "aliases": {
+      "hospital_user_record_mz-search": {}
+    }
+  },
+  "composed_of": [
+    "ct_default"
+  ],
+  "priority": 500
+}
