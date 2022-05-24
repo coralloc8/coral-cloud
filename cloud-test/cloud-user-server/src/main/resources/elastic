@@ -152,6 +152,9 @@ GET /index-hospital_user_record_mz/_doc/4508756/_termvectors?fields=physicalExam
 GET /index-hospital_user_record_mz/_doc/4508756/_termvectors?fields=physicalExamine
 
 
+GET /hospital_user_record_mz-write/_mapping
+
+
 # 用户信息查看
 GET /person/_search
 {
@@ -186,26 +189,48 @@ GET /person/_search
 
 
 
-GET /index-hospital_user_record_mz/_mapping
 
 
-DELETE index-hospital_user_record_mz
+GET /_ilm/policy/ilm_hospital_hot_warm_alldays
 
-
-
-DELETE /_index_template/policy_index_template
-
-
-GET /_index_template/policy_index_template
-
-
-
-# 创建公共模板 index-*
-PUT /_index_template/policy_index_template
+# 索引生命周期策略 热温 永久保存
+PUT /_ilm/policy/ilm_hospital_hot_warm_alldays
 {
-  "index_patterns": [
-    "index-*"
-  ],
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_age": "30d",
+            "max_primary_shard_size": "50gb",
+            "max_docs": 2
+          },
+          "set_priority": {
+            "priority": 100
+          }
+        },
+        "min_age": "0ms"
+      },
+      "warm": {
+        "min_age": "7d",
+        "actions": {
+          "set_priority": {
+            "priority": 50
+          }
+        }
+      }
+    }
+  }
+}
+
+
+GET /_component_template/ct_default
+
+DELETE /_component_template/ct_default
+
+# 创建公共组件模板
+PUT /_component_template/ct_default
+{
   "template": {
     "settings": {
       "number_of_shards": 3,
@@ -228,14 +253,36 @@ PUT /_index_template/policy_index_template
         "analysis": {}
       }
     }
-  },
-  "priority": 500
+  }
 }
 
+GET /_index_template/it_hospital_user_record_mz
 
+DELETE /_index_template/it_hospital_user_record_mz
 
-
-
+# it_hospital_user_record_mz 索引创建
+PUT /_index_template/it_hospital_user_record_mz
+{
+  "index_patterns": [
+    "index-hospital_user_record_mz-*"
+  ],
+  "template": {
+    "mappings": {},
+    "settings": {
+      "lifecycle": {
+        "name": "ilm_hospital_hot_warm_alldays",
+        "rollover_alias": "hospital_user_record_mz-write"
+      }
+    },
+    "aliases": {
+      "hospital_user_record_mz-search": {}
+    }
+  },
+  "composed_of": [
+    "ct_default"
+  ],
+  "priority": 500
+}
 
 
 
