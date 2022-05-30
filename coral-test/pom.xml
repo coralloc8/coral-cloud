@@ -17,5 +17,6 @@
         <module>contract-server</module>
         <module>contract-Client</module>
         <module>opendoc</module>
+        <module>copilot</module>
     </modules>
 </project>
