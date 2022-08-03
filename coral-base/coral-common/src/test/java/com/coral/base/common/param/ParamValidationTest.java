@@ -1,7 +1,8 @@
 package com.coral.base.common.param;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import com.coral.base.common.NameStyleUtil;
+import lombok.Data;
+import org.hibernate.validator.HibernateValidator;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
@@ -12,11 +13,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.metadata.ConstraintDescriptor;
-
-import com.coral.base.common.NameStyleUtil;
-import org.hibernate.validator.HibernateValidator;
-
-import lombok.Data;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * @description: TODO
@@ -29,10 +27,10 @@ public class ParamValidationTest {
         Person person = new Person();
 
         Validator validator = Validation.byProvider(HibernateValidator.class)//
-            .configure()//
-            .failFast(false)//
-            .buildValidatorFactory()//
-            .getValidator();
+                .configure()//
+                .failFast(false)//
+                .buildValidatorFactory()//
+                .getValidator();
 
         Set<ConstraintViolation<Person>> results = validator.validate(person);
 
@@ -48,8 +46,7 @@ public class ParamValidationTest {
         if (constraintViolation == null) {
             return "";
         }
-        String className =
-            NameStyleUtil.humpToLine(constraintViolation.getRootBeanClass().getName());
+        String className = NameStyleUtil.humpToLine(constraintViolation.getRootBeanClass().getName());
 
         ConstraintDescriptor<?> constraintDescriptor = constraintViolation.getConstraintDescriptor();
         Annotation annotation = constraintDescriptor.getAnnotation();

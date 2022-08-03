@@ -4,6 +4,7 @@ import com.coral.base.common.http.response.ErrorResponse;
 import com.coral.cloud.user.common.constants.ApiVersion;
 import com.coral.cloud.user.common.errormsg.UserErrorMessageDesc;
 import com.coral.cloud.user.dto.UserSaveDTO;
+import com.coral.cloud.user.vo.MonitorVO;
 import com.coral.cloud.user.vo.UserInfoVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -99,4 +100,19 @@ public interface UserApi {
             @Parameter(name = "userNo", description = "用户编码"),
     })
     ResponseEntity<UserInfoVO> updateUser(String userNo, UserSaveDTO userSaveDTO);
+
+
+    /**
+     * prometheus监控
+     *
+     * @return
+     */
+    @Operation(summary = "prometheus监控", description = "prometheus监控", tags = {ApiVersion.V_1_0_0})
+    @ApiResponses({
+            @ApiResponse(description = "success",
+                    responseCode = "200",
+                    content = @Content(
+                            schema = @Schema(implementation = MonitorVO.class))),
+    })
+    ResponseEntity<MonitorVO> prometheusCustomMonitor();
 }

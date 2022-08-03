@@ -97,3 +97,16 @@ elasticsearch:
 #      search: hospital_user_record_mz-search
 #      write: hospital_user_record_mz-write
 #      init-index: <index-hospital_user_record_mz-{now/d}-1>
+
+# 监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}

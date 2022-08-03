@@ -18,5 +18,6 @@
         <module>contract-Client</module>
         <module>opendoc</module>
         <module>copilot</module>
+        <module>hanlp</module>
     </modules>
 </project>

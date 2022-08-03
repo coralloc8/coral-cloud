@@ -1,5 +1,6 @@
 package com.coral.cloud.user.controller;
 
+import com.coral.base.common.RandomUtil;
 import com.coral.base.common.exception.SystemRuntimeException;
 import com.coral.cloud.user.common.config.UserProperty;
 import com.coral.cloud.user.common.errormsg.UserErrorMessage;
@@ -7,7 +8,9 @@ import com.coral.cloud.user.dto.UserSaveDTO;
 import com.coral.cloud.user.event.producer.UserCreateProducer;
 import com.coral.cloud.user.event.producer.UserModifyMessage;
 import com.coral.cloud.user.event.producer.UserModifyProducer;
+import com.coral.cloud.user.service.PrometheusCustomMonitor;
 import com.coral.cloud.user.service.UserService;
+import com.coral.cloud.user.vo.MonitorVO;
 import com.coral.cloud.user.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,10 @@ public class UserController implements UserApi {
 
     @Autowired
     private UserCreateProducer userCreateProducer;
+
+
+    @Autowired
+    private PrometheusCustomMonitor prometheusCustomMonitor;
 
 
     static {
@@ -108,6 +115,28 @@ public class UserController implements UserApi {
                     return ResponseEntity.ok(user);
                 })
                 .orElseThrow(() -> new SystemRuntimeException(UserErrorMessage.USER_NOT_EXIST));
+    }
+
+    @PostMapping("/monitor")
+    @Override
+    public ResponseEntity<MonitorVO> prometheusCustomMonitor() {
+        MonitorVO.MonitorVOBuilder builder = MonitorVO.builder();
+        int number = RandomUtil.buildRandom(5);
+        prometheusCustomMonitor.addMonitorGaugeTotal(number);
+        prometheusCustomMonitor.addCounter();
+        int summaryNumber = RandomUtil.buildRandom(3);
+        prometheusCustomMonitor.addSummary(summaryNumber);
+
+        builder.counterNumber(Double.valueOf(number))
+                .gaugeNumber(prometheusCustomMonitor.getMonitorGaugeTotal())
+                .summaryNumber(Double.valueOf(summaryNumber))
+                .summaryCount(prometheusCustomMonitor.getSummaryCount())
+                .summaryTotalAmount(prometheusCustomMonitor.getSummaryTotalAmount())
+                .summaryMean(prometheusCustomMonitor.getSummaryMean())
+                .summaryMax(prometheusCustomMonitor.getSummaryMax())
+        ;
+
+        return ResponseEntity.ok(builder.build());
     }
 
 

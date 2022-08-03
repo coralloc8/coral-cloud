@@ -2,6 +2,8 @@ package com.coral.base.common;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -46,15 +48,24 @@ public class IOUtil {
 
     public static String readStream(InputStream inputStream) throws IOException {
         Objects.requireNonNull(inputStream);
-        StringBuilder stringBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-
             return br.lines().collect(Collectors.joining("\n"));
         } catch (IOException ioe) {
-            // return getKeyFromAuthorizationServer();
             log.error("error:", ioe);
             return "";
         }
+
+    }
+
+    public static List<String> readStreamAsArray(InputStream inputStream) throws IOException {
+        Objects.requireNonNull(inputStream);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            return br.lines().collect(Collectors.toList());
+        } catch (IOException ioe) {
+            log.error("error:", ioe);
+
+        }
+        return Collections.emptyList();
 
     }
 }

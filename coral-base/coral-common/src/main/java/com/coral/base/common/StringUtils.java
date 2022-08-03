@@ -24,8 +24,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
 
-    public  static <T> T convert(Object obj,Class<T> clazz) {
-       return (T)obj;
+    public static <T> T convert(Object obj, Class<T> clazz) {
+        return (T) obj;
     }
 
     /**
@@ -87,4 +87,28 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             return false;
         }
     }
+
+    /**
+     * 是否是数字
+     *
+     * @param letter
+     * @return
+     */
+    public static boolean isNumber(String letter) {
+        if (isBlank(letter)) {
+            return false;
+        }
+
+        if (letter.startsWith(StringPool.DASH) || letter.startsWith(StringPool.PLUS)) {
+            letter = letter.substring(1);
+        }
+
+        if (letter.indexOf(StringPool.DOT) < 0) {
+            return isNumeric(letter);
+        } else {
+            String[] letters = letter.split(StringPool.BACK_SLASH + StringPool.DOT);
+            return isNumeric(letters[0]) && isNumeric(letters[1]);
+        }
+    }
+
 }
