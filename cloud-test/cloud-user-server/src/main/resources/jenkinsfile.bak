@@ -1,0 +1,124 @@
+
+// 获取分支名称
+def BranchName(branch) {
+    if(branch) {
+        return branch.replaceAll("origin/", "")
+    }
+    return ""
+}
+
+pipeline {
+    agent any
+
+    environment {
+        CREDENTIALS_ID = "151c000b-2fcc-4f33-8db4-4498174660cd"
+
+        //表单配置
+        GIT_URL_SURVEY = "http://ssm.ebmsz.com/zhyx/alpha/code/server/zhyx-survey.git"
+        DEPLOY_PATH_SURVEY = "/data/deploy/zhyx-survey"
+        CONFIG_NAME_SURVEY = "诊后预问诊开发环境"
+
+        EXEC_COMMAND_PATH_SURVEY = "/data/service/survey/zhyx-service-survey/survey-server.sh"
+        REMOTE_DIRECTORY_PATH_SURVEY = "service/survey/zhyx-service-survey"
+        REMOVE_PREFIX_PATH_SURVEY = "zhyx-service-survey/target"
+        SOURCE_FILES_PATH_SURVEY = "zhyx-service-survey/target/zhyx-service-survey.jar,zhyx-service-survey/target/lib/*"
+
+        //表单医生端配置
+        GIT_URL_SURVEY_DOC = "http://ssm.ebmsz.com/zhyx/alpha/code/server/zhyx-hospital-manage.git"
+        DEPLOY_PATH_SURVEY_DOC = "/data/deploy/zhyx-hospital-manage"
+        CONFIG_NAME_SURVEY_DOC = "诊后预问诊开发环境"
+
+        EXEC_COMMAND_PATH_SURVEY_DOC = "/data/service/survey-hospital/zhyx-hospital-manage/zhyx-hospital-manage.sh"
+        REMOTE_DIRECTORY_PATH_SURVEY_DOC = "service/survey-hospital/zhyx-hospital-manage"
+        REMOVE_PREFIX_PATH_SURVEY_DOC = "manage-admin/target"
+        SOURCE_FILES_PATH_SURVEY_DOC = "manage-admin/target/zhyx-hospital-manage.jar,manage-admin/target/lib/*"
+
+
+    }
+
+    parameters {
+        gitParameter branch: '', branchFilter: 'origin/(.*)', defaultValue: 'origin/master', description: '表单分支', name: 'branch_survey', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH'
+        gitParameter branch: '', branchFilter: 'origin/(.*)', defaultValue: 'origin/master', description: '表单医生端分支', name: 'branch_survey_doc', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH'
+        extendedChoice defaultValue: 'survey_build,survey_deploy,survey_doc_build,survey_doc_deploy', description: '流程发布', descriptionPropertyValue: '表单打包,表单发布,表单医生端打包,表单医生端发布', multiSelectDelimiter: ',', name: 'steps', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_CHECKBOX', value: 'survey_build,survey_deploy,survey_doc_build,survey_doc_deploy', visibleItemCount: 5
+
+    }
+
+    options {
+        timestamps()
+        //禁用Jenkins同时执行多次该pipeline
+        disableConcurrentBuilds()
+        //pipeline运行超时时间
+        timeout(time: 20, unit: 'MINUTES')
+        //保留最近历史构建记录的数量
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+        //重试次数
+        retry(3)
+    }
+
+    stages {
+
+
+        stage('Survey deploy.') {
+            when {
+                expression { params.steps.contains("survey_deploy")}
+            }
+
+            steps {
+                // 发布需要的入参
+                script {
+                    configName = CONFIG_NAME_SURVEY
+                    execCommand = EXEC_COMMAND_PATH_SURVEY
+                    remoteDirectory = REMOTE_DIRECTORY_PATH_SURVEY
+                    removePrefix = REMOVE_PREFIX_PATH_SURVEY
+                    sourceFiles = SOURCE_FILES_PATH_SURVEY
+                }
+
+                dir(DEPLOY_PATH_SURVEY) {
+                    sshPublisher(publishers: [sshPublisherDesc(configName: "${configName}", transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "${execCommand}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: "${remoteDirectory}", remoteDirectorySDF: false, removePrefix: "${removePrefix}", sourceFiles: "${sourceFiles}")], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+                }
+
+
+            }
+            post {
+                success {
+                   echo 'Survey deploy success!'
+                }
+            }
+
+        }
+
+        stage('Survey doctor manage deploy.') {
+            when {
+                expression { params.steps.contains("survey_doc_deploy")}
+            }
+            steps {
+                // 发布需要的入参
+                script {
+                    configName = CONFIG_NAME_SURVEY_DOC
+                    execCommand = EXEC_COMMAND_PATH_SURVEY_DOC
+                    remoteDirectory = REMOTE_DIRECTORY_PATH_SURVEY_DOC
+                    removePrefix = REMOVE_PREFIX_PATH_SURVEY_DOC
+                    sourceFiles = SOURCE_FILES_PATH_SURVEY_DOC
+                }
+
+               dir(DEPLOY_PATH_SURVEY_DOC) {
+                   sshPublisher(publishers: [sshPublisherDesc(configName: "${configName}", transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "${execCommand}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: "${remoteDirectory}", remoteDirectorySDF: false, removePrefix: "${removePrefix}", sourceFiles: "${sourceFiles}")], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+               }
+
+            }
+            post {
+                success {
+                   echo 'Survey doctor manage deploy success!'
+                }
+            }
+
+        }
+
+
+
+
+    }
+
+
+
+}
