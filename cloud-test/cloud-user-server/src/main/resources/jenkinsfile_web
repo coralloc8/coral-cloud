@@ -12,29 +12,31 @@ pipeline {
 
     environment {
 
-		PACKAGE_ENV = "dev"
-
-        CREDENTIALS_ID = "151c000b-2fcc-4f33-8db4-4498174660cd"
+        CREDENTIALS_ID = "8afd47f2-cf1e-4df0-87fd-8c1331ed1212"
 
         //表单配置
-        GIT_URL_SURVEY = "http://ssm.ebmsz.com/zhyx/alpha/code/server/zhyx-survey.git"
-        DEPLOY_PATH_SURVEY = "/data/deploy/zhyx-survey"
+        GIT_URL_SURVEY = "http://ssm.ebmsz.com/zhyx/alpha/code/web/zhyx-form-admin.git"
+        DEPLOY_PATH_SURVEY = "/data/deploy/zhyx-form-admin_web"
         CONFIG_NAME_SURVEY = "诊后预问诊开发环境"
 
-        EXEC_COMMAND_PATH_SURVEY = "/data/service/survey/zhyx-service-survey/survey-server.sh"
-        REMOTE_DIRECTORY_PATH_SURVEY = "service/survey/zhyx-service-survey"
-        REMOVE_PREFIX_PATH_SURVEY = "zhyx-service-survey/target"
-        SOURCE_FILES_PATH_SURVEY = "zhyx-service-survey/target/zhyx-service-survey.jar,zhyx-service-survey/target/lib/*"
+        EXEC_COMMAND_PATH_SURVEY = "/data/deploy/zhyx-form-admin_web/deploy.sh"
+        REMOTE_DIRECTORY_PATH_SURVEY = "deploy/zhyx-form-admin_web"
+        REMOVE_PREFIX_PATH_SURVEY = ""
+        SOURCE_FILES_PATH_SURVEY = "dist.tar.gz"
 
         //表单医生端配置
-        GIT_URL_SURVEY_DOC = "http://ssm.ebmsz.com/zhyx/alpha/code/server/zhyx-hospital-manage.git"
-        DEPLOY_PATH_SURVEY_DOC = "/data/deploy/zhyx-hospital-manage"
+        GIT_URL_SURVEY_DOC = "http://ssm.ebmsz.com/zhyx/alpha/code/web/zhyx-form-hospital.git"
+        DEPLOY_PATH_SURVEY_DOC = "/data/deploy/zhyx-form-hospital_web"
         CONFIG_NAME_SURVEY_DOC = "诊后预问诊开发环境"
 
-        EXEC_COMMAND_PATH_SURVEY_DOC = "/data/service/survey-hospital/zhyx-hospital-manage/zhyx-hospital-manage.sh"
-        REMOTE_DIRECTORY_PATH_SURVEY_DOC = "service/survey-hospital/zhyx-hospital-manage"
-        REMOVE_PREFIX_PATH_SURVEY_DOC = "manage-admin/target"
-        SOURCE_FILES_PATH_SURVEY_DOC = "manage-admin/target/zhyx-hospital-manage.jar,manage-admin/target/lib/*"
+        EXEC_COMMAND_PATH_SURVEY_DOC = "/data/deploy/zhyx-form-hospital_web/deploy.sh"
+        REMOTE_DIRECTORY_PATH_SURVEY_DOC = "deploy/zhyx-form-hospital_web"
+        REMOVE_PREFIX_PATH_SURVEY_DOC = ""
+        SOURCE_FILES_PATH_SURVEY_DOC = "dist.tar.gz"
+
+        // 发布流程
+        STEP_LIST = "survey_web_build,survey_web_deploy,survey_doc_web_build,survey_doc_web_deploy"
+        STEP_DESC_LIST = "表单前端打包,表单前端发布,表单医生端前端打包,表单医生端前端发布"
 
 
     }
@@ -42,7 +44,7 @@ pipeline {
     parameters {
         gitParameter branch: '', branchFilter: 'origin/(.*)', defaultValue: 'origin/master', description: '表单分支', name: 'branch_survey', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH'
         gitParameter branch: '', branchFilter: 'origin/(.*)', defaultValue: 'origin/master', description: '表单医生端分支', name: 'branch_survey_doc', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH'
-        extendedChoice defaultValue: 'survey_build,survey_deploy,survey_doc_build,survey_doc_deploy', description: '流程发布', descriptionPropertyValue: '表单打包,表单发布,表单医生端打包,表单医生端发布', multiSelectDelimiter: ',', name: 'steps', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_CHECKBOX', value: 'survey_build,survey_deploy,survey_doc_build,survey_doc_deploy', visibleItemCount: 5
+        extendedChoice defaultValue: "survey_web_build,survey_web_deploy,survey_doc_web_build,survey_doc_web_deploy", description: '流程发布', descriptionPropertyValue: "表单前端打包,表单前端发布,表单医生端前端打包,表单医生端前端发布", multiSelectDelimiter: ',', name: 'steps', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_CHECKBOX', value: "survey_web_build,survey_web_deploy,survey_doc_web_build,survey_doc_web_deploy", visibleItemCount: 5
     }
 
     options {
@@ -59,10 +61,10 @@ pipeline {
 
     stages {
 
-        // 表单部署
-        stage('Survey build.') {
+        // 表单前端部署
+        stage('Survey web build.') {
             when {
-                expression { params.steps.contains("survey_build")}
+                expression { params.steps.contains("survey_web_build")}
             }
             steps {
                 script {
@@ -82,20 +84,33 @@ pipeline {
                     // Get some code from a GitHub repository
                     git branch: "${branch}", credentialsId: CREDENTIALS_ID, url: GIT_URL_SURVEY
 
-                    sh "mvn clean package -pl zhyx-service-survey -am  -P ${PACKAGE_ENV} -Dmaven.test.skip=true"
+                    sh """
+                        echo $PATH
+                        node -v
+                        npm -v
+
+                        # 项目编译
+                        npm install
+                        npm run build
+
+                        # 压缩包
+                        echo "=====开始打包dist..."
+                        # tar -zcvf dist.tar.gz --exclude=h5_config.js dist/*
+
+                    """
                 }
 
             }
             post {
                 success {
-                   echo 'Survey build success!'
+                   echo 'Survey web build success!'
                 }
             }
         }
 
-        stage('Survey deploy.') {
+        stage('Survey web deploy.') {
             when {
-                expression { params.steps.contains("survey_deploy")}
+                expression { params.steps.contains("survey_web_deploy")}
             }
             steps {
                 // 发布需要的入参
@@ -115,17 +130,17 @@ pipeline {
             }
             post {
                 success {
-                   echo 'Survey deploy success!'
+                   echo 'Survey web deploy success!'
                 }
             }
 
         }
 
 
-        // 表单医生端部署
-        stage('Survey doctor manage build.') {
+        // 表单医生端前端部署
+        stage('Survey doctor manage web build.') {
             when {
-                expression { params.steps.contains("survey_doc_build")}
+                expression { params.steps.contains("survey_doc_web_build")}
             }
             steps {
                 script {
@@ -151,14 +166,14 @@ pipeline {
             }
             post {
                 success {
-                   echo 'Survey doctor manage build success!'
+                   echo 'Survey doctor manage web build success!'
                 }
             }
         }
 
-        stage('Survey doctor manage deploy.') {
+        stage('Survey doctor manage web deploy.') {
             when {
-                expression { params.steps.contains("survey_doc_deploy")}
+                expression { params.steps.contains("survey_doc_web_deploy")}
             }
             steps {
                 // 发布需要的入参
@@ -177,7 +192,7 @@ pipeline {
             }
             post {
                 success {
-                   echo 'Survey doctor manage deploy success!'
+                   echo 'Survey doctor manage web deploy success!'
                 }
             }
 
