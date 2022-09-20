@@ -1,6 +1,8 @@
 package com.coral.base.common.aviator;
 
+import com.coral.base.common.ScoreUtil;
 import com.coral.base.common.aviator.function.InFunction;
+import com.coral.base.common.aviator.function.PowFunction;
 import com.coral.base.common.aviator.function.QuestionAnswerFunction;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
@@ -131,4 +133,47 @@ public class AviatorTest {
         result = (Boolean) compileExp.execute(env);
         System.out.println(result);
     }
+
+    @Test
+    @DisplayName("test9")
+    public void test9() {
+        AviatorEvaluator.addFunction(new PowFunction());
+        /**
+         * 3、输入框内设置的字母为自然数（如：π，e等）
+         * 4、定义计算符号（+、（）、-、/、*、^、%、√）
+         */
+
+        String str = "{2 * [ 2 *2 + (2+5)]}";
+
+        System.out.println("替换前:" + str);
+
+        str = ScoreUtil.parse(str);
+        System.out.println("替换后:" + str);
+
+        Long result = (Long) AviatorEvaluator.execute(str);
+        System.out.println("结果：" + result);
+
+        Double result2 = (Double) AviatorEvaluator.execute("pow(2,(3+5))");
+        System.out.println(result2);
+
+        String str2 = " (1 + e^(6.8272 + (0.0391×年龄) + (0.7917×吸烟史) + (1.3388×恶性肿瘤史) + (0.1274×直径) + (1.040×肺结节影像学特征) + (0.7838×位置) )";
+
+
+        str2 = ScoreUtil.parse(str2);
+        System.out.println("替换后:" + str2);
+
+        String str4 = " e^(6.8272 + (0.0391×年龄) + (0.7917×吸烟史) + (1.3388×恶性肿瘤史) + (0.1274×直径) + (1.040×肺结节影像学特征) + (0.7838×位置) )" +
+                " * (1 + e ^ (6.8272 + (0.0391×年龄) + (0.7917×吸烟史) + (1.3388×恶性肿瘤史) + (0.1274×直径) + (1.040×肺结节影像学特征) + (0.7838×位置) ) )" +
+                " * (1 + ((2+3 )* 5) ^ (6.8272 + (0.0391×年龄) + (0.7917×吸烟史) + (1.3388×恶性肿瘤史) + (0.1274×直径) + (1.040×肺结节影像学特征) + (0.7838×位置) ))" +
+                " * (2^34)" +
+                "* ((2+3)*5^2*(3)+(Q1+Q23) )" +
+                "* ((Q11+23) * 23√(1+2*(2+3)/23+(Q34)) )";
+        System.out.println("result: " + ScoreUtil.parse(str4));
+
+
+        Double result23 = (Double) AviatorEvaluator.execute("math.pow(8,1.0/3)");
+        System.out.println(result23);
+    }
+
+
 }
