@@ -49,6 +49,7 @@ public class ScoreUtil {
      */
     public static String parse(String str) {
         String param = format(str);
+        System.out.println("param:" + param);
         param = extract(param);
         param = pow(param);
         return param;
@@ -152,6 +153,8 @@ public class ScoreUtil {
         return StringUtils.isBlank(str) ? "" :
                 str.replaceAll("[\\{\\[【（]", LEFT_BRACKET)
                         .replaceAll("[\\}\\]】）]", RIGHT_BRACKET)
+                        .replaceAll("e", String.valueOf(Math.E))
+                        .replaceAll("π", String.valueOf(Math.PI))
                         .replaceAll(" ", "");
     }
 
@@ -165,12 +168,17 @@ public class ScoreUtil {
     private static int rightIndex(String str) {
         int index = 0;
         if (!str.startsWith(LEFT_BRACKET)) {
+            boolean matched = false;
             for (int i = 0, size = str.length(); i < size; i++) {
                 char c = str.charAt(i);
                 if (OPERATOR.contains(String.valueOf(c))) {
                     index = i - 1;
+                    matched = true;
                     break;
                 }
+            }
+            if (!matched) {
+                index = str.length() - 1;
             }
         } else {
             index = calLeftToRightIndex(str, index);
@@ -188,13 +196,19 @@ public class ScoreUtil {
         int maxIndex = str.length();
         int index = maxIndex - 1;
         if (!str.endsWith(RIGHT_BRACKET)) {
+            boolean matched = false;
             for (int i = maxIndex - 1; i >= 0; i--) {
                 char c = str.charAt(i);
                 if (OPERATOR.contains(String.valueOf(c))) {
                     index = i + 1;
+                    matched = true;
                     break;
                 }
             }
+            if (!matched) {
+                index = 0;
+            }
+
         } else {
             index = calRightToLeftIndex(str, index);
         }
