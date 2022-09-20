@@ -19,8 +19,8 @@ public class QuestionAnswerFunction extends AbstractFunction {
     @Override
     public AviatorObject call(Map<String, Object> env, AviatorObject arg1) {
         System.out.println(arg1);
-        String key = FunctionUtils.getStringValue(arg1, env);
-        Integer left = (Integer) env.get(key);
+        Number key = FunctionUtils.getNumberValue(arg1, env);
+        Integer left = (Integer) env.get(key.toString());
         return AviatorLong.valueOf(left.longValue());
     }
 
