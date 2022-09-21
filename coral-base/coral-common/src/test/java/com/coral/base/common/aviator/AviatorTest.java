@@ -147,7 +147,7 @@ public class AviatorTest {
 
         System.out.println("替换前:" + str);
 
-        str = ScoreUtil.parse(str);
+        str = ScoreUtil.parse(str, null);
         System.out.println("替换后:" + str);
 
         Long result = (Long) AviatorEvaluator.execute(str);
@@ -159,7 +159,7 @@ public class AviatorTest {
         String str2 = " (1 + e^(6.8272 + (0.0391×年龄) + (0.7917×吸烟史) + (1.3388×恶性肿瘤史) + (0.1274×直径) + (1.040×肺结节影像学特征) + (0.7838×位置) )";
 
 
-        str2 = ScoreUtil.parse(str2);
+        str2 = ScoreUtil.parse(str2, null);
         System.out.println("替换后:" + str2);
 
         String str4 = " e^(6.8272 + (0.0391×年龄) + (0.7917×吸烟史) + (1.3388×恶性肿瘤史) + (0.1274×直径) + (1.040×肺结节影像学特征) + (0.7838×位置) )" +
@@ -168,7 +168,7 @@ public class AviatorTest {
                 " * (2^34)" +
                 "* ((2+3)*5^2*(3)+(Q1+Q23) )" +
                 "* ((Q11+23) * 23√(1+2*(2+3)/23+(Q34)) )";
-        System.out.println("result: " + ScoreUtil.parse(str4));
+        System.out.println("result: " + ScoreUtil.parse(str4, null));
 
 
         Double result23 = (Double) AviatorEvaluator.execute("math.pow(8,1.0/3)");

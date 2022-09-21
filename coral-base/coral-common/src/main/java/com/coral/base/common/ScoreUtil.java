@@ -43,15 +43,19 @@ public class ScoreUtil {
 
     /**
      * 解析计算公式
+     * 例如 4*QS(Q291719980716924928) + 20/QS(Q291720405587337216) + e^QS(Q291720637645594624)*π + QS(Q291720405587337216)^QS(Q291720637645594624)*π
+     * 如果其中的 skippedWords 包含 "QS" 的情况下
+     * 最终会解析成 4*QS(Q291719980716924928)+20/QS(Q291720405587337216)+math.pow(2.718281828459045,QS(Q291720637645594624))*3.141592653589793+math.pow(QS(Q291720405587337216),QS(Q291720637645594624))*3.141592653589793
      *
      * @param str
+     * @param skippedWords 公式中需要跳过的特殊字符串，跳过之后这些特殊字符串会维持原状
      * @return
      */
-    public static String parse(String str) {
+    public static String parse(String str, List<String> skippedWords) {
         String param = format(str);
-        System.out.println("param:" + param);
-        param = extract(param);
-        param = pow(param);
+        log.debug("param:" + param);
+        param = extract(param, skippedWords);
+        param = pow(param, skippedWords);
         return param;
     }
 
@@ -61,12 +65,12 @@ public class ScoreUtil {
      * @param str
      * @return
      */
-    private static String extract(String str) {
+    private static String extract(String str, List<String> skippedWords) {
         if (!str.contains(GH)) {
             return str;
         }
         List<String> params = Arrays.asList(str.split("\\" + GH));
-        return doParse(params, true);
+        return doParse(params, true, skippedWords);
     }
 
     /**
@@ -75,15 +79,21 @@ public class ScoreUtil {
      * @param str
      * @return
      */
-    private static String pow(String str) {
+    private static String pow(String str, List<String> skippedWords) {
         if (!str.contains(CF)) {
             return str;
         }
         List<String> params = Arrays.asList(str.split("\\" + CF));
-        return doParse(params, false);
+        return doParse(params, false, skippedWords);
     }
 
-    private static String doParse(List<String> params, boolean extract) {
+    /**
+     * @param params
+     * @param extract
+     * @param skippedWords
+     * @return
+     */
+    private static String doParse(List<String> params, boolean extract, List<String> skippedWords) {
         List<String> lines = new ArrayList<>();
         Map<Integer, String> map = new HashMap<>();
 
@@ -101,8 +111,8 @@ public class ScoreUtil {
             log.debug("left:{}", left);
             log.debug("right:{}", right);
 
-            int leftIndex = leftIndex(left);
-            int rightIndex = rightIndex(right);
+            int leftIndex = leftIndex(left, skippedWords);
+            int rightIndex = rightIndex(right, skippedWords);
 
             String leftNew = left.substring(leftIndex);
             String rightNew = right.substring(0, rightIndex);
@@ -158,20 +168,32 @@ public class ScoreUtil {
                         .replaceAll(" ", "");
     }
 
-
     /**
      * 计算右边最接近的字符串
      *
      * @param str
      * @return
      */
-    private static int rightIndex(String str) {
+    private static int rightIndex(String str, List<String> skippedWords) {
         int index = 0;
+
+        int prefixSize = 0;
+        if (CollectionUtil.isNotBlank(skippedWords)) {
+            String finalStr = str;
+            Optional<String> existOpt = skippedWords.stream().filter(e -> finalStr.startsWith(e))
+                    .findFirst();
+            if (existOpt.isPresent()) {
+                prefixSize = existOpt.get().length();
+            }
+        }
+
+        str = prefixSize > 0 ? str.substring(prefixSize) : str;
         if (!str.startsWith(LEFT_BRACKET)) {
             boolean matched = false;
             for (int i = 0, size = str.length(); i < size; i++) {
-                char c = str.charAt(i);
-                if (OPERATOR.contains(String.valueOf(c))) {
+                String c = String.valueOf(str.charAt(i));
+
+                if (OPERATOR.contains(c)) {
                     index = i - 1;
                     matched = true;
                     break;
@@ -183,7 +205,7 @@ public class ScoreUtil {
         } else {
             index = calLeftToRightIndex(str, index);
         }
-        return index + 1;
+        return prefixSize + index + 1;
     }
 
     /**
@@ -192,7 +214,7 @@ public class ScoreUtil {
      * @param str
      * @return
      */
-    private static int leftIndex(String str) {
+    private static int leftIndex(String str, List<String> skippedWords) {
         int maxIndex = str.length();
         int index = maxIndex - 1;
         if (!str.endsWith(RIGHT_BRACKET)) {
@@ -211,6 +233,18 @@ public class ScoreUtil {
 
         } else {
             index = calRightToLeftIndex(str, index);
+            int suffixSize = 0;
+            if (CollectionUtil.isNotBlank(skippedWords)) {
+                int maxSkipLength = skippedWords.stream().max(Comparator.comparing(String::length)).get().length();
+                final String tempStr = str.substring(index - maxSkipLength, index);
+
+                Optional<String> existOpt = skippedWords.stream().filter(e -> tempStr.endsWith(e))
+                        .findFirst();
+                if (existOpt.isPresent()) {
+                    suffixSize = existOpt.get().length();
+                }
+            }
+            index -= suffixSize;
         }
         return index;
     }
