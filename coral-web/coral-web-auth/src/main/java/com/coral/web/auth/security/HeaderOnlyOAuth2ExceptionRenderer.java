@@ -8,7 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.coral.web.core.enums.OauthErrorMessageEnum;
+import com.coral.base.common.exception.OauthErrorMessageEnum;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpResponse;

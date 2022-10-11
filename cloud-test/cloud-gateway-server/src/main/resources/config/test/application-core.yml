@@ -4,6 +4,8 @@ spring:
       discovery:
         server-addr: 192.168.29.61:8848 #nacos中心地址
         group: DEFAULT_GROUP
+        username: nacos
+        password: zhyx1202
         namespace: a68ad4b8-0e4e-40bb-bfa0-a564d4b3c9c2 #test
   redis:
     database: 14

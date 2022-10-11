@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.provider.error.WebResponseExceptionTr
 import org.springframework.stereotype.Component;
 
 import com.coral.base.common.exception.BaseErrorMessageEnum;
-import com.coral.web.core.enums.OauthErrorMessageEnum;
+import com.coral.base.common.exception.OauthErrorMessageEnum;
 
 import lombok.extern.slf4j.Slf4j;
 

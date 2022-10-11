@@ -79,6 +79,20 @@ public interface UserApi {
     ResponseEntity<UserInfoVO> saveUser(UserSaveDTO userSaveDTO);
 
     /**
+     * 保存用户信息测试
+     *
+     * @param userSaveDTO
+     * @return
+     */
+    @Operation(summary = "保存用户信息测试", description = "保存用户信息测试", tags = {ApiVersion.V_1_0_0})
+    @ApiResponses({
+            @ApiResponse(description = "success", responseCode = "200",
+                    content = @Content(
+                            schema = @Schema(implementation = UserInfoVO.class)))
+    })
+    ResponseEntity<UserInfoVO> saveUserTest(UserSaveDTO userSaveDTO, UserSaveDTO formData);
+
+    /**
      * 修改用户信息
      *
      * @param userNo

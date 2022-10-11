@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.coral.base.common.json.JsonUtil;
-import com.coral.web.core.enums.OauthErrorMessageEnum;
+import com.coral.base.common.exception.OauthErrorMessageEnum;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;

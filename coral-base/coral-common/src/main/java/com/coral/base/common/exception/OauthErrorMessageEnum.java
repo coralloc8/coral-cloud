@@ -1,7 +1,6 @@
-package com.coral.web.core.enums;
+package com.coral.base.common.exception;
 
 import com.coral.base.common.enums.I18nMessageKey;
-import com.coral.base.common.exception.IErrorCodeMessage;
 
 /**
  * oauth2 错误列表

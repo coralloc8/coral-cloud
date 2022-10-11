@@ -98,6 +98,24 @@ public class UserController implements UserApi {
     }
 
     /**
+     * 保存用户信息测试
+     *
+     * @param userSaveDTO
+     * @return
+     */
+    @Override
+    @PostMapping("/test")
+    public ResponseEntity<UserInfoVO> saveUserTest(@RequestBody UserSaveDTO userSaveDTO, UserSaveDTO formData) {
+        log.info(">>>>>userSaveDTO:{}", userSaveDTO);
+        log.info(">>>>>userSaveDTO form data:{}", formData);
+        UserInfoVO userInfoVO = UserInfoVO.createUserWithName(userSaveDTO.getUsername());
+        USERS.add(userInfoVO);
+        //发送事件
+        userCreateProducer.send(new UserModifyMessage(userInfoVO.getUserNo(), userInfoVO.getUsername()));
+        return ResponseEntity.ok(userInfoVO);
+    }
+
+    /**
      * 修改用户信息
      *
      * @param userNo

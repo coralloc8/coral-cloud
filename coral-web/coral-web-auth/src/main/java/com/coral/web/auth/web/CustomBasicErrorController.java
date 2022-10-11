@@ -6,8 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.coral.base.common.json.JsonUtil;
-import com.coral.service.auth.enums.AuthErrorMessageEnum;
-import com.coral.web.core.enums.OauthErrorMessageEnum;
+import com.coral.base.common.exception.OauthErrorMessageEnum;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;

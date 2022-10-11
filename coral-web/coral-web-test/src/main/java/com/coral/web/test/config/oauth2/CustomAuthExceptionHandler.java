@@ -14,7 +14,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import com.coral.web.core.enums.OauthErrorMessageEnum;
+import com.coral.base.common.exception.OauthErrorMessageEnum;
 import com.coral.web.core.response.Result;
 import com.coral.web.core.response.Results;
 
