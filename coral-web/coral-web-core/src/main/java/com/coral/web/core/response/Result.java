@@ -1,12 +1,10 @@
 package com.coral.web.core.response;
 
-import java.io.Serializable;
-import java.util.Collections;
-
 import com.coral.base.common.exception.BaseErrorMessageEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * @author huss
@@ -15,7 +13,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class Result implements Serializable {
+public class Result<T> implements Serializable {
 
     /**
      * 返回代码
@@ -32,7 +30,7 @@ public class Result implements Serializable {
      * 返回对象
      */
     @Setter(AccessLevel.PACKAGE)
-    private Object data;
+    private T data;
 
     @JsonIgnore
     public boolean isSuccess() {
@@ -43,10 +41,4 @@ public class Result implements Serializable {
         this.message = message;
     }
 
-    public Object getData() {
-        if (this.data == null) {
-            return Collections.emptyMap();
-        }
-        return data;
-    }
 }

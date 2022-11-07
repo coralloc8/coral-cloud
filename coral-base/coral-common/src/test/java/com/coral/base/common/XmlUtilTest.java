@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +40,7 @@ public class XmlUtilTest {
                 )
                 .build();
 
-        String xml = XmlUtil.createXml(xmlBean, "row", StandardCharsets.UTF_8);
+        String xml = XmlUtil.createXml(xmlBean, "Response", true, true);
         System.out.println(xml);
     }
 
@@ -100,6 +99,48 @@ public class XmlUtilTest {
 
     }
 
+    @Test
+    @DisplayName("解析xml测试3")
+    public void parseXml3() {
+        String xml = " <request>\n" +
+                "                <businessType>ywz</businessType>\n" +
+                "                <function>2wwwe2</function>\n" +
+                "                <params>333</params>\n" +
+                "                <age>23</age>\n" +
+                "                <money>5000.26</money>\n" +
+                "                <isMale>true</isMale>\n" +
+                "                <list>1,2</list>\n" +
+                "                <list>2</list>\n" +
+                "                <list>4</list>\n" +
+                "                <children>\n" +
+                "                    <no>11</no>\n" +
+                "                    <name>11_na</name>\n" +
+                "                </children>\n" +
+                "                <children>\n" +
+                "                    <no>22</no>\n" +
+                "                    <name>22_na</name>\n" +
+                "                </children>\n" +
+                "                <map>\n" +
+                "                    <entry>\n" +
+                "                        <key>11</key>\n" +
+                "                        <value>11_val</value>\n" +
+                "                    </entry>\n" +
+                "                    <entry>\n" +
+                "                        <key>22</key>\n" +
+                "                        <value>22_val</value>\n" +
+                "                    </entry>\n" +
+                "                </map>\n" +
+                "                <son>\n" +
+                "                    <no>33</no>\n" +
+                "                    <name>33_name</name>\n" +
+                "                </son>\n" +
+                "            </request>";
+        System.out.println("xml:" + xml);
+        XmlUtil.XmlParseConfig xmlParseConfig = new XmlUtil.XmlParseConfig(true, Arrays.asList("children", "list"), Map.class);
+        List<Map> list = XmlUtil.parseXml(xml, xmlParseConfig);
+        System.out.println("-------------------------------------------------------");
+        System.out.println(list.get(0));
+    }
 
     @Data
     private static class Result2 {

@@ -1,0 +1,49 @@
+server:
+  port: 8083
+  session-timeout: 30
+  servlet:
+    context-path: /websocket
+    encoding:
+      charset: UTF-8
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 800
+
+spring:
+  jackson:
+    data-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      enable: true
+  redis:
+    host: 47.92.172.93
+    port: 6379
+    database: 0
+    password: 123456
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 5000
+    cache:
+      #缓存的名称集合，多个采用逗号分割
+      cache-names:
+      #缓存的类型，官方提供了很多，这里我们填写redis
+      type: redis
+      redis:
+        #是否缓存null数据，默认是false
+        cache-null-values: false
+        #redis中缓存超时的时间，默认60000ms
+        time-to-live: 60000ms
+        #缓存数据key是否使用前缀，默认是true
+        use-key-prefix: false
+        #缓存数据key的前缀，在上面的配置为true时有效
+        key-prefix:
