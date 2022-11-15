@@ -8,6 +8,24 @@ spring:
         username: nacos
         password: zhyx1202
         namespace: a68ad4b8-0e4e-40bb-bfa0-a564d4b3c9c2 #test
+        heart-beat-interval: 2000  # 该实例在客户端上报心跳的间隔时间（毫秒）
+        heart-beat-timeout: 7000   # 该实例在不发送心跳后，从健康到不健康的时间（毫秒）
+        ip-delete-timeout: 15000   # 该实例在不发送心跳后，被 nacos下掉该实例的时间（毫秒）
+    loadbalancer:
+      enabled: true
+        health-check:
+          refetch-instances: true
+          refetch-instances-interval: 5s
+          repeat-health-check: false
+        retry:
+          # 该参数用来开启或关闭重试机制，默认是开启
+          enabled: true
+          # 对当前实例重试的次数，默认值: 0
+          max-retries-on-same-service-instance: 0
+          # 切换实例进行重试的次数，默认值: 1
+          max-retries-on-next-service-instance: 2
+          # 对所有的操作请求都进行重试
+          retry-on-all-operations: true
     # 消息中心
     function:
       # 方法路由，根据headers中的type属性查找方法
