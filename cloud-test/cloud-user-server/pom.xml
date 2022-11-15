@@ -204,7 +204,7 @@
             <resource>
                 <targetPath>${project.build.directory}/classes</targetPath>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
                 <excludes>
                     <exclude>config/**/*.yml</exclude>
                 </excludes>
@@ -215,7 +215,7 @@
                 <includes>
                     <include>*.yml</include>
                 </includes>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
             </resource>
         </resources>
 
