@@ -1,47 +1,55 @@
 package com.coral.web.core.support;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.context.ApplicationContextAware;
+
+import java.util.Map;
 
 /**
  * @author huss
  */
-public class SpringContext {
+@Slf4j
+public class SpringContext implements ApplicationContextAware {
+
+    private static ApplicationContext APPLICATION_CONTEXT;
 
     public static <T> T getBeanByName(Class<T> clazz, String name) {
-        try {
-            ApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
-            return ctx.getBean(name, clazz);
-        } catch (Exception var6) {
-            ServletRequestAttributes servletRequestAttributes =
-                (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+        return getApplicationContext().getBean(name, clazz);
+    }
 
-            try {
-                return RequestContextUtils.findWebApplicationContext(servletRequestAttributes.getRequest())
-                    .getBean(name, clazz);
-            } catch (Exception var5) {
-                return null;
-            }
-        }
+    public static ApplicationContext getApplicationContext() {
+        return APPLICATION_CONTEXT;
+//        try {
+//            if (Objects.isNull(ctx)) {
+//                ctx = ContextLoader.getCurrentWebApplicationContext();
+//            }
+//        } catch (Exception var5) {
+//            ServletRequestAttributes servletRequestAttributes =
+//                    (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//            try {
+//                ctx = RequestContextUtils.findWebApplicationContext(servletRequestAttributes.getRequest());
+//
+//            } catch (Exception var4) {
+//                throw Exceptions.unchecked(var4);
+//            }
+//
+//        }
+    }
+
+
+    public static Map<String, Object> getAllBeans() {
+        return getApplicationContext().getBeansOfType(Object.class);
     }
 
     public static <T> T getBeanByType(Class<T> clazz) {
-        try {
-            ApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
-            return ctx.getBean(clazz);
-        } catch (Exception var5) {
-            ServletRequestAttributes servletRequestAttributes =
-                (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+        return getApplicationContext().getBean(clazz);
+    }
 
-            try {
-                return RequestContextUtils.findWebApplicationContext(servletRequestAttributes.getRequest())
-                    .getBean(clazz);
-            } catch (Exception var4) {
-                return null;
-            }
-        }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        log.info(">>>>>init applicationContext.");
+        APPLICATION_CONTEXT = applicationContext;
     }
 }

@@ -15,9 +15,9 @@
     <modules>
         <module>coral-r</module>
         <module>contract-server</module>
-        <module>contract-Client</module>
+        <module>contract-client</module>
         <module>opendoc</module>
-        <module>copilot</module>
+        <module>groovy-test</module>
         <module>hanlp</module>
     </modules>
 </project>
