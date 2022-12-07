@@ -5,7 +5,10 @@ import com.coral.base.common.DatePattern;
 import com.coral.base.common.StringPool;
 import com.coral.base.common.StringUtils;
 import com.coral.base.common.exception.Exceptions;
-import com.coral.base.common.json.module.*;
+import com.coral.base.common.json.module.BladeBeanSerializerModifier;
+import com.coral.base.common.json.module.BladeJavaTimeModule;
+import com.coral.base.common.json.module.EnumModule;
+import com.coral.base.common.json.module.ParameterNamesModule;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -307,9 +310,8 @@ public class JsonUtil {
             INSTANCE.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
             // 日期格式化
 
-            INSTANCE.registerModules(new ParameterNamesModule(), new BladeJavaTimeModule(), new EnumModule(),
-                    new String2EscapeHtml4Module()
-
+            INSTANCE.registerModules(new ParameterNamesModule(), new BladeJavaTimeModule(), new EnumModule()
+//                    new String2EscapeHtml4Module()
             );
             // 字段属性自定义转换处理
             INSTANCE.setSerializerFactory(INSTANCE.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
