@@ -19,5 +19,6 @@
         <module>opendoc</module>
         <module>groovy-test</module>
         <module>hanlp</module>
+        <module>spring-event</module>
     </modules>
 </project>

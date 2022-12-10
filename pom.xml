@@ -15,7 +15,6 @@
         <module>coral-web</module>
         <module>coral-test</module>
         <module>cloud-test</module>
-
     </modules>
 
     <name>coral-cloud</name>

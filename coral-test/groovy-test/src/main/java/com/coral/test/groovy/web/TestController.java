@@ -1,12 +1,10 @@
 package com.coral.test.groovy.web;
 
-import com.coral.test.groovy.UserInfoDTO;
 import com.coral.web.core.response.Result;
 import com.coral.web.core.response.Results;
 import com.coral.web.core.support.SpringContext;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import groovy.lang.Script;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

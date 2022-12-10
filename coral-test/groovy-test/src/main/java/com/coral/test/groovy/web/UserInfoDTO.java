@@ -1,4 +1,4 @@
-package com.coral.test.groovy;
+package com.coral.test.groovy.web;
 
 import lombok.Data;
 

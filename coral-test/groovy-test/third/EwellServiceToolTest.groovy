@@ -1,4 +1,4 @@
-import com.coral.test.groovy.UserInfoDTO
+import com.coral.test.groovy.web.UserInfoDTO
 import com.ewell.sdk.business.EwellServiceTool
 import com.ewell.sdk.properties.PropertiesService
 import com.ewell.sdk.properties.PropertiesValue
