@@ -20,6 +20,5 @@
         <module>groovy-test</module>
         <module>hanlp</module>
         <module>spring-event</module>
-        <module>jdk17-test</module>
     </modules>
 </project>
