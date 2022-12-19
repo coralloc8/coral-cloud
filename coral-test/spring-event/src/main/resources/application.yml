@@ -1,0 +1,18 @@
+info:
+  author: huss
+  date: 20222年10月27号
+  remark: spring-vent 测试
+  my-server-name: spring-vent
+
+server:
+  port: 8083
+
+#spring
+spring:
+  application:
+    name: ${info.my-server-name}
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
