@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+        <name>dfs.name.dir</name>
+        <value>/data/tools/hadoop/data/dfs/name</value>
+        <description>Path on the local filesystem where theNameNode stores the namespace and transactions logs
+            persistently.
+        </description>
+    </property>
+
+    <property>
+        <name>dfs.data.dir</name>
+        <value>/data/tools/hadoop/data/dfs/data</value>
+        <description>Comma separated list of paths on the localfilesystem of a DataNode where it should store its
+            blocks.
+        </description>
+    </property>
+
+    <!-- 指定JournalNode在本地磁盘存放数据的位置 -->
+    <property>
+        <name>dfs.journalnode.edits.dir</name>
+        <value>/data/tools/hadoop/data/dfs/journaldata</value>
+    </property>
+
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>dfs.permissions</name>
+        <value>false</value>
+        <description>need not permissions</description>
+    </property>
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>dfs.nameservices</name>
+        <value>myha01</value>
+    </property>
+
+    <!-- myha01下面有两个NameNode，分别是nn1，nn2 -->
+    <property>
+        <name>dfs.ha.namenodes.myha01</name>
+        <value>nn1,nn2</value>
+    </property>
+
+    <!-- nn1的RPC通信地址 -->
+    <property>
+        <name>dfs.namenode.rpc-address.myha01.nn1</name>
+        <value>sfserver-dev:8020</value>
+    </property>
+    <!-- nn2的RPC通信地址 -->
+    <property>
+        <name>dfs.namenode.rpc-address.myha01.nn2</name>
+        <value>sfserver:8020</value>
+    </property>
+
+    <!-- nn1的http通信地址 -->
+    <property>
+        <name>dfs.namenode.http-address.myha01.nn1</name>
+        <value>sfserver-dev:9870</value>
+    </property>
+    <!-- nn2的http通信地址 -->
+    <property>
+        <name>dfs.namenode.http-address.myha01.nn2</name>
+        <value>sfserver:9870</value>
+    </property>
+
+    <!-- 指定NameNode的edits元数据的共享存储位置。也就是JournalNode列表
+                      该url的配置格式：qjournal://host1:port1;host2:port2;host3:port3/journalId
+        journalId推荐使用nameservice，默认端口号是：8485 -->
+    <property>
+        <name>dfs.namenode.shared.edits.dir</name>
+        <value>qjournal://sfserver-dev:8485;sfserver:8485;ywzfz:8485/myha01</value>
+    </property>
+
+    <!-- 开启NameNode失败自动切换 -->
+    <property>
+        <name>dfs.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
+
+    <!-- 配置失败自动切换实现方式 -->
+    <property>
+        <name>dfs.client.failover.proxy.provider.myha01</name>
+        <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+    </property>
+
+    <!-- 配置隔离机制方法，多个机制用换行分割，即每个机制暂用一行 -->
+    <property>
+        <name>dfs.ha.fencing.methods</name>
+        <value>
+            sshfence
+            shell(/bin/true)
+        </value>
+    </property>
+
+    <!-- 使用sshfence隔离机制时需要ssh免登陆 -->
+    <property>
+        <name>dfs.ha.fencing.ssh.private-key-files</name>
+        <value>/home/zhyx/.ssh/id_rsa</value>
+    </property>
+
+    <!-- 配置sshfence隔离机制超时时间 -->
+    <property>
+        <name>dfs.ha.fencing.ssh.connect-timeout</name>
+        <value>30000</value>
+    </property>
+
+    <property>
+        <name>ha.failover-controller.cli-check.rpc-timeout.ms</name>
+        <value>60000</value>
+    </property>
+
+
+    <!-- namenode与datanode存储多路径配置，且更改datanode磁盘写入规则 -->
+<!--    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:///${hadoop.tmp.dir}/dfs/data,file:///${hadoop.tmp.dir}/dfs/data1</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.fsdataset.volume.choosing.policy</name>
+        <value>org.apache.hadoop.hdfs.server.datanode.fsdataset.AvailableSpaceVolumeChoosingPolicy</value>
+    </property>
+
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:///${hadoop.tmp.dir}/dfs/name,file:///${hadoop.tmp.dir}/dfs/name1</value>
+    </property>-->
+
+
+</configuration>
