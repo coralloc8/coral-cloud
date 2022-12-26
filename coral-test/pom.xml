@@ -20,5 +20,6 @@
         <module>groovy-test</module>
         <module>hanlp</module>
         <module>spring-event</module>
+        <module>hadoop-test</module>
     </modules>
 </project>
