@@ -25,6 +25,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class WordCount {
 
+    /**
+     * hadoop jar hadoop-test.jar com.coral.test.hadoop.mapreduce.WordCount /test/wordcount/intput/hadoop-test-wordcount.txt /test/wordcount/intput/test1.txt /test/wordcount/output/result
+     * 输入需要上传到 hdfs对应的目录中 /test/wordcount/intput/hadoop-test-wordcount.txt /test/wordcount/intput/test1.txt
+     * 输出需要在hdfs上建立对应的目录
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
