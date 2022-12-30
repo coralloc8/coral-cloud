@@ -1,0 +1,242 @@
+
+show databases;
+
+show tables;
+
+-- 获取年
+select year('2022-12-27');
+
+-- 日期增加
+select date_add('2022-12-27', 10);
+
+-- 日期减少
+select date_sub('2022-12-27', 10);
+
+-- 查看配置
+-- 所有配置项
+set;
+
+
+
+/**
+（1）如果磁盘空间利用率和I/O开销优先级高的话，选择BZip2和GZip。
+（2）频繁读取数据所需的解压缩速度优先级高的话，选择LZO和Snappy。
+（3）中间数据多的时候，选择开启中间数据压缩，压缩格式选择Snappy。
+ */
+
+
+-- 开启中间压缩
+set hive.exec.compress.intermediate=true;
+-- Snappy结合了低CPU开销和好的压缩执行效率，适合中间文件的压缩和解压
+-- set mapred.output.compression.codec=org.apache.hadoop.io.compress.SnappyCodec;
+-- 最终输出结果压缩
+set hive.exec.compress.output=true;
+-- 开启hive动态分区
+SET hive.exec.dynamic.partition=true;
+-- 设置hive非严格模式
+SET hive.exec.dynamic.partition.mode=nonstrict;
+-- 单个节点上的mapper/reducer允许创建的最大分区
+SET hive.exec.max.dynamic.partitions.pernode=1000;
+-- 允许动态分区的最大数量
+set hive.exec.max.dynamic.partitions=1500;
+
+/**
+
+1、尽量不要用动态分区，因为动态分区的时候，将会为每一个分区分配reducer数量，当分区数量多的时候，reducer数量将会增加，对服务器是一种灾难。
+2、动态分区和静态分区的区别，静态分区不管有没有数据都将会创建该分区，动态分区是有结果集将创建，否则不创建。
+3、hive动态分区的严格模式和hive提供的hive.mapred.mode的严格模式。
+    hive提供我们一个严格模式：为了阻止用户不小心提交恶意hql
+    hive.mapred.mode=nostrict : strict
+    如果该模式值为strict，将会阻止以下三种查询：
+        (1)对分区表查询，where中过滤字段不是分区字段。
+        (2)笛卡尔积join查询，join查询语句，不带on条件或者where条件。
+        (3)对order by查询，有order by的查询不带limit语句。
+4、动态分区不允许主分区采用动态列而副分区采用静态列，这样将导致所有的主分区都要创建副分区静态列所定义的分区。
+5、动态分区可以允许所有的分区列都是动态分区列，但是要首先设置一个参数：hive.exec.dynamic.partition.mode。
+6、注意！！！
+hive用了动态分区，若select语句无数据，则insert overwrite并不会覆盖。因为动态分区由select决定，select语句无数据，分区也无法确定，故无法实现动态覆盖。此时想要修正表数据，需要手动删除该分区。
+
+
+尽量采用混合模式导入。在日常导入一天的数据，通常是指定日期为静态分区，小时为动态分区，进行混合模式导入
+
+
+ */
+
+-- 创建数据库
+create database if not exists test comment '测试用';
+
+-- 删除数据库
+drop database test;
+
+-- 创建表
+create table if not exists test.ods_desktop_event
+(
+    id            bigint comment '业务主键',
+    event_id      string comment '事件ID',
+    project       string comment '项目标识',
+    func_code     string comment "方法编码",
+    send_time     timestamp comment '发送时间',
+    send_date     string comment '发送数据',
+    latest_log_id string comment '最新的日志id',
+    status        int comment '状态 0:处理中 1:处理失败 2:失败次数太多导致的拒绝 3:处理成功'
+)
+    -- 分区
+    partitioned by (p_date string, p_hour string)
+
+    -- 行格式化
+    row format delimited
+        fields terminated by '\t'
+        collection items terminated by ":"
+        map keys terminated by ':'
+    -- 存储方式
+    stored as orc tblproperties ("orc.compress" = "SNAPPY")
+;
+
+-- 查看表
+describe test.ods_desktop_event;
+
+-- show locks ;
+
+-- 删除表
+drop table test.ods_desktop_event;
+
+
+-- 临时表
+create table if not exists test.tmp_desktop_event
+(
+    id            string comment '业务主键',
+    event_id      string comment '事件ID',
+    project       string comment '项目标识',
+    func_code     string comment "方法编码",
+    send_time     string comment '发送时间',
+    send_date     string comment '发送数据',
+    latest_log_id string comment '最新的日志id',
+    status        string comment '状态 0:处理中 1:处理失败 2:失败次数太多导致的拒绝 3:处理成功'
+)
+    -- 行格式化
+    row format delimited
+        fields terminated by '\t'
+        collection items terminated by ":"
+        map keys terminated by ':'
+;
+
+-- 删除表
+drop table test.tmp_desktop_event;
+
+-- 加载服务器上的本地数据
+load data local inpath '/data/tools/hive/test/event.txt' overwrite into table test.tmp_desktop_event;
+
+select *
+from test.tmp_desktop_event;
+
+-- 字符串分割
+select substr(id, 2, length(id) - 2) id
+from test.tmp_desktop_event;
+
+-- 去掉前后指定的字符串
+select regexp_replace(id, '"$|^"', '') id
+from test.tmp_desktop_event;
+
+-- 字符串转换int
+select cast(regexp_replace(id, '"$|^"', '') as bigint) id
+from test.tmp_desktop_event;
+
+-- 字符串转时间
+select regexp_replace(send_time, '"$|^"', '') send_time
+from test.tmp_desktop_event;
+
+select from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss')) send_time
+from test.tmp_desktop_event;
+
+-- 小时
+select from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss'), 'HH') send_time
+from test.tmp_desktop_event;
+
+
+-- send_date 转换
+select regexp_replace(regexp_replace(send_date, '"$|^"', ''), "\"\"", "\"") send_date
+from test.tmp_desktop_event;
+
+-- 事件
+select cast(regexp_replace(id, '"$|^"', '') as bigint)                                              id,
+       regexp_replace(event_id, '"$|^"', '')                                                        event_id,
+       regexp_replace(project, '"$|^"', '')                                                         project,
+       regexp_replace(func_code, '"$|^"', '')                                                       func_code,
+       from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss')) send_time,
+       regexp_replace(regexp_replace(send_date, '"$|^"', ''), "\"\"", "\"")                         send_date,
+       regexp_replace(latest_log_id, '"$|^"', '')                                                   latest_log_id,
+       cast(regexp_replace(status, '"$|^"', '') as int)                                             status
+from test.tmp_desktop_event
+where from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss')) >=
+      '2022-11-21 00:00:00'
+  and from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss')) <
+      '2022-11-22 00:00:00';
+
+
+-- 临时表插入到ods
+insert overwrite table test.ods_desktop_event partition (p_date = '2022-11-22', p_hour)
+select cast(regexp_replace(id, '"$|^"', '') as bigint)                                                    id,
+       regexp_replace(event_id, '"$|^"', '')                                                              event_id,
+       regexp_replace(project, '"$|^"', '')                                                               project,
+       regexp_replace(func_code, '"$|^"', '')                                                             func_code,
+       from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss'))       send_time,
+       regexp_replace(regexp_replace(send_date, '"$|^"', ''), "\"\"", "\"")                               send_date,
+       regexp_replace(latest_log_id, '"$|^"', '')                                                         latest_log_id,
+       cast(regexp_replace(status, '"$|^"', '') as int)                                                   status,
+       from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss'), 'HH') p_hour
+from test.tmp_desktop_event
+-- where 此时还不能使用别名
+where from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss')) >=
+      '2022-11-22 00:00:00'
+  and from_unixtime(unix_timestamp(regexp_replace(send_time, '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss')) <
+      '2022-11-23 00:00:00'
+  -- 分区 可以使用别名
+    distribute by p_hour
+  -- 区内排序 可以使用别名
+    sort by send_date
+;
+
+-- 内部表转外部表
+alter table test.ods_desktop_event
+    set tblproperties ('external' = 'true');
+
+
+-- 删除分区
+alter table test.ods_desktop_event
+    drop partition (p_date = '2022-11-21',p_hour = '17');
+
+alter table test.ods_desktop_event
+    drop partition (p_date = '2022-11-21',p_hour = '18');
+
+
+-- 查看表分区
+show partitions test.ods_desktop_event;
+
+-- 查询分区数据
+select *
+from test.ods_desktop_event
+where p_date = '2022-11-21'
+  and p_hour = 18;
+
+
+-- 联合查询分区数据
+select *
+from test.ods_desktop_event
+where p_date = '2022-11-22'
+union all
+select *
+from test.ods_desktop_event
+where p_date = '2022-11-21'
+;
+
+
+-- 范围查询
+select *
+from test.ods_desktop_event
+where p_date in ('2022-11-22', '2022-11-21');
+
+
+
+
+
+

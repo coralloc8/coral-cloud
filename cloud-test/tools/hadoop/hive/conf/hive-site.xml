@@ -893,7 +893,7 @@
     </property>
     <property>
         <name>hive.metastore.schema.verification</name>
-        <value>false</value>
+        <value>true</value>
         <description>
             Enforce metastore schema version consistency.
             True: Verify that version information stored in is compatible with one from Hive jars. Also disable
@@ -2191,7 +2191,7 @@
     </property>
     <property>
         <name>hive.merge.mapredfiles</name>
-        <value>false</value>
+        <value>true</value>
         <description>Merge small files at the end of a map-reduce job</description>
     </property>
     <property>
@@ -3320,7 +3320,7 @@
     </property>
     <property>
         <name>hive.support.concurrency</name>
-        <value>false</value>
+        <value>true</value>
         <description>
             Whether Hive supports concurrency control or not.
             A ZooKeeper instance must be up and running when using zookeeper Hive lock manager
@@ -4095,7 +4095,7 @@
     </property>
     <property>
         <name>hive.cli.print.header</name>
-        <value>false</value>
+        <value>true</value>
         <description>Whether to print the names of the columns in query output.</description>
     </property>
     <property>

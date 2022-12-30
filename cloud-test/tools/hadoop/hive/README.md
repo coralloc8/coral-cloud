@@ -7,3 +7,4 @@
 7. 每个节点后台启动`hiveserver2 &`
 8. 测试连接集群 `beeline`
 9. `!connect jdbc:hive2://sfserver-dev,sfserver,ywzfz:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2`
+10. drop 表卡主的话 改配置 `hive.metastore.schema.verification`为`true`
