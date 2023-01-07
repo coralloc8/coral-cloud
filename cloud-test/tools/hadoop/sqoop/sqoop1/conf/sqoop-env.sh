@@ -30,6 +30,9 @@ export HADOOP_MAPRED_HOME=/data/tools/hadoop/hadoop-3.3.1
 
 #Set the path to where bin/hive is available
 export HIVE_HOME=/data/tools/hive/hive-3.1.3
+export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HIVE_HOME/lib/*
+
+export HCAT_HOME=/data/tools/hive/hive-3.1.3/hcatalog
 
 #Set the path for where zookeper config dir is
 #export ZOOCFGDIR=
