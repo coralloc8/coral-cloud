@@ -21,3 +21,9 @@ spring:
   http:
     encoding:
       enable: true
+
+
+test:
+  name: haha1111
+  code: y
+  isShow: f

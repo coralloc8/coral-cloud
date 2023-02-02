@@ -1,16 +1,20 @@
 package com.coral.test.spring.event.web;
 
+import com.coral.test.spring.event.config.TestProperty;
 import com.coral.test.spring.event.domain.UserChanged;
 import com.coral.test.spring.event.domain.UserCreated;
+import com.coral.test.spring.event.dto.YmlQueryDTO;
 import com.coral.test.spring.event.listener.BaseEvent;
 import com.coral.web.core.response.Result;
 import com.coral.web.core.response.Results;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @description todo
  * @date 2022/12/10 16:34
  */
+@Slf4j
 @RestController
 @RequestMapping("/test")
 public class TestController {
@@ -29,6 +34,21 @@ public class TestController {
 
     private static Map<String, SseEmitter> SSE_CACHE = new ConcurrentHashMap<>();
 
+    @Autowired
+    private TestProperty testProperty;
+
+    @PostMapping("/yml")
+    public Result<TestProperty> yml(YmlQueryDTO queryDTO, @RequestBody YmlQueryDTO queryDTO2) {
+        log.info(">>queryDTO :{}", queryDTO);
+        log.info(">>queryDTO2 :{}", queryDTO2);
+        log.info(">>testProperty :{}", testProperty);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", testProperty.getName());
+        map.put("code", testProperty.getCode());
+        map.put("isShow", testProperty.getIsShow());
+        return new Results().success(map);
+    }
 
     @GetMapping
     public Result<Void> send() {

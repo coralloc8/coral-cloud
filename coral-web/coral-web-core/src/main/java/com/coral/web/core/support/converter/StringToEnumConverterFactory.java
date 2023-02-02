@@ -8,7 +8,7 @@ import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.util.Assert;
 
 /**
- * 替换spring默认的字符串转enum
+ * 替换spring默认的字符串转enum 也可使用{@link StringToEnumGenericConverter} 进行转换 二选一
  *
  * @author huss
  */
@@ -30,6 +30,7 @@ public class StringToEnumConverterFactory implements ConverterFactory<String, En
 
         @Override
         public T convert(String source) {
+            log.info(">>>>>convert start. source:{}", source);
             if (source.isEmpty()) {
                 // It's an empty enum identifier: reset the enum value to null.
                 return null;
