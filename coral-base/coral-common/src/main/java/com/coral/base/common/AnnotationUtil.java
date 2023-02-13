@@ -2,8 +2,13 @@ package com.coral.base.common;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author huss
@@ -13,6 +18,23 @@ import java.util.Optional;
  * @date 2021/4/9 9:42
  */
 public final class AnnotationUtil {
+
+    private static final Map<String, String> TABLE_METHOD_OF_ENUM_TYPES = new ConcurrentHashMap<>();
+
+    public static <A extends Annotation> Optional<String> findAnnotationFieldName(Class clazz, Class<A> annotationType) {
+        if (Objects.isNull(clazz) || !clazz.isEnum()) {
+            return Optional.empty();
+        }
+        String className = clazz.getName();
+
+        return Optional.ofNullable(
+                TABLE_METHOD_OF_ENUM_TYPES.computeIfAbsent(className, key -> {
+                    Optional<Field> fieldOptional = Arrays.stream(clazz.getDeclaredFields())
+                            .filter(field -> field.isAnnotationPresent(annotationType)).findFirst();
+                    return fieldOptional.map(Field::getName).orElse(null);
+                })
+        );
+    }
 
     public static <A extends Annotation, M> Optional<A> findAnnotation(M m, Class<A> annotationType) {
         if (annotationType == null || m == null) {
@@ -35,9 +57,6 @@ public final class AnnotationUtil {
 
         return Optional.of(annotation);
     }
-
-
-
 
 
 //    public static void main(String[] args) {
