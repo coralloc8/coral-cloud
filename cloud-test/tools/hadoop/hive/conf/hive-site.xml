@@ -3939,7 +3939,7 @@
     </property>
     <property>
         <name>hive.compute.query.using.stats</name>
-        <value>true</value>
+        <value>false</value>
         <description>
             When set to true Hive will answer a few queries like count(1) purely using stats
             stored in metastore. For basic stats collection turn on the config hive.stats.autogather to true.
