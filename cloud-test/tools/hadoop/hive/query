@@ -1,7 +1,8 @@
-
 show databases;
 
 show tables;
+
+show tables in test2;
 
 -- 获取年
 select year('2022-12-27');
@@ -14,7 +15,7 @@ select date_sub('2022-12-27', 10);
 
 -- 查看配置
 -- 所有配置项
-set;
+
 
 
 
@@ -63,7 +64,7 @@ hive用了动态分区，若select语句无数据，则insert overwrite并不会
  */
 
 -- 创建数据库
-create database if not exists test comment '测试用';
+create database if not exists test2 comment '测试用';
 
 -- 删除数据库
 drop database test;
@@ -93,7 +94,7 @@ create table if not exists test.ods_desktop_event
 ;
 
 -- 查看表
-describe test.ods_desktop_event;
+describe formatted test.ods_desktop_event;
 
 -- show locks ;
 
@@ -101,24 +102,6 @@ describe test.ods_desktop_event;
 drop table test.ods_desktop_event;
 
 
--- 临时表
-create table if not exists test.tmp_desktop_event
-(
-    id            string comment '业务主键',
-    event_id      string comment '事件ID',
-    project       string comment '项目标识',
-    func_code     string comment "方法编码",
-    send_time     string comment '发送时间',
-    send_date     string comment '发送数据',
-    latest_log_id string comment '最新的日志id',
-    status        string comment '状态 0:处理中 1:处理失败 2:失败次数太多导致的拒绝 3:处理成功'
-)
-    -- 行格式化
-    row format delimited
-        fields terminated by '\t'
-        collection items terminated by ":"
-        map keys terminated by ':'
-;
 
 -- 删除表
 drop table test.tmp_desktop_event;
@@ -237,6 +220,205 @@ where p_date in ('2022-11-22', '2022-11-21');
 
 
 
+create database if not exists ods comment 'ods层';
+
+drop database ods;
+
+drop table ods.ods_survey_form;
+
+create database if not exists ods_zhyx_survey comment '表单系统';
 
 
 
+desc ods_zhyx_survey.ods_form;
+
+drop table ods_zhyx_survey.ods_form;
+
+
+
+alter table ods_zhyx_survey.ods_form
+    drop partition (p_date = '1970-01-01');
+
+
+select *
+from ods_zhyx_survey.ods_form
+where p_date = '1970-01-01';
+
+
+
+select * from ods_desktop_event where 1=2;
+
+
+desc formatted test.ods_desktop_event;
+
+
+------------------------------------------------------------
+
+
+create database if not exists test2 comment '测试用';
+
+
+
+-- 临时表
+drop table if  exists test2.tmp_desktop_event;
+
+create table if not exists test2.tmp_desktop_event
+(
+    id            bigint comment '业务主键',
+    event_id      string comment '事件ID',
+    project       string comment '项目标识',
+    func_code     string comment "方法编码",
+    send_time     timestamp comment '发送时间',
+    send_time2    date comment '发送时间2',
+    send_data     string comment '发送数据',
+    latest_log_id string comment '最新的日志id',
+    status        string comment '状态 0:处理中 1:处理失败 2:失败次数太多导致的拒绝 3:处理成功'
+)
+    PARTITIONED BY (date_p STRING COMMENT 'yyyy-MM-dd分区字段,create_time')
+    -- 行格式化
+    row format delimited
+        fields terminated by '\001'
+        collection items terminated by ":"
+        map keys terminated by ':'
+    stored as orc
+;
+
+alter table test2.tmp_desktop_event
+    add partition (date_p = '1970-01-01');
+
+load data inpath '/user/hive/warehouse/test2.db/text__0368d0d6_59b7_4ade_91a7_83c5cebdf734.gz'  into table test2.tmp_desktop_event;
+
+load data inpath '/user/hive/warehouse/test2.db/111.txt'  into table test2.tmp_desktop_event;
+
+select * from test2.tmp_desktop_event;
+
+select count(*) from test2.tmp_desktop_event;
+
+select *
+from test2.tmp_desktop_event
+where date_p = '1970-01-01';
+
+-- delete from test2.tmp_desktop_event;
+
+describe formatted test2.tmp_desktop_event;
+
+
+select unix_timestamp(regexp_replace('2023-02-15 16:21:29', '"$|^"', ''), 'dd/MM/yyyy HH:mm:ss');
+
+
+SELECT tmp_desktop_event.id            as `tmp_desktop_event.id`,
+       tmp_desktop_event.event_id      as `tmp_desktop_event.event_id`,
+       tmp_desktop_event.project       as `tmp_desktop_event.project`,
+       tmp_desktop_event.func_code     as `tmp_desktop_event.func_code`,
+       tmp_desktop_event.send_time     as `tmp_desktop_event.send_time`,
+       tmp_desktop_event.send_data     as `tmp_desktop_event.send_data`,
+       tmp_desktop_event.latest_log_id as `tmp_desktop_event.latest_log_id`,
+       tmp_desktop_event.status        as `tmp_desktop_event.status`
+FROM tmp_desktop_event
+WHERE tmp_desktop_event.send_time BETWEEN '2023-02-23 00:00:00' AND '2023-02-23 23:59:59'
+;
+
+
+
+
+
+------------------------------------------------------------
+
+create database  ods;
+
+DROP TABLE IF EXISTS test2.ods_v_operation_info;
+
+CREATE TABLE test2.ods_v_operation_info (
+                                          id BIGINT COMMENT '编号'
+    ,hospital_code STRING COMMENT '医院编码'
+    ,primary_id STRING COMMENT 'his的主键id'
+    ,patient_id STRING COMMENT '患者ID'
+    ,inpatient_no STRING COMMENT '住院号'
+    ,outpatient_no STRING COMMENT '门诊号'
+    ,inpatient_serial_no STRING COMMENT '住院流水号'
+    ,doctor_advice_id STRING COMMENT '医嘱ID'
+    ,operation_apply_num STRING COMMENT '手术申请单号'
+    ,operation_code STRING COMMENT '手术编码'
+    ,operation_code_icd STRING COMMENT '手术ICD9编码'
+    ,operation_name STRING COMMENT '手术名称'
+    ,operation_level TINYINT COMMENT '手术级别 (S1001)'
+    ,operation_level_name STRING COMMENT '手术级别名称'
+    ,operation_cut_type STRING COMMENT '手术切口类型(多个以逗号隔开)'
+    ,operation_cut_type_name STRING COMMENT '手术切口类型名称'
+    ,main_doctor STRING COMMENT '主刀医生工号'
+    ,main_doctor_name STRING COMMENT '主刀医生姓名'
+    ,operation_start_time STRING COMMENT '手术开始时间'
+    ,operation_end_time STRING COMMENT '手术结束时间'
+    ,operation_anesthesia_type STRING COMMENT '手术麻醉方式(S1003)'
+    ,operation_anesthesia_type_name STRING COMMENT '手术麻醉方式名称'
+    ,operation_diagnose STRING COMMENT '诊断(多个以逗号隔开)'
+    ,operation_diagnose_icd STRING COMMENT '诊断ICD编码'
+    ,operation_diagnose_id STRING COMMENT '医院内部编码'
+    ,cancel TINYINT COMMENT '0未作废 1 已作废'
+    ,sync_time STRING COMMENT '同步时间'
+    ,create_time STRING COMMENT '创建时间'
+    ,update_time STRING COMMENT '修改时间'
+)
+    COMMENT '(住院)手术记录表, 来源42库zhyx_base_hospital.v_operation_info'
+    PARTITIONED BY (date_p STRING COMMENT 'yyyy-MM-dd分区字段,create_time')
+    ROW FORMAT DELIMITED
+        FIELDS TERMINATED BY '\t';
+
+select  * from test2.ods_v_operation_info;
+
+select count(id) from test2.ods_v_operation_info;
+
+select count(*) from test2.ods_v_operation_info;
+
+analyze table test2.ods_v_operation_info COMPUTE STATISTICS;
+
+show create table test2.ods_v_operation_info;
+
+alter table test2.ods_v_operation_info
+    add partition (date_p = '1970-01-01');
+
+
+create table if not exists test2.tmp_desktop_event2
+(
+    id            string comment '业务主键',
+    event_id      string comment '事件ID'
+)
+    -- 行格式化
+    row format delimited
+        fields terminated by '\t'
+        collection items terminated by ":"
+        map keys terminated by ':'
+;
+
+insert into test2.tmp_desktop_event2 values("1","dddd");
+
+load data inpath '/user/hive/warehouse/test2.db/000000_0'  into table test2.tmp_desktop_event2;
+
+select count(*) from test2.tmp_desktop_event2;
+
+
+
+
+DROP TABLE IF EXISTS test2.ods_v_user_info;
+CREATE TABLE test2.ods_v_user_info (
+     id BIGINT COMMENT ''
+    ,hospital_code STRING COMMENT '医院编码'
+    ,primary_id STRING COMMENT 'his的主键id'
+    ,patient_id STRING COMMENT '患者ID'
+    ,inpatient_no STRING COMMENT '住院号'
+    ,outpatient_no STRING COMMENT '门诊号'
+    ,patient_name STRING COMMENT '患者姓名'
+    ,patient_sex TINYINT COMMENT '患者性别(1男2女3未知)'
+    ,patient_sex_name STRING COMMENT ''
+    ,birthday DATE COMMENT '出生年月日'
+    ,id_card_no STRING COMMENT '身份证号码'
+    ,phone STRING COMMENT '手机号'
+    ,sync_time TIMESTAMP COMMENT '同步时间'
+    ,create_time TIMESTAMP COMMENT '创建时间'
+    ,update_time TIMESTAMP COMMENT '修改时间'
+)
+    COMMENT '住院患者基本信息表, 来源42 zhyx_base_hospital.v_user_info'
+    PARTITIONED BY (date_p STRING COMMENT 'create_time 分区')
+    ROW FORMAT DELIMITED
+        FIELDS TERMINATED BY '\001'
+    STORED AS ORC;
