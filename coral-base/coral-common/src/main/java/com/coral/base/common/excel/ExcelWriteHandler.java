@@ -3,8 +3,6 @@ package com.coral.base.common.excel;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
-import com.alibaba.excel.event.Handler;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.handler.CellWriteHandler;
@@ -180,25 +178,6 @@ public class ExcelWriteHandler {
         public void afterCellCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Cell cell,
                                     Head head, Integer relativeRowIndex, Boolean isHead) {
 
-        }
-
-        @Override
-        public void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
-                                           CellData cellData, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-
-        }
-
-        @Override
-        public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
-                                     List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-            // 这里可以对cell进行任何操作
-            log.info("第{}行，第{}列写入完成。", cell.getRowIndex(), cell.getColumnIndex());
-            // if (isHead && cell.getColumnIndex() == 0) {
-            // CreationHelper createHelper = writeSheetHolder.getSheet().getWorkbook().getCreationHelper();
-            // Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
-            // hyperlink.setAddress("https://github.com/alibaba/easyexcel");
-            // cell.setHyperlink(hyperlink);
-            // }
         }
 
     }

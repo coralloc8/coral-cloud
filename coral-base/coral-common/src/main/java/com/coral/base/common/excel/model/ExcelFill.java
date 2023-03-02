@@ -1,5 +1,7 @@
 package com.coral.base.common.excel.model;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ import lombok.*;
  * @time: 2020/11/2 15:09
  */
 @Data
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExcelFill {
 
@@ -25,14 +27,49 @@ public class ExcelFill {
     private String templateFilePath;
 
     /**
+     * 模板输入流
+     */
+    private InputStream templateInputStream;
+
+    /**
      * 文件路径
      */
     private String filePath;
 
     /**
+     * 文件输出流
+     */
+    private OutputStream fileOutputStream;
+
+
+    /**
      * 数据填充
      */
     private List<SheetFill> sheetFills;
+
+    public ExcelFill(InputStream templateInputStream, String filePath, List<SheetFill> sheetFills) {
+        this.templateInputStream = templateInputStream;
+        this.filePath = filePath;
+        this.sheetFills = sheetFills;
+    }
+
+    public ExcelFill(InputStream templateInputStream, OutputStream fileOutputStream, List<SheetFill> sheetFills) {
+        this.templateInputStream = templateInputStream;
+        this.fileOutputStream = fileOutputStream;
+        this.sheetFills = sheetFills;
+    }
+
+    public ExcelFill(String templateFilePath, String filePath, List<SheetFill> sheetFills) {
+        this.templateFilePath = templateFilePath;
+        this.filePath = filePath;
+        this.sheetFills = sheetFills;
+    }
+
+    public ExcelFill(String templateFilePath, OutputStream fileOutputStream, List<SheetFill> sheetFills) {
+        this.templateFilePath = templateFilePath;
+        this.fileOutputStream = fileOutputStream;
+        this.sheetFills = sheetFills;
+    }
 
     @Data
     public static class SheetFill {

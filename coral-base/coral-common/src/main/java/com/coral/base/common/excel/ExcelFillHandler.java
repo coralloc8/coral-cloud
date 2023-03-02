@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
@@ -11,6 +12,7 @@ import com.coral.base.common.excel.model.ExcelFill;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @description: excel按模板填充
@@ -28,8 +30,19 @@ public class ExcelFillHandler {
     public void fill(@NonNull ExcelFill excelFill) {
         ExcelWriter excelWriter = null;
         try {
-            excelWriter =
-                EasyExcel.write(excelFill.getFilePath()).withTemplate(excelFill.getTemplateFilePath()).build();
+            ExcelWriterBuilder excelWriterBuilder;
+            if(StringUtils.isNotBlank(excelFill.getFilePath())) {
+                excelWriterBuilder =  EasyExcel.write(excelFill.getFilePath());
+            }else {
+                excelWriterBuilder =  EasyExcel.write(excelFill.getFileOutputStream());
+            }
+
+            if(StringUtils.isNotBlank(excelFill.getTemplateFilePath())) {
+                excelWriterBuilder.withTemplate(excelFill.getTemplateFilePath());
+            } else {
+                excelWriterBuilder.withTemplate(excelFill.getTemplateInputStream());
+            }
+            excelWriter = excelWriterBuilder.build();
 
             ExcelWriter finalExcelWriter = excelWriter;
             excelFill.getSheetFills().forEach(sheet -> {
