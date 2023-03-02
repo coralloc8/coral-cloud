@@ -1,6 +1,6 @@
 package com.coral.base.common;
 
-import net.sf.cglib.beans.BeanCopier;
+import com.alibaba.excel.support.cglib.beans.BeanCopier;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,13 +1,14 @@
 package com.coral.base.common.excel.convert;
 
-import java.time.LocalTime;
-
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
+import com.alibaba.excel.metadata.data.ReadCellData;
+import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import com.coral.base.common.DateTimeUtil;
+
+import java.time.LocalTime;
 
 /**
  * @author huss
@@ -25,14 +26,14 @@ public class String2LocalTimeConverter implements Converter<LocalTime> {
     }
 
     @Override
-    public LocalTime convertToJavaData(CellData cellData, ExcelContentProperty excelContentProperty,
-        GlobalConfiguration globalConfiguration) throws Exception {
+    public LocalTime convertToJavaData(ReadCellData cellData, ExcelContentProperty excelContentProperty,
+                                       GlobalConfiguration globalConfiguration) throws Exception {
         return LocalTime.from(DateTimeUtil.parse(cellData.getStringValue(), DateTimeUtil.TIME_FORMAT));
     }
 
     @Override
-    public CellData convertToExcelData(LocalTime localTime, ExcelContentProperty excelContentProperty,
-        GlobalConfiguration globalConfiguration) throws Exception {
-        return new CellData(DateTimeUtil.formatTime(localTime));
+    public WriteCellData<LocalTime> convertToExcelData(LocalTime localTime, ExcelContentProperty excelContentProperty,
+                                                       GlobalConfiguration globalConfiguration) throws Exception {
+        return new WriteCellData(DateTimeUtil.formatTime(localTime));
     }
 }
