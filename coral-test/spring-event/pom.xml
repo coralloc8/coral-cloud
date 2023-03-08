@@ -49,6 +49,17 @@
         </dependency>
 
 
+
+        <!-- https://mvnrepository.com/artifact/io.trino/trino-jdbc -->
+        <dependency>
+            <groupId>io.trino</groupId>
+            <artifactId>trino-jdbc</artifactId>
+            <version>409</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
     </dependencies>
 
 

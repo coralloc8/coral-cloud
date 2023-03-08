@@ -21,5 +21,6 @@
         <module>hanlp</module>
         <module>spring-event</module>
         <module>hadoop-test</module>
+        <module>cucumber-test</module>
     </modules>
 </project>
