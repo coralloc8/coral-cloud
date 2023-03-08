@@ -27,7 +27,7 @@ public class TrinoDatasourceTest {
         try {
             Class.forName("io.trino.jdbc.TrinoDriver");
             // hive 库表 default.t_hive
-            connection = DriverManager.getConnection("jdbc:trino://192.168.29.101:8077/hive/default?user=test");
+            connection = DriverManager.getConnection("jdbc:trino://192.168.29.101:8077/hive/zhyx_mange?user=test");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -56,7 +56,10 @@ public class TrinoDatasourceTest {
 
 //        String sql = "select count(*) totalCount from zhyx_mange.ods_emr_log_decision_detail "; //15759730
 
-        String sql = "select count(*) totalCount from zhyx_mange.ods_emr_log_decision "; //7521241
+//        String sql = "select count(*) totalCount from ods_emr_log_decision "; //7521241
+
+        String sql = "select count(0) totalCount from ods_emr_log_decision t inner join ( SELECT id FROM ods_emr_log_decision" +
+                " WHERE req_timestamp BETWEEN 1548604800 and 1678325538 order by req_timestamp desc)t1 ON t.id = t1.id";
 
         ResultSet rs = st.executeQuery(sql);
         while (rs.next()) {
@@ -75,12 +78,20 @@ public class TrinoDatasourceTest {
         //String sql = "select * from zhyx_mange.ods_emr_log_decision where req_time between timestamp'2023-02-07 00:00:00' and timestamp'2023-02-11 00:00:00'";
         //String sql = "select * from zhyx_mange.ods_emr_log_decision where dept_code_now = '1121' and req_time between timestamp'2023-02-07 00:00:00' and timestamp'2023-02-09 00:00:00'";
 
-        String sql = "select old.* from  zhyx_mange.ods_emr_log_decision old " +
-                "inner join zhyx_mange.ods_emr_log_decision_detail oldd on old.sequence = oldd.sequence where " +
-                "old.req_time between timestamp'2023-02-07 00:00:00' and timestamp'2023-02-09 00:00:00' "
-               // "limit 100";
-                ;
+//        String sql = "select old.* from  zhyx_mange.ods_emr_log_decision old " +
+//                "inner join zhyx_mange.ods_emr_log_decision_detail oldd on old.sequence = oldd.sequence where " +
+//                "old.req_time between timestamp'2023-02-07 00:00:00' and timestamp'2023-02-09 00:00:00' "
+//               // "limit 100";
+//                ;
 
+//
+//        String sql ="   select * from ods_emr_log_decision t inner join\n" +
+//                "                    ( SELECT id FROM ods_emr_log_decision WHERE req_time BETWEEN timestamp '2023-2-7 00:00:00' and timestamp '2023-3-8 09:32:18'\n" +
+//                "                    order by req_timestamp desc offset 1 limit 2000 ) t1 ON t.id = t1.id";
+
+
+        String sql = "select * from ods_emr_log_decision t inner join ( SELECT id FROM ods_emr_log_decision WHERE " +
+                "req_timestamp BETWEEN 1675785600 and 1675733538 order by req_timestamp desc offset 0 limit 10 )t1 ON t.id = t1.id";
 
 //        String sql = "select old.* from  zhyx_mange.ods_emr_log_decision old " +
 //                "inner join zhyx_mange.ods_emr_log_decision_detail oldd on old.sequence = oldd.sequence limit 1000";
