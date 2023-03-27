@@ -30,7 +30,7 @@
         <!--<hibernate-validator.version>7.0.0.Final</hibernate-validator.version>-->
         <!--<version.jakarta.validation-api>3.0.0</version.jakarta.validation-api>-->
         <javax.el-api.version>4.0.1</javax.el-api.version>
-        <itextpdf.version>5.5.13.2</itextpdf.version>
+        <itextpdf.version>5.5.13.3</itextpdf.version>
         <itext-asian.version>5.2.0</itext-asian.version>
         <aviator.version>5.3.0</aviator.version>
 
