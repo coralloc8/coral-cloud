@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE flow PUBLIC  "liteflow" "liteflow.dtd">
+<flow>
+    <nodes>
+        <node id="globalKey" name="动态全局变量" type="script" file="flow/GlobalKey.groovy"/>
+        <node id="setExamineData" name="设置检验数据" type="script" file="flow/SetExamineData.groovy"/>
+
+    </nodes>
+    <chain name="initChain">
+        //初始化
+        THEN(globalKey,setExamineData);
+    </chain>
+
+</flow>

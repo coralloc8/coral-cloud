@@ -40,6 +40,7 @@
         <lombok.version>1.18.22</lombok.version>
         <cxf.version>3.5.3</cxf.version>
         <commons-discovery.version>0.5</commons-discovery.version>
+        <apm.apm-toolkit.version>8.14.0</apm.apm-toolkit.version>
 
         <!-- spring全家桶配置 -->
         <spring-boot.version>2.6.12</spring-boot.version>

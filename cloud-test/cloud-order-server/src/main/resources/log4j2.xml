@@ -10,7 +10,8 @@
         <!-- %d{yyyy-MM-dd HH:mm:ss, SSS} : 日志生产时间 %p : 日志输出格式 %c : logger的名称 %m
             : 日志内容，即 logger.info("message") %n : 换行符 %C : Java类名 %L : 日志输出所在行数 %M : 日志输出所在方法名
             hostName : 本地机器名 hostAddress : 本地ip地址 -->
-        <property name="PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36}:%M(%L)] - %msg%xEx%n</property>
+<!--        <property name="PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36}:%M(%L)] - %msg%xEx%n</property>-->
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t-%L] [%-5level] [%traceId] %class{36}:%M(%L) - %msg%xEx%n</property>
     </properties>
     <!--先定义所有的appender -->
     <appenders>
@@ -65,6 +66,11 @@
             </Policies>
     <!--        <DefaultRolloverStrategy max="20"/>-->
         </RollingFile>
+
+        <GRPCLogClientAppender name="grpc-log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%M(%L) - %msg%n"/>
+        </GRPCLogClientAppender>
+
     </appenders>
     <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
     <loggers>
@@ -81,6 +87,7 @@
             <appender-ref ref="RollingFileInfo"/>
             <!--			<appender-ref ref="RollingFileWarn" />-->
             <appender-ref ref="RollingFileError"/>
+            <appender-ref ref="grpc-log" />
         </root>
     </loggers>
 </configuration>

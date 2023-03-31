@@ -19,6 +19,7 @@
         <module>cloud-order2-server</module>
         <module>cloud-order-feign</module>
         <module>cloud-gateway-server</module>
+        <module>cloud-user2-server</module>
     </modules>
 
 
@@ -40,6 +41,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-log4j-2.x</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+        </dependency>
+
 
     </dependencies>
 
@@ -65,6 +76,21 @@
                 <artifactId>cloud-gateway-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.skywalking/apm-toolkit-log4j-2.x -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-log4j-2.x</artifactId>
+                <version>${apm.apm-toolkit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${apm.apm-toolkit.version}</version>
+            </dependency>
+
+
+
         </dependencies>
     </dependencyManagement>
 

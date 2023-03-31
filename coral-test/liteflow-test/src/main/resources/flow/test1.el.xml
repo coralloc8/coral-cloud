@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE flow PUBLIC  "liteflow" "liteflow.dtd">
+<flow>
+    <nodes>
+        <node id="examineBGroup" name="检验b走groovy检测" type="script" file="flow/ExamineBGroup.groovy"/>
+        <node id="ruleGroup" name="规则走groovy检测" type="script" file="flow/RuleGroup.groovy"/>
+        <node id="examineIfGroup" name="检验if走groovy检测" type="if_script" file="flow/ExamineIfGroup.groovy"/>
+    </nodes>
+    <chain name="mainChain">
+        //年龄分组
+        ageGroup = WHEN(babyGroup,childrenGroup,juniorGroup,youthGroup,midLifeGroup,oldAgeGroup);
+
+        //主诉
+        symptomGroup = WHEN(symptomA,symptomB).any(true);
+
+        //年龄分组2
+        ageGroup2 =
+        SWITCH(ageSwitchGroup).TO(babyGroup,childrenGroup,juniorGroup,youthGroup,midLifeGroup,oldAgeGroup).DEFAULT(defAgeGroup);
+
+        //药品
+        drugGroup = IF(drugIfGroup,drugAGroup,drugBGroup);
+
+        //检验
+        examineGroup = IF(examineIfGroup,examineBGroup);
+
+        //主线
+        THEN(initChain,personGroup,sexGroup,symptomGroup,ageGroup,ageGroup2,drugGroup,examineGroup,ruleGroup);
+    </chain>
+
+</flow>

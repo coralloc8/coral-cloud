@@ -22,5 +22,6 @@
         <module>spring-event</module>
         <module>hadoop-test</module>
         <module>cucumber-test</module>
+        <module>liteflow-test</module>
     </modules>
 </project>

@@ -1,0 +1,74 @@
+server:
+  port: 16101
+  session-timeout: 30
+  servlet:
+    context-path:
+    encoding:
+      charset: UTF-8
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 800
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    data-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      enable: true
+
+#feign
+feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  circuitbreaker:
+    enabled: true
+  metrics:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+  compression:
+    request:
+      # 开启GZIP请求压缩
+      enabled: true
+      # 设置压缩的数据类型
+      mime-types: text/html,application/xml,application/json
+      # 设置触发压缩的大小下限
+      min-request-size: 2048
+    response:
+      # 开启GZIP响应压缩
+      enabled: true
+
+# openapi 文档配置
+springdoc:
+  version: 1.0
+  name: 用户接口文档
+  description: 用户接口文档
+  url: http://localhost:${server.port}${server.servlet.context-path}/doc.html
+  groups:
+    - group: api
+      # 多个,分割
+      packagesToScan: com.coral.cloud.user.controller
+      # 多个,分割
+      packagesToExclude:
+      tags:
+        - name: 1.0.0
+          desc: 测试
+
+
+
+
+

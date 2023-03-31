@@ -1,0 +1,24 @@
+info:
+  author: huss
+  date: 2020年10月24日
+  remark: liteflow-test
+  my-server-name: liteflow-test
+
+server:
+  port: 8085
+
+#spring
+spring:
+#  autoconfigure:
+#    exclude:
+#      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: ${info.my-server-name}
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
+#  main:
+#    allow-bean-definition-overriding: true
