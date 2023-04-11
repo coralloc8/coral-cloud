@@ -20,6 +20,7 @@ rules = rules.stream().filter(e -> {
 diagnoseResponse.put(GlobalKey.RULES_KEY, rules);
 
 
+// 清洗->rule->合并
 class MyRule {
 
     private String name;

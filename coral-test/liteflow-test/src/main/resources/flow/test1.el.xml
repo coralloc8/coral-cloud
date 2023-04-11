@@ -9,7 +9,6 @@
     <chain name="mainChain">
         //年龄分组
         ageGroup = WHEN(babyGroup,childrenGroup,juniorGroup,youthGroup,midLifeGroup,oldAgeGroup);
-
         //主诉
         symptomGroup = WHEN(symptomA,symptomB).any(true);
 
