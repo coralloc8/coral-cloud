@@ -11,8 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author huss
@@ -71,5 +77,36 @@ public class LiteFlowTest {
 
         System.out.println("诊断响应：" + diagnoseResponse);
 
+    }
+
+    public void test3() throws IOException {
+        Files.readAllLines(Paths.get("C:\\Users\\Administrator\\Desktop\\test.txt")).stream().forEach(e -> {
+            String pattern = "'.*\\{.*?\\ }.*'";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(e);
+            String last = e;
+
+            try {
+                if (m.find()) {
+                    String str = m.group();
+                    int size = m.group().length();
+
+                    int first = e.indexOf("IS");
+
+                    last = e.substring(0, first + 2) + " " + str.replaceAll(" ", "") + e.substring(first + 3 + size);
+                    System.out.println(last);
+                    last += "\n";
+                    Files.write(Paths.get("C:\\Users\\Administrator\\Desktop\\test_new.txt"), last.getBytes(), StandardOpenOption.APPEND);
+                } else {
+                    last += "\n";
+                    Files.write(Paths.get("C:\\Users\\Administrator\\Desktop\\test_new.txt"), last.getBytes(), StandardOpenOption.APPEND);
+
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
+        });
     }
 }

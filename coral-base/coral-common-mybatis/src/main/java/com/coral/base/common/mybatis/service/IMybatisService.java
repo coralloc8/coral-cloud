@@ -12,4 +12,9 @@ import java.io.Serializable;
  * @date 2021/5/11 17:31
  */
 public interface IMybatisService<T extends Serializable> extends IService<T> {
+    @Override
+    default boolean removeById(Serializable id) {
+        return IService.super.removeById(id);
+    }
+
 }

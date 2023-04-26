@@ -23,5 +23,6 @@
         <module>hadoop-test</module>
         <module>cucumber-test</module>
         <module>liteflow-test</module>
+        <module>mybatisplus-generator</module>
     </modules>
 </project>

@@ -3,6 +3,7 @@ package com.coral.cloud.user.service;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.Metrics;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

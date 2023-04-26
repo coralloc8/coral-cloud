@@ -20,6 +20,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -95,7 +96,7 @@ public class MybatisSessionFactory {
         //  注入填充器
         this.getBeanThen(MetaObjectHandler.class, globalConfig::setMetaObjectHandler);
         //  注入主键生成器
-        this.getBeanThen(IKeyGenerator.class, i -> globalConfig.getDbConfig().setKeyGenerator(i));
+        this.getBeanThen(IKeyGenerator.class, i -> globalConfig.getDbConfig().setKeyGenerators(Arrays.asList(i)));
         //  注入sql注入器
         this.getBeanThen(ISqlInjector.class, globalConfig::setSqlInjector);
         //  注入ID生成器
