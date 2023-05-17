@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.sql.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +26,57 @@ public class TagGeneratorTest extends GeneratorTest {
     private static final DataSourceConfig.Builder DB_INSURANCE = new DataSourceConfig
             .Builder("jdbc:postgresql://192.168.29.112:5432/bigdata", "zhyx", "Meimima1202")
             .schema("tool_tag");
+
+    private static Connection connection;
+
+
+    @BeforeAll
+    public static void init() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            // hive 库表 default.t_hive
+            connection = DriverManager.getConnection("jdbc:postgresql://192.168.29.112:5432/bigdata?currentSchema=tool_tag", "zhyx", "Meimima1202");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    @DisplayName("metadata测试")
+    public void jdbcTest() throws SQLException {
+        DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+        ResultSet resultSet = databaseMetaData.getTables(connection.getCatalog(), connection.getSchema(), "", new String[]{"TABLE", "VIEW"});
+
+        while (resultSet.next()) {
+            String name = resultSet.getString(3);
+            String comment = resultSet.getString(5);
+            String type = resultSet.getString(4);
+            System.out.printf("table:%s\t\t\t\t\tcomment:%s\t\t\t\t\ttype:%s\n", name, comment, type);
+        }
+        System.out.println("==========================================================================");
+
+        resultSet = databaseMetaData.getColumns(connection.getCatalog(), connection.getSchema(), "test", "");
+        while (resultSet.next()) {
+            String column = resultSet.getString(4);
+            String comment = resultSet.getString(12);
+            String type = resultSet.getString(6);
+            System.out.printf("column:%s\t\t\t\t\tcomment:%s\t\t\t\t\ttype:%s\n", column, comment, type);
+        }
+
+        System.out.println("==========================================================================");
+        resultSet = databaseMetaData.getPrimaryKeys(connection.getCatalog(), connection.getSchema(),"test");
+        while (resultSet.next()) {
+            String column = resultSet.getString(4);
+            String comment = resultSet.getString(5);
+            String type = resultSet.getString(6);
+            System.out.printf("column:%s\t\t\t\t\tcomment:%s\t\t\t\t\ttype:%s\n", column, comment, type);
+
+        }
+
+
+    }
 
     @Test
     @DisplayName("标签平台单代码生成")

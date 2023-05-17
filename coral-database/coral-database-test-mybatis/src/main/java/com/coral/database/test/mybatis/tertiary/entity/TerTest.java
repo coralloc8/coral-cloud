@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.coral.base.common.mybatis.enums.GlobalSexEnum;
-import jdk.nashorn.internal.objects.Global;
 import lombok.Data;
 
 import javax.persistence.*;

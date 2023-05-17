@@ -17,7 +17,7 @@ public class GeneratorTest {
     private static final String TEMPLATE = "templates";
     private static final String ENTITY_DTO_FTL = "entityDTO.java.ftl";
 
-    private static final String OUTPUT_DIR = "C:\\Users\\Administrator\\Desktop";
+    private static final String OUTPUT_DIR = "C:\\Users\\huss\\Desktop";
 
     private static final String DEF_OUT_XML_PATH = "xml";
 
