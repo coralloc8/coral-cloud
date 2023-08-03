@@ -1,4 +1,5 @@
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
@@ -89,7 +90,7 @@ public class GenFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
             tableInfo.getFields().clear();
             tableInfo.getFields().addAll(fields);
 
-            String fileName = filePath + File.separator + entityName + file.getFileName();
+            String fileName = filePath + File.separator + entityName + file.getFileName() + ConstVal.JAVA_SUFFIX;
 
             outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
 

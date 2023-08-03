@@ -24,6 +24,19 @@
             <version>${hanlp.version}</version>
         </dependency>
 
+
+        <!-- weka -->
+        <!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable -->
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.6</version>
+        </dependency>
+
+
+
+
+
         <!-- 基础工具类 -->
         <dependency>
             <groupId>com.coral.base</groupId>

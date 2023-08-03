@@ -24,7 +24,7 @@ public class TagGeneratorTest extends GeneratorTest {
 
     private static final String INSURANCE_KEY = "tag";
     private static final DataSourceConfig.Builder DB_INSURANCE = new DataSourceConfig
-            .Builder("jdbc:postgresql://192.168.29.112:5432/bigdata", "zhyx", "Meimima1202")
+            .Builder("jdbc:postgresql://192.168.29.112:5432/bigdata", "app", "App.1202p")
             .schema("tool_tag");
 
     private static Connection connection;
@@ -35,7 +35,7 @@ public class TagGeneratorTest extends GeneratorTest {
         try {
             Class.forName("org.postgresql.Driver");
             // hive 库表 default.t_hive
-            connection = DriverManager.getConnection("jdbc:postgresql://192.168.29.112:5432/bigdata?currentSchema=tool_tag", "zhyx", "Meimima1202");
+            connection = DriverManager.getConnection("jdbc:postgresql://192.168.29.112:5432/bigdata?currentSchema=tool_tag", "app", "App.1202p");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

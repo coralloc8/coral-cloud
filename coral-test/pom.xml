@@ -24,5 +24,6 @@
         <module>cucumber-test</module>
         <module>liteflow-test</module>
         <module>mybatisplus-generator</module>
+        <module>flink-test</module>
     </modules>
 </project>
