@@ -5,13 +5,12 @@ import com.coral.base.common.json.JsonUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import lombok.extern.slf4j.Slf4j;
+import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -19,6 +18,8 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author huss
@@ -27,6 +28,7 @@ import java.util.*;
  * @description xml工具类
  * @date 2021/6/11 9:53
  */
+@Slf4j
 public class XmlUtil {
 
     private static final String LIST_KEY = "value";
@@ -261,12 +263,14 @@ public class XmlUtil {
      * @return List 如果不删除根节点的话返回的一定是只有一个元素的list集合，如果删除根节点的话，返回的有可能是有多个元素的list集合
      */
     public static <T> List<T> parseXml(String xmlStr, @NonNull XmlParseConfig xmlParseConfig) {
-        Map<String, Object> map = xmlStrToMap(xmlStr, xmlParseConfig.getArrayNodeNames());
+        // xml解析成map
+        Map<String, Object> map = xmlStrToMap(xmlStr, xmlParseConfig);
+        //
         boolean removeRootNode = xmlParseConfig.isRemoveRootNode();
         Class<T> clazz = (Class<T>) xmlParseConfig.getClazz();
 
         Object obj = removeRootNode && map.size() == 1 ? map.values().iterator().next() : map;
-
+//        System.out.println(">>>>> :" + JsonUtil.toJson(obj));
         if (obj instanceof Map) {
             return Arrays.asList(JsonUtil.toPojo((Map) obj, clazz));
         } else if (obj instanceof List) {
@@ -275,17 +279,60 @@ public class XmlUtil {
         return Collections.emptyList();
     }
 
-    private static Map<String, Object> xmlStrToMap(String xmlStr, List<String> arrayNodeNames) {
+    private static Map<String, Object> xmlStrToMap(String xmlStr, XmlParseConfig xmlParseConfig) {
         try {
             if (StringUtils.isBlank(xmlStr)) {
                 return Collections.emptyMap();
             }
+            List<String> arrayNodeNames = xmlParseConfig.getArrayNodeNames();
             Map<String, Object> map = new HashMap<>(16);
-            Document document = DocumentHelper.parseText(xmlStr);
 
+            SAXReader reader = SAXReader.createDefault();
+            reader.setDocumentFactory(new DocumentFactory());
+
+            if (Objects.nonNull(xmlParseConfig.getXpathNamespaces())) {
+                reader.getDocumentFactory().setXPathNamespaceURIs(xmlParseConfig.getXpathNamespaces());
+            }
+            String encoding = getEncoding(xmlStr);
+//            xmlStr = xmlStr.replaceAll("<\\?xml.*\\?>", "");
+            InputSource source = new InputSource(new StringReader(xmlStr));
+            source.setEncoding(encoding);
+
+            Document document = reader.read(source);
+            // if the XML parser doesn't provide a way to retrieve the encoding,
+            // specify it manually
+            if (document.getXMLEncoding() == null) {
+                document.setXMLEncoding(encoding);
+            }
             // 获取根节点
             Element rootElt = document.getRootElement();
 
+            if (StringUtils.isNotBlank(xmlParseConfig.getXpathExpression())) {
+                rootElt = (Element) rootElt.selectSingleNode(xmlParseConfig.getXpathExpression());
+                if (Objects.isNull(rootElt)) {
+                    throw Exceptions.unchecked(
+                            new RuntimeException("对应的节点不存在,xpathExpression: " + xmlParseConfig.getXpathExpression())
+                    );
+                }
+            }
+//            List<Element> eles = new ArrayList<>(64);
+//            eles.add(rootElt);
+            if (xmlParseConfig.isXpathValParse()) {
+                InputSource valSource = new InputSource(new StringReader(rootElt.getTextTrim()));
+                valSource.setEncoding(encoding);
+                Document valDoc = reader.read(valSource);
+                valDoc.setXMLEncoding(encoding);
+                rootElt = valDoc.getRootElement();
+
+                if (StringUtils.isNotBlank(xmlParseConfig.getXpathValExpression())) {
+                    rootElt = (Element) rootElt.selectSingleNode(xmlParseConfig.getXpathValExpression());
+                }
+                if (Objects.isNull(rootElt)) {
+                    throw Exceptions.unchecked(
+                            new RuntimeException("对应的节点不存在,xpathValExpression: " + xmlParseConfig.getXpathValExpression())
+                    );
+                }
+            }
             // 遍历子节点
             map = elementToMap(rootElt, map, arrayNodeNames);
             return map;
@@ -305,7 +352,6 @@ public class XmlUtil {
         List<Element> list = outEle.elements();
         String currentNodeName = outEle.getName();
 
-
         if (list.isEmpty()) {
             outMap.put(currentNodeName, outEle.getTextTrim());
             return outMap;
@@ -322,12 +368,11 @@ public class XmlUtil {
                 List innerList;
                 if (!(obj instanceof List)) {
                     // map 转 list
-                    innerList = new ArrayList();
+                    innerList = new ArrayList<>();
                     innerList.add(innerMap.remove(perNodeName));
                 } else {
                     innerList = (List) obj;
                 }
-
                 elementToMap(ele, innerMap, arrayNodeNames);
                 innerList.add(innerMap.remove(perNodeName));
                 innerMap.put(perNodeName, innerList);
@@ -341,8 +386,36 @@ public class XmlUtil {
         } else {
             outMap.put(currentNodeName, innerMap);
         }
-
         return outMap;
+    }
+
+    private static String getEncoding(String text) {
+        String result = null;
+        String xml = text.trim();
+        Pattern r = Pattern.compile("<\\?xml.*\\?>");
+        Matcher m = r.matcher(xml);
+        if (m.find()) {
+            xml = m.group();
+        }
+        if (xml.startsWith("<?xml")) {
+            int end = xml.indexOf("?>");
+            String sub = xml.substring(0, end);
+            StringTokenizer tokens = new StringTokenizer(sub, " =\"\'");
+
+            while (tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+
+                if ("encoding".equals(token)) {
+                    if (tokens.hasMoreTokens()) {
+                        result = tokens.nextToken();
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -354,6 +427,26 @@ public class XmlUtil {
          * 解析时是否删除根节点
          */
         private boolean removeRootNode;
+
+        /**
+         * xpath查找的命名空间
+         */
+        private Map<String, String> xpathNamespaces;
+
+        /**
+         * xpath表达式 只查找单个节点
+         */
+        private String xpathExpression;
+
+        /**
+         * xpath值是否继续解析
+         */
+        private boolean xpathValParse;
+
+        /**
+         * xpath值继续解析xpath表达式 查找单个节点
+         */
+        private String xpathValExpression;
 
         /**
          * 是集合的节点列表
@@ -370,8 +463,12 @@ public class XmlUtil {
             this.removeRootNode = removeRootNode;
             this.arrayNodeNames = Objects.isNull(arrayNodeNames) ? Collections.emptyList() : arrayNodeNames;
             this.clazz = Objects.isNull(clazz) ? Map.class : clazz;
+        }
 
+        public XmlParseConfig(boolean removeRootNode, Class<?> clazz) {
+            this(removeRootNode, null, clazz);
         }
 
     }
+
 }
