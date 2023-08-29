@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>coral-base</artifactId>
+        <groupId>com.coral.base</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>coral-common-opendoc</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <springdoc.version>1.6.7</springdoc.version>
+        <!-- 替换swagger-ui  -->
+        <knife4j-springdoc-ui.version>3.0.3</knife4j-springdoc-ui.version>
+    </properties>
+
+    <dependencies>
+        <!-- api文档生成 替代springfox -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-springdoc-ui</artifactId>
+            <!--在引用时请在maven中央仓库搜索3.X最新版本号-->
+            <version>${knife4j-springdoc-ui.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.coral.base</groupId>
+            <artifactId>coral-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+</project>

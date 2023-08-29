@@ -16,6 +16,7 @@
         <module>coral-common</module>
         <module>coral-common-jpa</module>
         <module>coral-common-mybatis</module>
+        <module>coral-common-opendoc</module>
     </modules>
 
 </project>
