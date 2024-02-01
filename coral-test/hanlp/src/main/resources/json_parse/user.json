@@ -1,0 +1,40 @@
+{
+  "user_info": [
+    {
+      "user_code": "001",
+      "user_name": "name:001",
+      "age": "23",
+      "sex": "男",
+      "address_infos": [
+        {
+          "address_code": "a001",
+          "address_name": "深圳市",
+          "detail": "深圳市南山区"
+        },
+        {
+          "address_code": "a002",
+          "address_name": "广州市",
+          "detail": "广州市白云区"
+        }
+      ]
+    },
+    {
+      "user_code": "002",
+      "user_name": "name:002",
+      "age": "27",
+      "sex": "女"
+    }
+  ],
+  "address_info": [
+    {
+      "address_code": "a001",
+      "address_name": "深圳市",
+      "detail": "深圳市南山区"
+    },
+    {
+      "address_code": "a002",
+      "address_name": "广州市",
+      "detail": "广州市白云区"
+    }
+  ]
+}

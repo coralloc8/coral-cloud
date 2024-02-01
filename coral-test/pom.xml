@@ -25,5 +25,7 @@
         <module>liteflow-test</module>
         <module>mybatisplus-generator</module>
         <module>flink-test</module>
+        <module>spring-graphql</module>
+        <module>spring-graphql-jdk8</module>
     </modules>
 </project>

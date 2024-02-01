@@ -1,0 +1,11 @@
+server:
+  port: 8083
+spring:
+  graphql:
+    schema:
+      printer:
+        enabled: true
+    graphiql:
+      enabled: true
+      path: /graphiql
+    path: /graphql

@@ -1,0 +1,11 @@
+# 作者
+"用户信息"
+type User {
+    "账号"
+    account:String
+    "名称"
+    username:String
+    "角色"
+    role:String @auth
+
+}

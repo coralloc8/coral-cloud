@@ -49,6 +49,12 @@
             <groupId>com.coral.base</groupId>
             <artifactId>coral-common-mybatis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jta-atomikos</artifactId>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>

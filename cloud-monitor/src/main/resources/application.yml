@@ -1,0 +1,127 @@
+server:
+  port: 9024
+  session-timeout: 30
+  servlet:
+    context-path: /monitor
+    encoding:
+      charset: UTF-8
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 800
+
+spring:
+  profiles:
+    active: @profileActive@
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    data-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      enable: true
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org.quartz.startupDelay: 90s
+      org.quartz.scheduler.instanceId: AUTO
+      #持久化配置
+      org.quartz.jobStore.class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+      #我们仅为数据库制作了特定于数据库的代理
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+      #以指示JDBCJobStore将JobDataMaps中的所有值都作为字符串，因此可以作为名称 - 值对存储而不是在BLOB列中以其序列化形式存储更多复杂的对象。从长远来看，这是更安全的，因为您避免了将非String类序列化为BLOB的类版本问题。
+      org.quartz.jobStore.useProperties: false
+      #数据库表前缀
+      org.quartz.jobStore.tablePrefix: qrtz_
+      #在被认为“失火”之前，调度程序将“容忍”一个Triggers将其下一个启动时间通过的毫秒数。默认值（如果您在配置中未输入此属性）为60000（60秒）。
+      org.quartz.jobStore.misfireThreshold: 60000
+      #设置此实例“检入”*与群集的其他实例的频率（以毫秒为单位）。影响检测失败实例的速度。
+      org.quartz.jobStore.clusterCheckinInterval: 5000
+      org.quartz.jobStore.acquireTriggersWithinLock: true
+      #打开群集功能
+      org.quartz.jobStore.isClustered: true
+      org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
+      org.quartz.threadPool.threadCount: 10
+      org.quartz.threadPool.threadPriority: 5
+      org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread: true
+
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.coral.**.model
+  typeEnumsPackage: com.coral.**.enums
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: NOT_NULL
+      #驼峰下划线转换
+      column-underline: true
+      #db-type: mysql
+    banner: false
+  #原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+    default-enum-type-handler: com.coral.base.common.mybatis.config.MybatisAutoEnumTypeHandler
+    # 打印sql语句
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #自定义类型处理器的包名
+  type-handlers-package:
+
+
+
+# id生成器
+snow-flake-creator:
+  data-center-id: 2
+  machine-id: 2
+
+# 监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+
+# openapi 文档配置
+springdoc:
+  version: 2.0
+  name: 监控服务接口文档
+  description: 监控服务接口文档
+  url: http://localhost:${server.port}${server.servlet.context-path}/doc.html
+  groups:
+    - group: api
+      # 多个,分割
+      packagesToScan: com.coral.cloud.monitor.controller
+      # 多个,分割
+      packagesToExclude:
+      tags:
+        - name: 2.0
+          desc: 测试
+
+
+# 自定义
+coral.monitor:
+  key: TEST
+
+
+

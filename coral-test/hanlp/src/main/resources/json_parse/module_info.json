@@ -1,0 +1,44 @@
+[
+  {
+    "module": "user_info",
+    "module_name": "用户信息",
+    "field": "user_code",
+    "field_name": "用户编码"
+  },
+  {
+    "module": "user_info",
+    "module_name": "用户信息",
+    "field": "user_name",
+    "field_name": "用户名称"
+  },
+  {
+    "module": "user_info",
+    "module_name": "用户信息",
+    "field": "age",
+    "field_name": "年龄"
+  },
+  {
+    "module": "user_info",
+    "module_name": "用户信息",
+    "field": "sex",
+    "field_name": "性别"
+  },
+  {
+    "module": "address_info",
+    "module_name": "地址信息",
+    "field": "address_code",
+    "field_name": "地址编码"
+  },
+  {
+    "module": "address_info",
+    "module_name": "地址信息",
+    "field": "address_name",
+    "field_name": "地址名称"
+  },
+  {
+    "module": "address_info",
+    "module_name": "地址信息",
+    "field": "detail",
+    "field_name": "详细地址"
+  }
+]

@@ -1,0 +1,41 @@
+# https://github.com/graphql-java/graphql-java-extended-scalars
+
+
+# A RFC-3339 compliant date time scalar that accepts string values like 1996-12-19T16:39:57-08:00 and produces java.time.OffsetDateTime objects at runtime.
+scalar DateTime
+@specifiedBy(url:
+"https://scalars.graphql.org/andimarek/date-time.html"
+)
+
+# A RFC-3339 compliant date scalar that accepts string values like 1996-12-19 and produces java.time.LocalDate objects at runtime.
+scalar Date
+@specifiedBy(url:
+"https://tools.ietf.org/html/rfc3339"
+)
+
+# A RFC-3339 compliant time scalar that accepts string values like 16:39:57-08:00 and produces java.time.OffsetTime objects at runtime.
+scalar Time
+@specifiedBy(url:
+"https://tools.ietf.org/html/rfc3339"
+)
+
+# 24-hour clock time string in the format hh:mm:ss.sss or hh:mm:ss if partial seconds is zero and produces java.time.LocalTime objects at runtime.
+scalar LocalTime
+
+# A universally unique identifier scalar that accepts uuid values like 2423f0a0-3b81-4115-a189-18df8b35e8fc and produces java.util.UUID instances at runtime.
+scalar UUID
+@specifiedBy(url:
+"https://tools.ietf.org/html/rfc4122"
+)
+
+# A scalar which represents java.lang.Long
+scalar Long
+
+# A scalar which represents java.lang.Short
+scalar Short
+
+# A synonym for the Object scalar, it will accept any object as a scalar value.
+scalar JSON
+
+
+scalar LocalDateTime

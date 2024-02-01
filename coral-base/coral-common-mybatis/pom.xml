@@ -34,20 +34,15 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jta-atomikos</artifactId>
-        </dependency>
 
-<!--
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>${mybatis-plus-dynamic.version}</version>
-        </dependency>
+        <!--
+                <dependency>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                    <version>${mybatis-plus-dynamic.version}</version>
+                </dependency>
 
--->
-
+        -->
 
 
     </dependencies>

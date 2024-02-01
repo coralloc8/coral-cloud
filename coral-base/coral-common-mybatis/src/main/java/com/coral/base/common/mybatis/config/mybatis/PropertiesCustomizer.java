@@ -34,6 +34,8 @@ public class PropertiesCustomizer implements MybatisPlusPropertiesCustomizer {
     private final static String ENTITY_CLASSPATH = "classpath*:com/**/entity/**/*.class";
     private final static String DOMAIN_CLASSPATH = "classpath*:com/**/domain/**/*.class";
 
+    private final static String MODEL_CLASSPATH = "classpath*:com/**/model/**/*.class";
+
     public PropertiesCustomizer(String replaceStr) {
         this.replaceStr = replaceStr;
     }
@@ -48,6 +50,7 @@ public class PropertiesCustomizer implements MybatisPlusPropertiesCustomizer {
         try {
             List<Class<?>> classes = findClasses(ENTITY_CLASSPATH);
             classes.addAll(findClasses(DOMAIN_CLASSPATH));
+            classes.addAll(findClasses(MODEL_CLASSPATH));
             log.debug(">>>classes: {}", classes);
             this.tableFieldMappings(classes);
         } catch (IOException e) {

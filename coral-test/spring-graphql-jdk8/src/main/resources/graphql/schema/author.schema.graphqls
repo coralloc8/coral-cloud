@@ -1,0 +1,41 @@
+# 作者
+"作者信息"
+type Author {
+    "作者ID"
+    id:ID!
+    "作者编码"
+    authorNo:String!
+    "作者名称"
+    authorName:String!
+    "性别"
+    sex:Sex
+    "出生日期"
+    birthday:Date
+    "创建时间"
+    createTime:LocalDateTime
+    "书籍列表"
+    books:[Book]
+}
+
+"作者查询"
+input AuthorQuery {
+    "作者编码集合"
+    authorNos:[String]
+    "性别"
+    sex:Sex
+    "出生日期开始范围"
+    birthdayStart:Date
+    "出生日期结束范围"
+    birthdayEnd:Date
+    "作者名称"
+    authorName: String
+
+}
+
+"性别"
+enum Sex {
+    "男性"
+    MALE
+    "女性"
+    FEMALE
+}

@@ -1,0 +1,17 @@
+
+# 书籍
+"书籍信息"
+type Book {
+    "书籍ID"
+    id:ID!
+    "书籍名称"
+    bookName: String!
+    "作者信息"
+    author:Author
+    "书籍价格"
+    price:Float
+    "书籍总章节"
+    chapter:Long
+    "创建时间"
+    createTime:LocalDateTime
+}

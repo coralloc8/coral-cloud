@@ -1,0 +1,42 @@
+# 查询
+"""
+**查询**
+"""
+type Query {
+
+    "查询书籍"
+    book(
+        "书籍ID"
+        id:ID!
+    ):Book
+
+    "查询作者"
+    author(
+        "作者编码"
+        authorNo:String!
+    ):Author
+
+    "查询所有作者信息"
+    authors(
+        "作者查询"
+        query: AuthorQuery
+    ):[Author]
+
+    "分页查询书籍信息"
+    booksOfPage(
+        "书籍查询"
+        query: BookQuery
+    ): BookConnection
+
+    "分页查询书籍信息2"
+    booksOfPage2(
+        "书籍查询"
+        query: BookQuery
+    ): Book @page
+
+    "分页查询书籍信息3"
+    booksOfPage3(
+        "书籍查询"
+        query: BookQuery
+    ): Book @page
+}

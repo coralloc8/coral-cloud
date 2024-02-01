@@ -1,0 +1,52 @@
+# 书籍
+"书籍信息"
+type Book {
+    "书籍ID"
+    id:ID!
+    "书籍名称"
+    bookName: String!
+    "作者信息"
+    author:Author
+    "用户信息"
+    user:User @auth
+    "书籍价格"
+    price:Float
+    "书籍总章节"
+    chapter:Long @auth
+    "创建时间"
+    createTime:LocalDateTime @dateFormat
+}
+
+#type BookPage {
+#    pageInfo: DefPage!
+#    records: [Book]
+#}
+
+type BookConnection {
+    edges: [BookEdge]
+    pageInfo: SimPageInfo
+}
+
+type BookEdge {
+    cursor: String
+    node: Book
+}
+
+"书籍查询"
+input BookQuery {
+    "分页查询"
+    pageQuery: PageQuery!
+    "书籍名称"
+    bookName:String
+    "作者名称"
+    authorName:String
+    "价格开始范围"
+    priceStart:Float
+    "价格结束范围"
+    priceEnd:Float
+    "章节开始范围"
+    chapterStart:Long
+    "章节结束范围"
+    chapterEnd:Long
+
+}

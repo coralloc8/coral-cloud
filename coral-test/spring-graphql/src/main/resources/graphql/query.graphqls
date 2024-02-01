@@ -1,0 +1,27 @@
+# 查询
+"""
+**查询**
+"""
+type Query {
+
+    "查询书籍"
+    findBook(
+        "书籍ID"
+        id:ID!
+    ):Book
+
+    "查询作者"
+    findAuthor(
+        "作者编码"
+        authorNo:String!
+    ):Author
+
+    "查询所有作者信息"
+    findAllAuthors(
+        "作者编码集合"
+        authorNos:[String]
+
+    ):[Author]
+}
+
+

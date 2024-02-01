@@ -1,0 +1,117 @@
+#数据库配置
+db:
+  host: ${coral.datasource.url:localhost:3306}
+  name: coral_monitor
+  username: ${coral.datasource.username:root}
+  password: ${coral.datasource.password:coral@2023}
+  #password: ${coral.datasource.password-encryption:A+jROq3Re1Nk6KCkCB3QI5422q8fWxUiz4QixgYY0wJH6tVtnXndluKEDYSnA1LlaVf7FLB1PZ53ldloPfolTQ==}
+  #public-key: ${coral.datasource.public-key:MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIW9OCX/fFb6LFiDYcYrJ1bhN2Z6cKJZG1n0topz3/bqxf9ynoXZ52Pgp8xFi3Y67Eb0X4/SM2EQPD8bgDT0udsCAwEAAQ==}
+
+#nacos配置
+spring:
+  datasource:
+    monitor:
+      type: com.alibaba.druid.pool.DruidDataSource
+      username: ${db.username}
+      password: ${db.password}
+      url: jdbc:mysql://${db.host}/${db.name}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useOldAliasMetadataBehavior=true&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&failOverReadOnly=false
+      #connection-properties: config.decrypt=true;config.decrypt.key=${db.public-key};druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      #查询超时时间
+      query-timeout: 6000
+      #事务查询超时时间
+      transaction-query-timeout: 6000
+      #关闭空闲连接超时时间
+      remove-abandoned-timeout: 1800
+      #最大连接数
+      max-active: 10
+      #初始化连接大小
+      initial-size: 8
+      max-wait: 60000
+      #最小空闲连接数
+      min-idle: 5
+      time-between-eviction-runs-millis: 100000
+      # 最大 900000
+      max-evictable-idle-time-millis: 900000
+      # 最小 600000
+      min-evictable-idle-time-millis: 600000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      keep-alive: true
+      filters: stat,wall,log4j2,config
+      atomikos:
+        #ato
+        minPoolSize: 0
+        maxPoolSize: 25
+        maxLifetime: 20000
+        borrowConnectionTimeout: 30
+        loginTimeout: 30
+        maintenanceInterval: 60
+        maxIdleTime: 60
+        testQuery: SELECT 1
+#    quartz:
+#      type: com.alibaba.druid.pool.DruidDataSource
+#      username: ${db.username}
+#      password: ${db.password}
+#      url: jdbc:mysql://${db.host}/${db.quartz-name}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useOldAliasMetadataBehavior=true&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&failOverReadOnly=false
+#      #connection-properties: config.decrypt=true;config.decrypt.key=${db.public-key};druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+#      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+#      #查询超时时间
+#      query-timeout: 6000
+#      #事务查询超时时间
+#      transaction-query-timeout: 6000
+#      #关闭空闲连接超时时间
+#      remove-abandoned-timeout: 1800
+#      #最大连接数
+#      max-active: 10
+#      #初始化连接大小
+#      initial-size: 8
+#      max-wait: 60000
+#      #最小空闲连接数
+#      min-idle: 5
+#      time-between-eviction-runs-millis: 100000
+#      # 最大 900000
+#      max-evictable-idle-time-millis: 900000
+#      # 最小 600000
+#      min-evictable-idle-time-millis: 600000
+#      validation-query: SELECT 1
+#      test-while-idle: true
+#      test-on-borrow: false
+#      test-on-return: false
+#      keep-alive: true
+#      filters: stat,wall,log4j2,config
+    # druid 监控页面配置
+    druid:
+      filter:
+        config:
+          enabled: true
+        stat:
+          log-slow-sql: true
+          slow-sql-mills: 5000
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: coral@2023
+        reset-enable: false
+
+
+
+
+# doc文档
+springdoc:
+  # 是否启用doc 生产环境在外网的话可以选择关闭该功能
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    #自定义swagger前端请求路径，输入http：127.0.0.1:8080/doc 会自动重定向到swagger页面
+    # path: /doc
+    # 不显示默认示例
+    disable-swagger-default-url: true

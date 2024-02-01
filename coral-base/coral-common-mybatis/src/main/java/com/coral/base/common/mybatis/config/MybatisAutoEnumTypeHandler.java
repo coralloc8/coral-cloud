@@ -31,10 +31,10 @@ public class MybatisAutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandl
         }
 
         if (enumClassType.isEnum() && MybatisEnumTypeHandler.isMpEnums(enumClassType)) {
-//            log.info(">>>>>[MybatisAutoEnumTypeHandler] enumClassType:{} MybatisEnumTypeHandler init.", enumClassType);
+            log.info(">>>>>[MybatisAutoEnumTypeHandler] enumClassType:{} MybatisEnumTypeHandler init.", enumClassType);
             this.typeHandler = new MybatisEnumTypeHandler(enumClassType);
         } else {
-//            log.info(">>>>>[MybatisAutoEnumTypeHandler] enumClassType:{} EnumOrdinalTypeHandler init.", enumClassType);
+            log.info(">>>>>[MybatisAutoEnumTypeHandler] enumClassType:{} EnumOrdinalTypeHandler init.", enumClassType);
             this.typeHandler = new EnumOrdinalTypeHandler<>(enumClassType);
         }
 

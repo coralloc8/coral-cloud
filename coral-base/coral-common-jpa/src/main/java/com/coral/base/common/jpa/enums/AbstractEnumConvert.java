@@ -1,11 +1,11 @@
 package com.coral.base.common.jpa.enums;
 
+import com.coral.base.common.EnumUtil;
 import com.coral.base.common.enums.IEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.AttributeConverter;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * @author huss
@@ -31,11 +31,7 @@ public abstract class AbstractEnumConvert<E extends Enum<E> & IEnum<E, R>, R ext
     @Override
     public E convertToEntityAttribute(R dbData) {
         log.debug(">>>>>convertToEntityAttribute data:{}", dbData);
-        return dbData == null ? null : this.getByCode(clazz, dbData);
+        return dbData == null ? null : EnumUtil.getOf(clazz, String.valueOf(dbData));
     }
 
-    private E getByCode(Class<E> cls, R code) {
-        return Arrays.stream(cls.getEnumConstants()).filter(e -> e.getCode().equals(code)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown code '" + code + "' for enum " + cls.getName()));
-    }
 }

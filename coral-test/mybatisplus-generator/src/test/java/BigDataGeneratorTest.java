@@ -35,7 +35,7 @@ public class BigDataGeneratorTest extends GeneratorTest {
                             .outputDir(findOutputDir()); // 指定输出目录
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com.zhyx.insurance") // 设置父包名
+                    builder.parent("com.zhyx.event") // 设置父包名
                             .pathInfo(Collections.singletonMap(OutputFile.xml, findOutputXmlDir())); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
@@ -44,7 +44,6 @@ public class BigDataGeneratorTest extends GeneratorTest {
                             //实体
                             .entityBuilder()
                             .enableLombok()
-                            .enableChainModel()
                             //controller
                             .controllerBuilder()
                             .enableRestStyle();
@@ -53,7 +52,7 @@ public class BigDataGeneratorTest extends GeneratorTest {
                 .injectionConfig(consumer -> {
                     /**自定义生成模板参数**/
                     Map<String, Object> paramMap = new HashMap<>(8);
-                    paramMap.put("dto.swagger", true);
+                    paramMap.put("dto.swagger", false);
 
                     CustomFile customFile = new CustomFile.Builder()
                             .fileName("DTO")
@@ -61,6 +60,15 @@ public class BigDataGeneratorTest extends GeneratorTest {
                             .packageName("dto")
                             .build();
                     consumer.customFile(customFile)
+                            .customMap(paramMap);
+
+
+                    CustomFile customFile2 = new CustomFile.Builder()
+                            .fileName("DTO2")
+                            .templatePath(findDtoTemplatePath(BIGDATA_KEY))
+                            .packageName("dto2")
+                            .build();
+                    consumer.customFile(customFile2)
                             .customMap(paramMap);
                 })
                 .execute();

@@ -1,13 +1,18 @@
 package com.coral.base.common.reflection;
 
 
+import lombok.NonNull;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.beans.Introspector;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class LambdaFieldUtil {
 
+
     private static final String METHOD_IS_PREFIX = "is";
     private static final String METHOD_GET_PREFIX = "get";
     private static final String METHOD_SET_PREFIX = "set";
@@ -26,6 +32,17 @@ public class LambdaFieldUtil {
 
 
     private static final Map<String, Field> FIELD_MAP = new ConcurrentHashMap<>(16);
+
+
+    public static Class<?> findParameterizedType(@NonNull Field field) {
+        Class<?> clazz = field.getType();
+        if (Collection.class.isAssignableFrom(clazz)) {
+            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+            return (Class<?>) findArg((ParameterizedType) parameterizedType);
+        }
+        return clazz;
+    }
+
 
     /**
      * 根据lambda获取field
@@ -64,8 +81,25 @@ public class LambdaFieldUtil {
      * @return
      */
     public static <T> String getFieldName(IGetter<T> lambda) {
+        if (Objects.isNull(lambda)) {
+            return "";
+        }
         Field field = getField(lambda);
         return field.getName();
+    }
+
+    /**
+     * 根据lambda获取field名称
+     *
+     * @param clazz
+     * @param fieldName
+     * @return
+     */
+    public static <T> Field findField(Class<?> clazz, String fieldName) {
+        return FIELD_MAP.computeIfAbsent(createCacheKey(clazz, fieldName), key -> {
+            String name = Introspector.decapitalize(fieldName);
+            return FieldUtils.getField(clazz, fieldName, true);
+        });
     }
 
 
@@ -73,8 +107,7 @@ public class LambdaFieldUtil {
         // 第3步 获取的Class是字符串，并且包名是“/”分割，需要替换成“.”，才能获取到对应的Class对象
         String declaredClass = serializedLambda.getImplClass().replace("/", ".");
         Class<?> aClass = Class.forName(declaredClass, false, LambdaFieldUtil.class.getClassLoader());
-        Field field = FieldUtils.getField(aClass, fieldName, true);
-        return field;
+        return FieldUtils.getField(aClass, fieldName, true);
     }
 
     private static String findFieldName(String name) {
@@ -91,6 +124,19 @@ public class LambdaFieldUtil {
 
     private static String createCacheKey(SerializedLambda serializedLambda) {
         return serializedLambda.getImplClass() + ":" + serializedLambda.getImplMethodName();
+    }
+
+    private static String createCacheKey(Class<?> clazz, String fieldName) {
+        return clazz.getName() + ":" + fieldName;
+    }
+
+    private static Type findArg(ParameterizedType parameterizedType) {
+        Type[] types = parameterizedType.getActualTypeArguments();
+        Type first = Objects.nonNull(types) ? types[0] : null;
+        if (Objects.nonNull(first) && (ParameterizedType.class.isAssignableFrom(first.getClass()))) {
+            return findArg((ParameterizedType) first);
+        }
+        return first;
     }
 
 }

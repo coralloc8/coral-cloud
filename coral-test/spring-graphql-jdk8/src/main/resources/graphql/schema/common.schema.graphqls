@@ -1,0 +1,43 @@
+input PageQuery {
+    "每页显示数据量"
+    size:Long = 20
+    "当前页数"
+    current:Long = 1
+}
+
+type SimPageInfo  {
+    "是否有上一页"
+    hasPreviousPage: Boolean
+    "是否有下一页"
+    hasNextPage: Boolean
+}
+
+#type PageInfo implements Page {
+#    "是否有上一页"
+#    hasPreviousPage: Boolean
+#    "是否有下一页"
+#    hasNextPage: Boolean
+#}
+
+#
+#type DefPage implements Page {
+#    "总数据量"
+#    total:Long
+#    "每页显示数据量"
+#    size:Long
+#    "当前页数"
+#    current:Long
+#    "总页数"
+#    pages:Long
+#    "是否有上一页"
+#    hasPreviousPage: Boolean
+#    "是否有下一页"
+#    hasNextPage: Boolean
+#}
+#
+#interface Page {
+#    "是否有上一页"
+#    hasPreviousPage: Boolean
+#    "是否有下一页"
+#    hasNextPage: Boolean
+#}

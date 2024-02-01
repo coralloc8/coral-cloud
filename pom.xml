@@ -27,6 +27,7 @@
         <java.version>1.8</java.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <druid.version>1.2.6</druid.version>
+        <mysql.version>8.0.33</mysql.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <spring.security.version>2.3.3.RELEASE</spring.security.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
@@ -37,16 +38,16 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-dynamic.version>3.5.3.1</mybatis-plus-dynamic.version>
         <mapstruct.version>1.5.0.RC1</mapstruct.version>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <cxf.version>3.5.3</cxf.version>
         <commons-discovery.version>0.5</commons-discovery.version>
         <apm.apm-toolkit.version>8.14.0</apm.apm-toolkit.version>
         <freemarker.version>2.3.32</freemarker.version>
 
         <!-- spring全家桶配置 -->
-        <spring-boot.version>2.6.12</spring-boot.version>
-        <spring-cloud.version>2021.0.1</spring-cloud.version>
-        <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
+        <spring-cloud.version>2021.0.9</spring-cloud.version>
+        <spring-cloud-alibaba-dependencies.version>2021.0.4.0</spring-cloud-alibaba-dependencies.version>
 
 
         <maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
@@ -187,6 +188,12 @@
             </dependency>
 
             <!-- web end -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
