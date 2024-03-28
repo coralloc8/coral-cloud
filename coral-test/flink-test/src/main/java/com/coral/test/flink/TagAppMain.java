@@ -1,6 +1,8 @@
-package com.coral.test.flink.tag;
+package com.coral.test.flink;
 
 import com.coral.base.common.CollectionUtil;
+import com.coral.test.flink.tag.R000022Tag;
+import com.coral.test.flink.tag.R000022_2Tag;
 import com.coral.test.flink.tag.dto.MislOpnDTO;
 import com.coral.test.flink.tag.dto.PatientInfoDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class TagApp {
+public class TagAppMain {
     // 将数据广播下去
     private final static MapStateDescriptor<String, List<MislOpnDTO>> GLOBAL_DATA = new MapStateDescriptor<>("GLOBAL_DATA",
             Types.STRING, Types.LIST(Types.POJO(MislOpnDTO.class)));
@@ -42,9 +44,6 @@ public class TagApp {
                 .connect(globalDataStream)
                 .process(func)
                 .print();
-
-
-        // R000022Tag
         R000022Tag r000022Tag = new R000022Tag(env, patientInfo);
         r000022Tag.execute();
 
